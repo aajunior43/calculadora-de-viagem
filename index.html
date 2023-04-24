@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculadora de Combustível</title>
+    <style>
+      body {
+        background-color: #FFC107;
+      }
+      h1 {
+        color: #FFF;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 30px;
+      }
+      form {
+        background-color: #FFF;
+        border-radius: 10px;
+        padding: 20px;
+        margin: auto;
+        width: 500px;
+        box-shadow: 0 0 10px #CCC;
+        margin-top: 30px;
+      }
+      label {
+        color: #333;
+        font-family: Arial, sans-serif;
+        display: block;
+        margin-bottom: 10px;
+      }
+      input[type="number"] {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      input[type="checkbox"] {
+        margin-bottom: 20px;
+      }
+      input[type="button"] {
+        background-color: #FFC107;
+        border: none;
+        color: #FFF;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+      #resultado {
+        background-color: #FFF;
+        border-radius: 10px;
+        padding: 20px;
+        margin: auto;
+        width: 500px;
+        box-shadow: 0 0 10px #CCC;
+        margin-top: 30px;
+        text-align: center;
+        color: #333;
+        font-family: Arial, sans-serif;
+      }
+      .carro {
+        font-size: 50px;
+        margin-top: 30px;
+        text-align: center;
+      }
+      table {
+        border-collapse: collapse;
+        margin: auto;
+      }
+      th, td {
+        border: 1px solid #333;
+        padding: 10px;
+        text-align: left;
+      }
+      .copy-btn {
+        background-color: #333;
+        border: none;
+        color: #FFF;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+        display: block;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="carro">&#128663;</div>
+    <h1>Calculadora de Combustível</h1>
+    <form>
+      <label for="distancia">Distância da viagem (em km):</label>
+      <input type="number" id="distancia" name="distancia"><br>
+      <label for="consumo">Consumo médio do veículo (em km/litro):</label>
+      <input type="number" id="consumo" name="consumo"><br>
+      <label for="preco">Preço do combustível (em R$/litro):</label>
+      <input type="number" id="preco" name="preco"><br>
+      <label for="ida_volta">Ida e volta?</label>
+      <input type="checkbox" id="ida_volta" name="ida_volta" value="sim"><br>
+      <input type="button" value="Calcular" onclick="calcularCombustivel()">
+    </form>
+    <div id="resultado">
+      <table>
+        <tr>
+          <th>Distância</th>
+          <td id="distancia-result"></td>
+        </tr>
+        <tr>
+          <th>Consumo médio</th>
+          <td id="consumo-result"></td>
+        </tr>
+        <tr>
+          <th>Preço do combustível</th>
+          <td id="preco-result"></td>
+        </tr>
+        <tr>
+          <th>Ida e volta?</th>
+          <td id="ida_volta-result"></td>
+        </tr>
+        <tr>
+          <th>Litros de combustível</th>
+          <td id="litros-result"></td>
+        </tr>
+        <tr>
+          <th>Custo total</th>
+          <td id="custo-result"></td>
+        </tr>
+      </table>
+    </div>
+    <button class="copy-btn" onclick="copiarExtrato()">Copiar Extrato</button>
+
+    <script>
+      function calcularCombustivel() {
+        var distancia = document.getElementById("distancia").value;
+        var consumo = document.getElementById("consumo").value;
+        var preco = parseFloat(document.getElementById("preco").value.replace(",", "."));
+        var idaVolta = document.getElementById("ida_volta").checked;
+
+        var litros = distancia / consumo;
+        var gasto = litros * preco;
+
+        if (idaVolta) {
+          litros = litros * 2;
+          gasto = gasto * 2;
+        }
+
+        document.getElementById("distancia-result").innerHTML = distancia + " km";
+        document.getElementById("consumo-result").innerHTML = consumo + " km/litro";
+        document.getElementById("preco-result").innerHTML = "R$ " + preco.toFixed(2) + "/litro";
+        document.getElementById("ida_volta-result").innerHTML = idaVolta ? "Sim" : "Não";
+        document.getElementById("litros-result").innerHTML = litros.toFixed(2) + " litros";
+        document.getElementById("custo-result").innerHTML = "R$ " + gasto.toFixed(2);
+      }
+
+      function copiarExtrato() {
+        var extrato = "";
+        var table = document.getElementById("resultado").getElementsByTagName('table')[0];
+        for (var i = 0; i < table.rows.length; i++) {
+          var row = table.rows[i];
+          for (var j = 0; j < row.cells.length; j++) {
+            extrato += row.cells[j].textContent;
+            if (j < row.cells.length - 1) {
+              extrato += " - ";
+            }
+          }
+          extrato += "\n";
+        }
+        navigator.clipboard.writeText(extrato).then(function () {
+          alert("Extrato copiado para a área de transferência!");
+        }, function () {
+          alert("Erro ao copiar o extrato!");
+        });
+      }
+    </script>
+
+    <p style="text-align: center; font-family: Arial, sans-serif; margin-top: 30px;">Criado por Aleksandro Alves da Rocha Junior</p>
+  </body>
+</html>
