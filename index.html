@@ -1,178 +1,113 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Calculadora de Combustível</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
     <style>
       body {
-        background-color: #FFC107;
+        font-family: 'Orbitron', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #0A0F0D; /* Dark background */
+        color: #00FFC6; /* Cyberpunk neon green */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-image: linear-gradient(315deg, #0A0F0D 0%, #22303C 74%);
       }
       h1 {
-        color: #FFF;
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin-top: 30px;
+        color: #FF1177; /* Neon pink for the title */
+        margin: 20px 0;
       }
       form {
-        background-color: #FFF;
-        border-radius: 10px;
+        background-color: #12343b; /* Dark slate background for form */
+        border-radius: 8px;
         padding: 20px;
-        margin: auto;
-        width: 500px;
-        box-shadow: 0 0 10px #CCC;
-        margin-top: 30px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 2px 4px rgba(0, 255, 198, 0.4); /* Neon green shadow */
       }
       label {
-        color: #333;
-        font-family: Arial, sans-serif;
-        display: block;
-        margin-bottom: 10px;
+        margin: 10px 0;
       }
-      input[type="number"] {
-        padding: 10px;
-        border-radius: 5px;
-        border: none;
+      input[type="number"], input[type="checkbox"] + label, button, .result {
         width: 100%;
-        margin-bottom: 20px;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+        border: 1px solid #FF1177; /* Neon pink border */
+        background-color: #22303C; /* Slate background for inputs */
+        color: #00FFC6; /* Cyberpunk neon green text */
+        box-sizing: border-box;
       }
       input[type="checkbox"] {
-        margin-bottom: 20px;
+        accent-color: #FF1177; /* Neon pink checkbox accent */
       }
-      input[type="button"] {
-        background-color: #FFC107;
-        border: none;
-        color: #FFF;
-        padding: 10px 20px;
-        border-radius: 5px;
+      button, .copy-btn {
+        background-color: #FF1177; /* Neon pink for buttons */
         cursor: pointer;
-        margin-bottom: 20px;
+        transition: background-color 0.2s;
       }
-      #resultado {
-        background-color: #FFF;
-        border-radius: 10px;
-        padding: 20px;
-        margin: auto;
-        width: 500px;
-        box-shadow: 0 0 10px #CCC;
-        margin-top: 30px;
+      button:hover, .copy-btn:hover {
+        background-color: #FF75A0; /* Lighter pink on hover */
+      }
+      .result {
+        display: none; /* Hide result by default */
         text-align: center;
-        color: #333;
-        font-family: Arial, sans-serif;
-      }
-      .carro {
-        font-size: 50px;
-        margin-top: 30px;
-        text-align: center;
-      }
-      table {
-        border-collapse: collapse;
-        margin: auto;
-      }
-      th, td {
-        border: 1px solid #333;
-        padding: 10px;
-        text-align: left;
+        font-weight: 500;
+        margin-top: 20px;
       }
       .copy-btn {
-        background-color: #333;
-        border: none;
-        color: #FFF;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-bottom: 20px;
         display: block;
-        margin: auto;
+        margin: 20px auto; /* Center copy button */
       }
     </style>
-  </head>
-  <body>
-    <div class="carro">&#128663;</div>
+</head>
+<body>
     <h1>Calculadora de Combustível</h1>
     <form>
-      <label for="distancia">Distância da viagem (em km):</label>
-      <input type="number" id="distancia" name="distancia"><br>
-      <label for="consumo">Consumo médio do veículo (em km/litro):</label>
-      <input type="number" id="consumo" name="consumo"><br>
-      <label for="preco">Preço do combustível (em R$/litro):</label>
-      <input type="number" id="preco" name="preco"><br>
-      <label for="ida_volta">Ida e volta?</label>
-      <input type="checkbox" id="ida_volta" name="ida_volta" value="sim"><br>
-      <input type="button" value="Calcular" onclick="calcularCombustivel()">
+      <label for="distancia">Distância em km:</label>
+      <input type="number" id="distancia" placeholder="Ex: 120">
+      <label for="consumo">Consumo em km/l:</label>
+      <input type="number" id="consumo" placeholder="Ex: 10">
+      <label for="preco">Preço por litro:</label>
+      <input type="number" id="preco" placeholder="Ex: 5.30">
+      <label for="ida_volta">Ida e volta</label>
+      <input type="checkbox" id="ida_volta">
+      <button type="button" onclick="calcularCombustivel()">Calcular</button>
     </form>
-    <div id="resultado">
-      <table>
-        <tr>
-          <th>Distância</th>
-          <td id="distancia-result"></td>
-        </tr>
-        <tr>
-          <th>Consumo médio</th>
-          <td id="consumo-result"></td>
-        </tr>
-        <tr>
-          <th>Preço do combustível</th>
-          <td id="preco-result"></td>
-        </tr>
-        <tr>
-          <th>Ida e volta?</th>
-          <td id="ida_volta-result"></td>
-        </tr>
-        <tr>
-          <th>Litros de combustível</th>
-          <td id="litros-result"></td>
-        </tr>
-        <tr>
-          <th>Custo total</th>
-          <td id="custo-result"></td>
-        </tr>
-      </table>
-    </div>
-    <button class="copy-btn" onclick="copiarExtrato()">Copiar Extrato</button>
+    <div id="resultado" class="result"></div>
+    <button class="copy-btn" onclick="copiarResultado()">Copiar Resultado</button>
 
     <script>
       function calcularCombustivel() {
-        var distancia = document.getElementById("distancia").value;
-        var consumo = document.getElementById("consumo").value;
-        var preco = parseFloat(document.getElementById("preco").value.replace(",", "."));
-        var idaVolta = document.getElementById("ida_volta").checked;
+        const distancia = parseFloat(document.getElementById("distancia").value);
+        const consumo = parseFloat(document.getElementById("consumo").value);
+        const preco = parseFloat(document.getElementById("preco").value);
+        const idaVolta = document.getElementById("ida_volta").checked;
 
-        var litros = distancia / consumo;
-        var gasto = litros * preco;
+        const totalDistancia = idaVolta ? distancia * 2 : distancia;
+        const totalLitros = totalDistancia / consumo;
+        const totalCusto = totalLitros * preco;
 
-        if (idaVolta) {
-          litros = litros * 2;
-          gasto = gasto * 2;
-        }
-
-        document.getElementById("distancia-result").innerHTML = distancia + " km";
-        document.getElementById("consumo-result").innerHTML = consumo + " km/litro";
-        document.getElementById("preco-result").innerHTML = "R$ " + preco.toFixed(2) + "/litro";
-        document.getElementById("ida_volta-result").innerHTML = idaVolta ? "Sim" : "Não";
-        document.getElementById("litros-result").innerHTML = litros.toFixed(2) + " litros";
-        document.getElementById("custo-result").innerHTML = "R$ " + gasto.toFixed(2);
+        document.getElementById("resultado").innerHTML = `
+          <p>Distância Total: ${totalDistancia.toFixed(2)} km</p>
+          <p>Consumo Total: ${totalLitros.toFixed(2)} litros</p>
+          <p>Custo Total: R$ ${totalCusto.toFixed(2)}</p>
+        `;
+        document.getElementById("resultado").style.display = 'block';
       }
 
-      function copiarExtrato() {
-        var extrato = "";
-        var table = document.getElementById("resultado").getElementsByTagName('table')[0];
-        for (var i = 0; i < table.rows.length; i++) {
-          var row = table.rows[i];
-          for (var j = 0; j < row.cells.length; j++) {
-            extrato += row.cells[j].textContent;
-            if (j < row.cells.length - 1) {
-              extrato += " - ";
-            }
-          }
-          extrato += "\n";
-        }
-        navigator.clipboard.writeText(extrato).then(function () {
-          alert("Extrato copiado para a área de transferência!");
-        }, function () {
-          alert("Erro ao copiar o extrato!");
+      function copiarResultado() {
+        const resultadoTexto = document.getElementById("resultado").innerText;
+        navigator.clipboard.writeText(resultadoTexto).then(() => {
+          alert("Resultado copiado com sucesso!");
+        }, () => {
+          alert("Erro ao copiar o resultado.");
         });
       }
     </script>
-
-    <p style="text-align: center; font-family: Arial, sans-serif; margin-top: 30px;">Criado por Aleksandro Alves da Rocha Junior</p>
-  </body>
+</body>
 </html>
