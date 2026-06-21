@@ -1,151 +1,427 @@
 <!DOCTYPE html>
-<html lang="pt">
-
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" />
-    <title>Links de Grupos de Whatsapp e Telegram - Cuidado!</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-        body {
-            background-color: #000000;
-            color: #f8bbd0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extrair Links de Grupos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--font:'Inter',system-ui,-apple-system,sans-serif;--radius:20px;--transition:0.35s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{
+  --bg:#0a0a1a;--bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);--card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;--text-muted:#8b8ba0;
+  --primary:#22c55e;--primary-dim:rgba(34,197,94,0.12);--primary-glow:rgba(34,197,94,0.25);
+  --accent:#16a34a;
+  --wa:#25d366;--wa-dim:rgba(37,211,102,0.12);
+  --tg:#0088cc;--tg-dim:rgba(0,136,204,0.12);
+  --red:#ef4444;--red-dim:rgba(239,68,68,0.12);
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--tag-bg:rgba(255,255,255,0.05);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);--card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;--text-muted:#6b7280;
+  --primary:#16a34a;--primary-dim:rgba(22,163,74,0.08);--primary-glow:rgba(22,163,74,0.15);
+  --accent:#15803d;
+  --wa:#128c7e;--wa-dim:rgba(18,140,126,0.08);
+  --tg:#0088cc;--tg-dim:rgba(0,136,204,0.08);
+  --red:#dc2626;--red-dim:rgba(220,38,38,0.08);
+  --shadow:0 8px 32px rgba(0,0,0,0.08);--tag-bg:rgba(0,0,0,0.04);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-grad);color:var(--text);min-height:100vh;padding:20px;transition:background var(--transition),color var(--transition)}
+.app{max-width:520px;margin:0 auto;padding-bottom:40px}
 
-        .container {
-            border: none;
-        }
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:var(--wa-dim);border:1.5px solid var(--wa);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.header-title{font-size:1.1rem;font-weight:800;letter-spacing:-0.01em}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.theme-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
 
-        a,
-        a:hover {
-            color: #f8bbd0;
-        }
+/* Card */
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:16px}
 
-        .btn-primary {
-            background-color: #d81b60;
-            color: #000000;
-            border: 2px solid #f8bbd0;
-        }
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:14px;padding:4px}
+.tab{flex:1;padding:12px 8px;border-radius:11px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:6px}
+.tab.active{background:var(--primary-dim);color:var(--primary);box-shadow:0 2px 8px var(--primary-glow)}
+.tab:hover:not(.active){color:var(--text)}
 
-        .btn-primary:hover {
-            background-color: #f8bbd0;
-            color: #d81b60;
-        }
+/* Input */
+.input-group{margin-bottom:14px}
+.input-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.input-label span{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.input-wrap{position:relative}
+.input-wrap textarea,.input-wrap input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--font);font-size:0.9rem;font-weight:500;outline:none;transition:all var(--transition);resize:vertical}
+.input-wrap textarea{min-height:120px;line-height:1.5}
+.input-wrap textarea::placeholder,.input-wrap input::placeholder{color:var(--text-muted);font-weight:400}
+.input-wrap textarea:focus,.input-wrap input[type="text"]:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
 
-        .result-textarea {
-            background-color: #f8bbd0;
-            color: #000000;
-            border: 2px solid #d81b60;
-        }
+/* Platform chips */
+.platform-chips{display:flex;gap:8px;margin-bottom:16px}
+.chip{flex:1;padding:12px;border-radius:14px;border:1.5px solid var(--card-border);background:var(--tag-bg);cursor:pointer;transition:all var(--transition);text-align:center}
+.chip:hover{transform:translateY(-1px)}
+.chip.active.wa{border-color:var(--wa);background:var(--wa-dim);box-shadow:0 0 12px rgba(37,211,102,0.2)}
+.chip.active.tg{border-color:var(--tg);background:var(--tg-dim);box-shadow:0 0 12px rgba(0,136,204,0.2)}
+.chip-icon{font-size:1.5rem;margin-bottom:4px}
+.chip-name{font-size:0.78rem;font-weight:700;color:var(--text)}
+.chip-count{font-size:0.65rem;font-weight:600;color:var(--text-muted);margin-top:2px}
 
-        footer {
-            text-align: center;
-            padding: 10px;
-            font-size: 0.8em;
-            color: #f8bbd0;
-        }
+/* Buttons */
+.btn{width:100%;padding:14px;border-radius:14px;border:none;font-family:var(--font);font-size:0.9rem;font-weight:700;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--wa),var(--accent));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{background:var(--card);border:1.5px solid var(--card-border);color:var(--text);margin-top:8px}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-row{display:flex;gap:8px;margin-top:8px}
+.btn-row .btn{flex:1}
 
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-        }
-    </style>
+/* Stats */
+.stats-bar{display:flex;gap:8px;margin-bottom:16px}
+.stat{flex:1;padding:12px;border-radius:14px;text-align:center}
+.stat.wa{background:var(--wa-dim);border:1px solid rgba(37,211,102,0.15)}
+.stat.tg{background:var(--tg-dim);border:1px solid rgba(0,136,204,0.15)}
+.stat.total{background:var(--primary-dim);border:1px solid rgba(34,197,94,0.15)}
+.stat-num{font-size:1.4rem;font-weight:800;line-height:1.2}
+.stat.wa .stat-num{color:var(--wa)}
+.stat.tg .stat-num{color:var(--tg)}
+.stat.total .stat-num{color:var(--primary)}
+.stat-label{font-size:0.65rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em}
+
+/* Results */
+.results-section{display:none}
+.results-section.show{display:block}
+.results-group{margin-bottom:16px}
+.group-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.group-title{font-size:0.78rem;font-weight:700;display:flex;align-items:center;gap:6px}
+.group-title.wa{color:var(--wa)}
+.group-title.tg{color:var(--tg)}
+.group-badge{font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:8px}
+.group-badge.wa{background:var(--wa-dim);color:var(--wa)}
+.group-badge.tg{background:var(--tg-dim);color:var(--tg)}
+.link-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--card-border);margin-bottom:4px;transition:all var(--transition);animation:slideUp 0.25s ease}
+.link-item:hover{border-color:var(--primary);background:var(--primary-dim)}
+.link-item .platform-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.link-item .platform-dot.wa{background:var(--wa)}
+.link-item .platform-dot.tg{background:var(--tg)}
+.link-item .link-url{flex:1;font-size:0.8rem;font-weight:500;color:var(--text);word-break:break-all;line-height:1.4}
+.link-item .link-actions{display:flex;gap:4px;flex-shrink:0}
+.link-btn{padding:5px 10px;border-radius:8px;border:none;font-family:var(--font);font-size:0.65rem;font-weight:600;cursor:pointer;transition:all var(--transition)}
+.link-btn.copy{background:var(--primary-dim);color:var(--primary)}
+.link-btn.copy:hover{background:var(--primary);color:#fff}
+.link-btn.copy.copied{background:var(--wa-dim);color:var(--wa)}
+.link-btn.open{background:var(--tg-dim);color:var(--tg)}
+.link-btn.open:hover{background:var(--tg);color:#fff}
+.results-empty{text-align:center;padding:24px;font-size:0.85rem;color:var(--text-muted)}
+
+/* Search */
+.search-row{display:flex;gap:8px}
+.search-row .input-wrap{flex:1}
+.search-btn{padding:14px 20px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-family:var(--font);font-size:0.9rem;font-weight:700;cursor:pointer;transition:all var(--transition);white-space:nowrap}
+.search-btn:hover{border-color:var(--primary);color:var(--primary)}
+
+/* Footer */
+.footer{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid var(--card-border)}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;border-radius:12px;background:var(--primary);color:#fff;font-family:var(--font);font-size:0.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:500px){body{padding:12px}.card{padding:18px}.btn-row{flex-direction:column}}
+</style>
 </head>
-
 <body>
-    <div class="container py-5">
-        <input id="theme-input" class="form-control mb-2" placeholder="Digite o tema da pesquisa..." type="text" />
-        <label class="mr-2">
-            <input id="whatsapp-checkbox" type="checkbox" /> WhatsApp
-        </label>
-        <label class="mr-2">
-            <input id="telegram-checkbox" type="checkbox" /> Telegram
-        </label>
-        <button class="btn btn-primary mb-4" onclick="performSearch()">Pesquisar</button>
-        <h1 class="text-center mb-4">Filtrar Links de Grupos de Whatsapp e Telegram</h1>
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <textarea class="form-control" id="input-text" placeholder="Cole seu texto aqui..." rows="10"></textarea>
-                <button class="btn btn-primary btn-block mt-4" onclick="extractLinks()">Extrair links</button>
-            </div>
-        </div>
-        <div class="mt-5" id="results">
-            <h2 class="text-center">Links Extraídos:</h2>
-            <textarea class="form-control result-textarea" id="result-text" readonly></textarea>
-            <button class="btn btn-secondary btn-block mt-3" onclick="copyToClipboard()">Copiar para a Área de Transferência</button>
-        </div>
-        <div id="link-count">Links extraídos: 0</div>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">🔗</div>
+      <div>
+        <div class="header-title">Extrair Links de Grupos</div>
+        <div class="header-sub">WhatsApp e Telegram</div>
+      </div>
     </div>
-    <script>
-        function extractLinks() {
-            var text = document.getElementById('input-text').value;
-            var whatsappGroupLinks = text.match(/chat\.whatsapp\.com\/(?:invite\/)?[\w-]{22,32}/gi);
-            var telegramGroupLinks = text.match(/t\.me\/(?:joinchat\/|invite\/)?[\w-]+/gi);
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
 
-            var resultTextarea = document.getElementById('result-text');
-            resultTextarea.value = '';
+  <!-- Tabs -->
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="setTab('extract')" data-tab="extract">📋 Extrair</button>
+      <button class="tab" onclick="setTab('search')" data-tab="search">🔍 Pesquisar</button>
+    </div>
 
-            if (whatsappGroupLinks) {
-                resultTextarea.value += 'Links de Grupos de Whatsapp:\n';
-                resultTextarea.value += whatsappGroupLinks.join('\n') + '\n\n';
-            }
+    <!-- Extract Tab -->
+    <div id="tabExtract">
+      <div class="platform-chips">
+        <div class="chip wa active" id="chipWA" onclick="toggleChip('wa')">
+          <div class="chip-icon">💬</div>
+          <div class="chip-name">WhatsApp</div>
+          <div class="chip-count" id="waCount">0 links</div>
+        </div>
+        <div class="chip tg active" id="chipTG" onclick="toggleChip('tg')">
+          <div class="chip-icon">✈️</div>
+          <div class="chip-name">Telegram</div>
+          <div class="chip-count" id="tgCount">0 links</div>
+        </div>
+      </div>
 
-            if (telegramGroupLinks) {
-                resultTextarea.value += 'Links de Grupos de Telegram:\n';
-                resultTextarea.value += telegramGroupLinks.join('\n') + '\n';
-            }
-        }
+      <div class="input-group">
+        <div class="input-label"><span>Cole o texto com os links</span></div>
+        <div class="input-wrap">
+          <textarea id="inputText" placeholder="Cole aqui mensagens, posts ou qualquer texto que contenha links de grupos do WhatsApp ou Telegram..."></textarea>
+        </div>
+      </div>
 
-        function copyToClipboard() {
-            var resultTextarea = document.getElementById('result-text');
-            resultTextarea.select();
-            document.execCommand('copy');
-        }
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="extractLinks()"><span>⚡</span> Extrair Links</button>
+        <button class="btn btn-secondary" onclick="clearAll()"><span>🗑️</span> Limpar</button>
+      </div>
+    </div>
 
-        function performSearch() {
-            var theme = document.getElementById('theme-input').value.trim();
-            var whatsappSelected = document.getElementById('whatsapp-checkbox').checked;
-            var telegramSelected = document.getElementById('telegram-checkbox').checked;
+    <!-- Search Tab -->
+    <div id="tabSearch" style="display:none">
+      <div class="input-group">
+        <div class="input-label"><span>Tema para pesquisar grupos</span></div>
+        <div class="search-row">
+          <div class="input-wrap"><input type="text" id="searchTheme" placeholder="Ex: programação, jogos, crypto..."></div>
+          <button class="search-btn" onclick="performSearch()">🔍</button>
+        </div>
+      </div>
+      <div class="platform-chips">
+        <div class="chip wa active" id="searchWA" onclick="this.classList.toggle('active')">
+          <div class="chip-icon">💬</div>
+          <div class="chip-name">WhatsApp</div>
+        </div>
+        <div class="chip tg active" id="searchTG" onclick="this.classList.toggle('active')">
+          <div class="chip-icon">✈️</div>
+          <div class="chip-name">Telegram</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="performSearch()"><span>🔍</span> Pesquisar no Google</button>
+    </div>
+  </div>
 
-            if (theme === '') {
-                alert('Por favor, digite um tema para a pesquisa.');
-                return;
-            }
+  <!-- Stats -->
+  <div class="stats-bar" id="statsBar" style="display:none">
+    <div class="stat wa">
+      <div class="stat-num" id="statWA">0</div>
+      <div class="stat-label">WhatsApp</div>
+    </div>
+    <div class="stat tg">
+      <div class="stat-num" id="statTG">0</div>
+      <div class="stat-label">Telegram</div>
+    </div>
+    <div class="stat total">
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-label">Total</div>
+    </div>
+  </div>
 
-            // Creating the search query based on the theme and selections
-            var searchQuery = theme + ' ';
-            if (whatsappSelected) searchQuery += '"chat.whatsapp.com" ';
-            if (telegramSelected) searchQuery += '"t.me"';
+  <!-- Results -->
+  <div class="results-section" id="resultsSection">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:0.8rem;font-weight:700;color:var(--text-muted)">Links Extraídos</span>
+        <div style="display:flex;gap:6px">
+          <button class="link-btn copy" onclick="copyAll()" id="copyAllBtn" style="font-size:0.7rem;padding:6px 12px">📋 Copiar todos</button>
+          <button class="link-btn open" onclick="exportTxt()" style="font-size:0.7rem;padding:6px 12px">💾 .txt</button>
+        </div>
+      </div>
+      <div id="resultsContainer"></div>
+    </div>
+  </div>
 
-            // Opening Google search in a new tab with the search query
-            window.open('https://www.google.com/search?q=' + encodeURIComponent(searchQuery), '_blank');
-        }
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
 
-        function countExtractedLinks() {
-            var resultTextarea = document.querySelector('.result-textarea');
-            var links = resultTextarea.value.split('\n');
-            var linkCount = 0;
+<div class="toast" id="toast"></div>
 
-            // Counting non-empty lines as links
-            for (var i = 0; i < links.length; i++) {
-                if (links[i].trim() !== '') linkCount++;
-            }
+<script>
+let platforms = { wa: true, tg: true };
+let extractedLinks = { wa: [], tg: [] };
 
-            // Updating the displayed count
-            document.getElementById('link-count').innerText = 'Links extraídos: ' + linkCount;
-        }
+/* Theme */
+function toggleTheme(){
+  const h=document.documentElement,b=document.querySelector('.theme-btn');
+  const d=h.getAttribute('data-theme')==='dark';
+  h.setAttribute('data-theme',d?'light':'dark');
+  b.textContent=d?'☀️':'🌙';
+  localStorage.setItem('elTheme',d?'light':'dark');
+}
+(function(){const s=localStorage.getItem('elTheme');if(s){document.documentElement.setAttribute('data-theme',s);document.querySelector('.theme-btn').textContent=s==='dark'?'🌙':'☀️';}})();
 
-        if (typeof extractLinks === 'function') {
-            var originalExtractLinks = extractLinks;
-            extractLinks = function() {
-                originalExtractLinks();
-                countExtractedLinks();
-            };
-        }
-    </script>
-    <footer>Direitos Reservados © Aleksandro Alves da Rocha Junior</footer>
+/* Tabs */
+function setTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));
+  document.getElementById('tabExtract').style.display=t==='extract'?'block':'none';
+  document.getElementById('tabSearch').style.display=t==='search'?'block':'none';
+}
+
+/* Chips */
+function toggleChip(p){
+  platforms[p]=!platforms[p];
+  document.getElementById(p==='wa'?'chipWA':'chipTG').classList.toggle('active',platforms[p]);
+}
+
+/* Extract */
+function extractLinks(){
+  const text=document.getElementById('inputText').value;
+  if(!text.trim()){showToast('Cole um texto para extrair os links!');return;}
+
+  extractedLinks={wa:[],tg:[]};
+
+  if(platforms.wa){
+    const wa=text.match(/chat\.whatsapp\.com\/(?:invite\/)?[\w-]{22,32}/gi)||[];
+    extractedLinks.wa=[...new Set(wa)];
+  }
+  if(platforms.tg){
+    const tg=text.match(/t\.me\/(?:joinchat\/|invite\/)?[\w-]+/gi)||[];
+    extractedLinks.tg=[...new Set(tg)];
+  }
+
+  renderResults();
+}
+
+function renderResults(){
+  const wa=extractedLinks.wa,tg=extractedLinks.tg;
+  const total=wa.length+tg.length;
+
+  document.getElementById('waCount').textContent=wa.length+' links';
+  document.getElementById('tgCount').textContent=tg.length+' links';
+
+  document.getElementById('statsBar').style.display=total>0?'flex':'none';
+  document.getElementById('statWA').textContent=wa.length;
+  document.getElementById('statTG').textContent=tg.length;
+  document.getElementById('statTotal').textContent=total;
+
+  const section=document.getElementById('resultsSection');
+  const container=document.getElementById('resultsContainer');
+
+  if(total===0){
+    section.classList.add('show');
+    container.innerHTML='<div class="results-empty">Nenhum link encontrado no texto</div>';
+    return;
+  }
+
+  section.classList.add('show');
+  let html='';
+
+  if(wa.length>0){
+    html+=`<div class="results-group">
+      <div class="group-header">
+        <div class="group-title wa">💬 WhatsApp</div>
+        <span class="group-badge wa">${wa.length}</span>
+      </div>
+      ${wa.map((l,i)=>`
+        <div class="link-item" style="animation-delay:${i*0.03}s">
+          <div class="platform-dot wa"></div>
+          <span class="link-url">${esc(l)}</span>
+          <div class="link-actions">
+            <button class="link-btn copy" onclick="copyOne(this,'${escAttr(l)}')">Copiar</button>
+            <button class="link-btn open" onclick="window.open('${escAttr(l)}','_blank')">Abrir</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  if(tg.length>0){
+    html+=`<div class="results-group">
+      <div class="group-header">
+        <div class="group-title tg">✈️ Telegram</div>
+        <span class="group-badge tg">${tg.length}</span>
+      </div>
+      ${tg.map((l,i)=>`
+        <div class="link-item" style="animation-delay:${(wa.length+i)*0.03}s">
+          <div class="platform-dot tg"></div>
+          <span class="link-url">${esc(l)}</span>
+          <div class="link-actions">
+            <button class="link-btn copy" onclick="copyOne(this,'${escAttr(l)}')">Copiar</button>
+            <button class="link-btn open" onclick="window.open('${escAttr(l)}','_blank')">Abrir</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  container.innerHTML=html;
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escAttr(s){return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"');}
+
+/* Copy */
+function copyOne(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✅';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');},1500);
+  });
+}
+
+function copyAll(){
+  const all=[...extractedLinks.wa,...extractedLinks.tg];
+  if(all.length===0){showToast('Nenhum link para copiar!');return;}
+  navigator.clipboard.writeText(all.join('\n')).then(()=>{
+    const btn=document.getElementById('copyAllBtn');
+    btn.textContent='✅ Copiado!';btn.classList.add('copied');
+    showToast(`${all.length} links copiados!`);
+    setTimeout(()=>{btn.textContent='📋 Copiar todos';btn.classList.remove('copied');},2000);
+  });
+}
+
+function exportTxt(){
+  const all=[...extractedLinks.wa.map(l=>'[WA] '+l),...extractedLinks.tg.map(l=>'[TG] '+l)];
+  if(all.length===0){showToast('Nenhum link para exportar!');return;}
+  const blob=new Blob([all.join('\n')],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;
+  a.download='links-grupos-'+new Date().toISOString().slice(0,10)+'.txt';
+  a.click();URL.revokeObjectURL(url);
+  showToast('Arquivo .txt baixado!');
+}
+
+/* Search */
+function performSearch(){
+  const theme=document.getElementById('searchTheme').value.trim();
+  if(!theme){showToast('Digite um tema!');return;}
+  const wa=document.getElementById('searchWA').classList.contains('active');
+  const tg=document.getElementById('searchTG').classList.contains('active');
+  let q=theme+' ';
+  if(wa) q+='"chat.whatsapp.com" ';
+  if(tg) q+='"t.me"';
+  window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank');
+}
+
+/* Clear */
+function clearAll(){
+  document.getElementById('inputText').value='';
+  extractedLinks={wa:[],tg:[]};
+  document.getElementById('resultsSection').classList.remove('show');
+  document.getElementById('statsBar').style.display='none';
+  document.getElementById('waCount').textContent='0 links';
+  document.getElementById('tgCount').textContent='0 links';
+}
+
+/* Toast */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+/* Keyboard */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();extractLinks();}
+  if(e.key==='Escape')clearAll();
+});
+</script>
 </body>
-
 </html>
