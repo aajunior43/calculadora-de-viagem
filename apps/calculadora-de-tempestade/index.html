@@ -1,125 +1,528 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Distância de Tempestades</title>
-    <style>
-        :root {
-            --primary-color: #4ecca3;
-            --background-color: #1e2022;
-            --text-color: #f5f5f5;
-            --container-bg-color: #252a34;
-            --btn-hover-color: #227093;
-            --result-bg-color: #0a3d62;
-        }
-        body {
-            background: var(--background-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 10px;
-        }
-        .container {
-            background-color: var(--container-bg-color);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-        }
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 25px;
-        }
-        input, button {
-            width: calc(100% - 20px);
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid transparent;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        input {
-            background-color: #fff;
-            color: #333;
-        }
-        input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-        }
-        button {
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            cursor: pointer;
-            border: none;
-        }
-        button:hover {
-            background-color: var(--btn-hover-color);
-        }
-        .resultado {
-            display: none; /* Hide by default */
-            background-color: var(--result-bg-color);
-            color: var(--text-color);
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            transition: display 0.3s ease;
-        }
-        .explanation, .credit {
-            font-size: 0.85em;
-            opacity: 0.9;
-            margin-top: 15px;
-        }
-        @media screen and (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-            h1 {
-                font-size: 1.75em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calcule a distância de uma tempestade pelo intervalo entre relâmpago e trovão.">
+  <meta name="theme-color" content="#0f172a">
+  <title>Calculadora de Tempestade</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, system-ui, sans-serif;
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --primary: #facc15;
+      --primary-hover: #eab308;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --success: #22c55e;
+      --error: #ef4444;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      background-image:
+        radial-gradient(circle at 20% 0%, rgba(250,204,21,0.08), transparent 30rem),
+        radial-gradient(circle at 80% 100%, rgba(59,130,246,0.06), transparent 30rem);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+    .container {
+      width: 100%;
+      max-width: 480px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+    }
+    .icon-large {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #facc15, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1.2rem;
+      text-align: center;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input:focus { border-color: var(--primary); }
+    input.error { border-color: var(--error); }
+    .error-msg {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 8px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    button {
+      flex: 1;
+      padding: 14px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #0f172a;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-timer {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      color: var(--text);
+      flex: 0 0 auto;
+      width: 56px;
+      height: 56px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+    }
+    .btn-timer:hover { border-color: var(--primary); }
+    .btn-timer.running {
+      background: rgba(239,68,68,0.15);
+      border-color: var(--error);
+      animation: blink 1s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .timer-display {
+      font-size: 2.5rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--primary);
+      margin-bottom: 20px;
+      display: none;
+    }
+    .timer-display.show { display: block; }
+    .result {
+      display: none;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    .result.show { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .result .distance {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--success);
+    }
+    .result .label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+    .result .safety {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(34,197,94,0.2);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .result .safety strong { color: var(--text); }
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .actions button {
+      flex: 1;
+      padding: 10px;
+      font-size: 0.85rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .actions button:hover { border-color: var(--primary); }
+    .history {
+      margin-top: 20px;
+      text-align: left;
+    }
+    .history h3 {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .history h3 button {
+      flex: none;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .history-list {
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: var(--bg);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+    }
+    .history-item .dist { color: var(--success); font-weight: 600; }
+    .history-item .time { color: var(--text-muted); }
+    .info {
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: left;
+    }
+    .info h3 {
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+    .info ul {
+      list-style: none;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .info li {
+      padding: 6px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+    .info li::before {
+      content: '⚡';
+      position: absolute;
+      left: 0;
+    }
+    @media (max-width: 480px) {
+      .card { padding: 24px; }
+      h1 { font-size: 1.5rem; }
+      .result .distance { font-size: 1.6rem; }
+      .timer-display { font-size: 2rem; }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1>Calculadora de Distância de Tempestades</h1>
-    <input type="number" id="intervalo" placeholder="Intervalo em segundos" onchange="limparResultado()">
-    <button onclick="calcularDistancia()">Calcular</button>
-    <div class="resultado" id="resultado"></div>
-    <p class="explanation">A distância da tempestade é calculada multiplicando o intervalo em segundos pela velocidade do som em m/s (0.343), para obter uma estimativa aproximada em quilômetros.</p>
-    <p class="credit">Criado por Aleksandro Alves Da Rocha Junior</p>
-</div>
-<script>
+  <div class="container">
+    <div class="card">
+      <div class="icon-large">⛈️</div>
+      <h1>Calculadora de Tempestade</h1>
+      <p class="subtitle">Calcule a distância pelo intervalo entre relâmpago e trovão</p>
+
+      <div class="timer-display" id="timerDisplay">0.0s</div>
+
+      <div class="btn-group">
+        <button class="btn-timer" id="timerBtn" onclick="toggleTimer()" aria-label="Iniciar cronômetro" title="Cronômetro automático">
+          ▶
+        </button>
+        <input
+          type="number"
+          id="intervalo"
+          placeholder="Segundos"
+          min="0"
+          step="0.1"
+          aria-label="Intervalo em segundos"
+          oninput="limparResultado()"
+        >
+      </div>
+      <div class="error-msg" id="errorMsg">Informe um valor válido</div>
+
+      <button class="btn-primary" onclick="calcularDistancia()">Calcular Distância</button>
+
+      <div class="result" id="resultado">
+        <div class="distance" id="distValue"></div>
+        <div class="label" id="distLabel"></div>
+        <div class="safety" id="safetyTip"></div>
+        <div class="actions">
+          <button onclick="compartilhar()">📤 Compartilhar</button>
+          <button onclick="copiar()">📋 Copiar</button>
+        </div>
+      </div>
+
+      <div class="history" id="historySection" style="display:none;">
+        <h3>
+          Histórico
+          <button onclick="limparHistorico()">Limpar</button>
+        </h3>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </div>
+
+    <div class="info">
+      <h3>Como funciona?</h3>
+      <ul>
+        <li>A luz viaja mais rápido que o som</li>
+        <li>Conta os segundos entre ver o relâmpago e ouvir o trovão</li>
+        <li>Cada 3 segundos ≈ 1 km de distância</li>
+        <li>A fórmula é: distância = tempo × 0,343 km/s</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let timerInterval = null;
+    let timerRunning = false;
+    let timerSeconds = 0;
+
+    const intervalo = document.getElementById('intervalo');
+    const timerBtn = document.getElementById('timerBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const errorMsg = document.getElementById('errorMsg');
+
+    function toggleTimer() {
+      if (timerRunning) {
+        pararTimer();
+      } else {
+        iniciarTimer();
+      }
+    }
+
+    function iniciarTimer() {
+      timerRunning = true;
+      timerSeconds = 0;
+      timerBtn.textContent = '⏹';
+      timerBtn.classList.add('running');
+      timerBtn.setAttribute('aria-label', 'Parar cronômetro');
+      timerDisplay.classList.add('show');
+      timerDisplay.textContent = '0.0s';
+      limparResultado();
+
+      timerInterval = setInterval(() => {
+        timerSeconds += 0.1;
+        timerDisplay.textContent = timerSeconds.toFixed(1) + 's';
+      }, 100);
+    }
+
+    function pararTimer() {
+      timerRunning = false;
+      clearInterval(timerInterval);
+      timerBtn.textContent = '▶';
+      timerBtn.classList.remove('running');
+      timerBtn.setAttribute('aria-label', 'Iniciar cronômetro');
+      intervalo.value = timerSeconds.toFixed(1);
+      calcularDistancia();
+    }
+
     function calcularDistancia() {
-        const intervaloSegundos = document.getElementById("intervalo").value.trim();
-        if (intervaloSegundos === '') {
-            alert('Por favor, insira um intervalo de tempo.');
-            return;
-        }
-        const distancia = intervaloSegundos * 0.343;
-        let resultado;
-        if (distancia < 1) {
-            resultado = `A distância da tempestade é de aproximadamente ${(distancia * 1000).toFixed(2)} metros.`;
-        } else {
-            resultado = `A distância da tempestade é de aproximadamente ${distancia.toFixed(2)} quilômetros.`;
-        }
-        const resultadoDiv = document.getElementById('resultado');
-        resultadoDiv.innerHTML = resultado;
-        resultadoDiv.style.display = 'block'; // Show the result
+      const val = intervalo.value.trim();
+      if (val === '' || isNaN(val) || parseFloat(val) < 0) {
+        errorMsg.classList.add('show');
+        intervalo.classList.add('error');
+        return;
+      }
+
+      errorMsg.classList.remove('show');
+      intervalo.classList.remove('error');
+
+      const segundos = parseFloat(val);
+      const distanciaKm = segundos * 0.343;
+      const distanciaM = distanciaKm * 1000;
+
+      let distText, distLabel;
+      if (distanciaKm < 1) {
+        distText = `${distanciaM.toFixed(0)} m`;
+        distLabel = 'aproximadamente';
+      } else {
+        distText = `${distanciaKm.toFixed(2)} km`;
+        distLabel = 'aproximadamente';
+      }
+
+      let safety = '';
+      if (distanciaKm < 1) {
+        safety = '<strong>⚠️ Perigo!</strong> A tempestade está muito perto. Procure abrigo imediatamente.';
+      } else if (distanciaKm < 5) {
+        safety = '<strong>⚡ Atenção!</strong> A tempestade está se aproximando. Evite áreas abertas.';
+      } else if (distanciaKm < 15) {
+        safety = '<strong>🌤️ Moderado.</strong> A tempestade está distante, mas fique atento.';
+      } else {
+        safety = '<strong>✅ Seguro.</strong> A tempestade está longe da sua localização.';
+      }
+
+      document.getElementById('distValue').textContent = distText;
+      document.getElementById('distLabel').textContent = distLabel;
+      document.getElementById('safetyTip').innerHTML = safety;
+
+      const result = document.getElementById('resultado');
+      result.classList.remove('show');
+      void result.offsetWidth;
+      result.classList.add('show');
+
+      salvarHistorico(segundos, distText);
     }
 
     function limparResultado() {
-        const resultadoDiv = document.getElementById('resultado');
-        resultadoDiv.innerHTML = '';
-        resultadoDiv.style.display = 'none'; // Hide the result again
+      errorMsg.classList.remove('show');
+      intervalo.classList.remove('error');
+      document.getElementById('resultado').classList.remove('show');
     }
-</script>
+
+    function compartilhar() {
+      const distancia = document.getElementById('distValue').textContent;
+      const tempo = intervalo.value;
+      const safety = document.getElementById('safetyTip').textContent;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 800;
+      canvas.height = 500;
+      const ctx = canvas.getContext('2d');
+
+      // Fundo gradiente
+      const grad = ctx.createLinearGradient(0, 0, 0, 500);
+      grad.addColorStop(0, '#0f172a');
+      grad.addColorStop(1, '#1e293b');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 800, 500);
+
+      // Borda decorativa
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(20, 20, 760, 460);
+
+      // Ícone de tempestade
+      ctx.font = '80px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('⛈️', 400, 120);
+
+      // Título
+      ctx.font = 'bold 32px Inter, system-ui, sans-serif';
+      ctx.fillStyle = '#facc15';
+      ctx.fillText('Calculadora de Tempestade', 400, 180);
+
+      // Distância
+      ctx.font = 'bold 72px Inter, system-ui, sans-serif';
+      ctx.fillStyle = '#22c55e';
+      ctx.fillText(distancia, 400, 290);
+
+      // Label
+      ctx.font = '24px Inter, system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('distância aproximada', 400, 330);
+
+      // Info
+      ctx.font = '20px Inter, system-ui, sans-serif';
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillText(`Tempo: ${tempo}s | Fórmula: tempo × 0,343 km/s`, 400, 390);
+
+      // Dica de segurança
+      ctx.font = '18px Inter, system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(safety.substring(0, 80), 400, 440);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = `tempestade-${distancia.replace(/\s/g, '')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function copiar() {
+      const texto = `⛈️ Distância: ${document.getElementById('distValue').textContent} | Tempo: ${intervalo.value}s`;
+      navigator.clipboard.writeText(texto);
+      alert('Copiado!');
+    }
+
+    function salvarHistorico(tempo, distancia) {
+      const historico = JSON.parse(localStorage.getItem('stormHistory') || '[]');
+      historico.unshift({ tempo, distancia, data: new Date().toLocaleString('pt-BR') });
+      if (historico.length > 10) historico.pop();
+      localStorage.setItem('stormHistory', JSON.stringify(historico));
+      carregarHistorico();
+    }
+
+    function carregarHistorico() {
+      const historico = JSON.parse(localStorage.getItem('stormHistory') || '[]');
+      const section = document.getElementById('historySection');
+      const list = document.getElementById('historyList');
+
+      if (historico.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+
+      section.style.display = 'block';
+      list.innerHTML = historico.map(h => `
+        <div class="history-item">
+          <span class="dist">${h.distancia}</span>
+          <span class="time">${h.tempo}s • ${h.data}</span>
+        </div>
+      `).join('');
+    }
+
+    function limparHistorico() {
+      localStorage.removeItem('stormHistory');
+      carregarHistorico();
+    }
+
+    intervalo.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') calcularDistancia();
+    });
+
+    carregarHistorico();
+  </script>
 </body>
 </html>
