@@ -15,9 +15,6 @@ COPY apps/google-dorks/index.html /usr/share/nginx/html/google-dorks/index.html
 COPY apps/calculadora-juros-parcelamento/index.html /usr/share/nginx/html/calculadora-juros-parcelamento/index.html
 COPY apps/contagem-regressiva-datas/index.html /usr/share/nginx/html/contagem-regressiva-datas/index.html
 COPY apps/calculadora-seguranca-tomada/index.html /usr/share/nginx/html/calculadora-seguranca-tomada/index.html
-COPY apps/salvar-prompt/index.html /usr/share/nginx/html/salvar-prompt/index.html
-COPY apps/calculadora-conciliacao/index.html /usr/share/nginx/html/calculadora-conciliacao/index.html
-COPY apps/calculadora-regra-de-3/index.html /usr/share/nginx/html/calculadora-regra-de-3/index.html
 COPY apps/formatador-mensagem-whatsapp/index.html /usr/share/nginx/html/formatador-mensagem-whatsapp/index.html
 COPY apps/marca-dagua/index.html /usr/share/nginx/html/marca-dagua/index.html
 COPY apps/buscador-grupos-whatsapp-telegram/index.html /usr/share/nginx/html/buscador-grupos-whatsapp-telegram/index.html

@@ -1,384 +1,1047 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WaterMark Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
-            --tiffany-blue: #BCECE0;
-            --cyan: #36EEE0;
-            --hot-pink: #F652A0;
-            --cornflower: #4C5270;
-            --white: #FFFFFF;
-            --black: #000000;
+            --primary: #e11d48;
+            --primary-hover: #be123c;
+            --primary-light: #fecdd3;
+            --bg: #0f0f11;
+            --bg-secondary: #1a1a1f;
+            --surface: rgba(255,255,255,0.05);
+            --surface-hover: rgba(255,255,255,0.08);
+            --border: rgba(255,255,255,0.08);
+            --text: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --radius-xs: 8px;
+            --glass-bg: rgba(255,255,255,0.04);
+            --glass-border: rgba(255,255,255,0.06);
+            --input-bg: rgba(255,255,255,0.06);
+            --input-border: rgba(255,255,255,0.1);
+            --canvas-bg: #18181b;
+            --toast-bg: rgba(225,29,72,0.95);
+            --toggle-bg: rgba(255,255,255,0.1);
         }
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--tiffany-blue), var(--cyan));
-            color: var(--cornflower);
+
+        [data-theme="light"] {
+            --primary: #be123c;
+            --primary-hover: #e11d48;
+            --primary-light: #ffe4e6;
+            --bg: #fafafa;
+            --bg-secondary: #f4f4f5;
+            --surface: rgba(255,255,255,0.7);
+            --surface-hover: rgba(255,255,255,0.85);
+            --border: rgba(0,0,0,0.08);
+            --text: #18181b;
+            --text-secondary: #52525b;
+            --text-muted: #a1a1aa;
+            --shadow: 0 8px 32px rgba(0,0,0,0.08);
+            --glass-bg: rgba(255,255,255,0.6);
+            --glass-border: rgba(255,255,255,0.5);
+            --input-bg: rgba(0,0,0,0.04);
+            --input-border: rgba(0,0,0,0.1);
+            --canvas-bg: #ffffff;
+            --toast-bg: rgba(190,18,60,0.95);
+            --toggle-bg: rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+            overflow-x: hidden;
         }
-        .container {
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(225,29,72,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(190,18,60,0.05) 0%, transparent 50%);
+            z-index: -1;
+            animation: bgShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-5%, -5%) rotate(3deg); }
+        }
+
+        .app {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 20px 16px 40px;
         }
+
+        /* Header */
         header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        h1 {
-            font-size: 3.5em;
-            color: var(--hot-pink);
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            letter-spacing: 2px;
-        }
-        .subtitle {
-            font-size: 1.2em;
-            color: var(--cornflower);
-            margin-top: 10px;
-        }
-        .main-content {
             display: flex;
-            gap: 40px;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 16px 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
         }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(225,29,72,0.3);
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo h1 span {
+            color: var(--primary);
+        }
+
+        .theme-toggle {
+            width: 48px;
+            height: 28px;
+            border-radius: 14px;
+            background: var(--toggle-bg);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            transition: transform 0.3s;
+            box-shadow: 0 2px 8px rgba(225,29,72,0.4);
+        }
+
+        [data-theme="light"] .theme-toggle::after {
+            transform: translateX(20px);
+        }
+
+        .theme-toggle .icon-sun,
+        .theme-toggle .icon-moon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            transition: opacity 0.3s;
+        }
+
+        .theme-toggle .icon-sun { left: 6px; }
+        .theme-toggle .icon-moon { right: 6px; }
+
+        [data-theme="dark"] .theme-toggle .icon-sun { opacity: 0.4; }
+        [data-theme="dark"] .theme-toggle .icon-moon { opacity: 1; }
+        [data-theme="light"] .theme-toggle .icon-sun { opacity: 1; }
+        [data-theme="light"] .theme-toggle .icon-moon { opacity: 0.4; }
+
+        /* Main Layout */
+        .main {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 900px) {
+            .main {
+                grid-template-columns: 1fr 380px;
+            }
+        }
+
+        /* Canvas Area */
         .canvas-area {
-            flex: 1;
-            background: var(--white);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
-        #canvas {
+
+        .canvas-wrapper {
+            position: relative;
             width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-height: 300px;
+            background: var(--canvas-bg);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed var(--border);
+            transition: border-color 0.3s, background 0.3s;
+            cursor: pointer;
         }
-        .controls {
-            flex: 0 0 350px;
-            background: var(--white);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+        .canvas-wrapper.has-image {
+            border-style: solid;
+            border-color: var(--glass-border);
         }
-        .control-group {
-            margin-bottom: 25px;
+
+        .canvas-wrapper.dragover {
+            border-color: var(--primary);
+            background: rgba(225,29,72,0.05);
         }
-        label {
+
+        .canvas-wrapper canvas {
+            max-width: 100%;
+            max-height: 500px;
             display: block;
-            margin-bottom: 8px;
+            border-radius: var(--radius-xs);
+        }
+
+        .canvas-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .canvas-placeholder svg {
+            width: 56px;
+            height: 56px;
+            opacity: 0.4;
+        }
+
+        .canvas-placeholder p {
+            font-size: 0.9rem;
+        }
+
+        .canvas-placeholder .hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .canvas-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .canvas-actions button {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        /* Controls Panel */
+        .controls {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .controls::-webkit-scrollbar { width: 4px; }
+        .controls::-webkit-scrollbar-track { background: transparent; }
+        .controls::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .controls-title {
+            font-size: 0.85rem;
             font-weight: 600;
-            color: var(--cornflower);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
         }
-        input[type="text"], input[type="number"], select {
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-group label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .control-group label .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--primary);
+            background: rgba(225,29,72,0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid var(--tiffany-blue);
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            padding: 10px 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-xs);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
-            border-color: var(--hot-pink);
-            box-shadow: 0 0 0 3px rgba(246, 82, 160, 0.2);
         }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(225,29,72,0.15);
+        }
+
+        input[type="text"]::placeholder { color: var(--text-muted); }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        select option {
+            background: var(--bg-secondary);
+            color: var(--text);
+        }
+
         input[type="range"] {
             width: 100%;
+            height: 6px;
             -webkit-appearance: none;
-            height: 8px;
-            border-radius: 5px;  
-            background: var(--tiffany-blue);
+            appearance: none;
+            background: var(--input-bg);
+            border-radius: 3px;
             outline: none;
-            padding: 0;
-            margin: 10px 0;
+            margin: 4px 0;
         }
+
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%; 
-            background: var(--hot-pink);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
             cursor: pointer;
-            transition: all .2s ease-in-out;
+            box-shadow: 0 2px 8px rgba(225,29,72,0.4);
+            transition: transform 0.15s, box-shadow 0.15s;
         }
+
         input[type="range"]::-webkit-slider-thumb:hover {
-            background: var(--cyan);
+            transform: scale(1.15);
+            box-shadow: 0 3px 12px rgba(225,29,72,0.5);
         }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(225,29,72,0.4);
+        }
+
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         input[type="color"] {
             -webkit-appearance: none;
-            width: 50px;
-            height: 50px;
-            border: none;
-            border-radius: 50%;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--input-border);
+            border-radius: var(--radius-xs);
             cursor: pointer;
+            background: none;
+            padding: 2px;
         }
-        input[type="color"]::-webkit-color-swatch-wrapper {
-            padding: 0; 
-        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
         input[type="color"]::-webkit-color-swatch {
             border: none;
-            border-radius: 50%;
+            border-radius: 6px;
         }
-        .button-group {
+
+        .color-hex {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Checkbox / Toggle */
+        .toggle-row {
             display: flex;
-            gap: 10px;
-            margin-top: 30px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--input-bg);
+            border-radius: var(--radius-xs);
+            border: 1px solid var(--input-border);
         }
-        button {
-            flex: 1;
-            padding: 12px;
+
+        .toggle-row span {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .mini-toggle {
+            width: 40px;
+            height: 22px;
+            border-radius: 11px;
+            background: var(--input-border);
             border: none;
-            border-radius: 25px;
-            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .mini-toggle.active {
+            background: var(--primary);
+        }
+
+        .mini-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
+        .mini-toggle.active::after {
+            transform: translateX(18px);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
-        #addWatermark {
-            background-color: var(--hot-pink);
-            color: var(--white);
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(225,29,72,0.3);
         }
-        #removeWatermark {
-            background-color: var(--cornflower);
-            color: var(--white);
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(225,29,72,0.4);
         }
-        #download {
-            background-color: var(--cyan);
-            color: var(--cornflower);
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
         }
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+            color: var(--text);
         }
-        .file-upload {
-            position: relative;
-            overflow: hidden;
-            margin: 10px 0;
-            background-color: var(--cyan);
-            color: var(--cornflower);
-            text-align: center;
-            padding: 15px;
-            border-radius: 8px;
+
+        .btn-danger {
+            background: rgba(239,68,68,0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239,68,68,0.25);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(34,197,94,0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(34,197,94,0.4);
+        }
+
+        .btn-full { width: 100%; }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* File Upload */
+        .file-upload-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 14px;
+            border: 1px dashed var(--input-border);
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
+            background: var(--input-bg);
         }
-        .file-upload:hover {
-            background-color: var(--hot-pink);
-            color: var(--white);
+
+        .file-upload-zone:hover {
+            border-color: var(--primary);
+            background: rgba(225,29,72,0.04);
         }
-        .file-upload input[type="file"] {
-            position: absolute;
-            font-size: 100px;
-            right: 0;
-            top: 0;
+
+        .file-upload-zone svg { width: 24px; height: 24px; color: var(--text-muted); }
+        .file-upload-zone span { font-size: 0.8rem; color: var(--text-muted); }
+        .file-upload-zone input { display: none; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 12px 24px;
+            background: var(--toast-bg);
+            backdrop-filter: blur(12px);
+            color: #fff;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 9999;
             opacity: 0;
-            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 32px rgba(225,29,72,0.3);
+            pointer-events: none;
         }
-        @media (max-width: 1024px) {
-            .main-content {
-                flex-direction: column;
-            }
-            .controls {
-                width: 100%;
-            }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .app { padding: 12px 10px 30px; }
+            header { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
+            .logo h1 { font-size: 1.1rem; }
+            .controls { padding: 16px; }
+            .canvas-area { padding: 12px; }
+            .canvas-actions { flex-direction: column; }
+            .canvas-actions button { min-width: unset; }
+        }
+
+        /* Diagonal pattern overlay */
+        .diagonal-info {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 4px;
+            font-style: italic;
+        }
+
+        /* Section divider */
+        .section-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="app">
         <header>
-            <h1>WaterMark Pro</h1>
-            <p class="subtitle">Transforme suas imagens com marcas d'água personalizadas</p>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
+                <h1>Water<span>Mark</span> Pro</h1>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+                <span class="icon-sun">&#9728;</span>
+                <span class="icon-moon">&#9790;</span>
+            </button>
         </header>
-        <div class="main-content">
+
+        <div class="main">
+            <!-- Canvas Area -->
             <div class="canvas-area">
-                <canvas id="canvas"></canvas>
-                <div class="file-upload">
-                    <span>Escolher Imagem</span>
-                    <input type="file" id="imageLoader" accept="image/*">
+                <div class="canvas-wrapper" id="canvasWrapper">
+                    <canvas id="canvas"></canvas>
+                    <div class="canvas-placeholder" id="placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                        <p>Arraste uma imagem ou clique para selecionar</p>
+                        <span class="hint">PNG, JPG, WEBP — at&eacute; 20MB</span>
+                    </div>
+                </div>
+
+                <div class="file-upload-zone" id="fileUploadZone">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>Carregar imagem</span>
+                    <input type="file" id="fileInput" accept="image/*">
+                </div>
+
+                <div class="canvas-actions">
+                    <button class="btn btn-primary" id="btnApply">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Aplicar Marca d'Agua
+                    </button>
+                    <button class="btn btn-danger" id="btnRemove">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        Remover
+                    </button>
+                    <button class="btn btn-success" id="btnDownload">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Baixar PNG
+                    </button>
                 </div>
             </div>
+
+            <!-- Controls -->
             <div class="controls">
+                <div class="controls-title">Configuracoes da Marca d'Agua</div>
+
                 <div class="control-group">
-                    <label for="watermarkText">Texto da Marca d'Água</label>
-                    <input type="text" id="watermarkText" placeholder="Seu texto aqui">
+                    <label for="wmText">Texto</label>
+                    <input type="text" id="wmText" value="Dev Aleksandro Alves" placeholder="Digite o texto da marca d'agua">
                 </div>
+
                 <div class="control-group">
-                    <label for="fontSize">Tamanho da Fonte</label>
-                    <input type="range" id="fontSize" min="10" max="100" value="30">
-                    <span id="fontSizeValue">30</span>
-                </div><div class="control-group">
-                    <label for="fontFamily">Fonte</label>
-                    <select id="fontFamily">
+                    <label for="wmFont">Fonte</label>
+                    <select id="wmFont">
                         <option value="Arial">Arial</option>
                         <option value="Helvetica">Helvetica</option>
                         <option value="Times New Roman">Times New Roman</option>
-                        <option value="Courier">Courier</option>
+                        <option value="Courier New">Courier New</option>
                         <option value="Verdana">Verdana</option>
                         <option value="Georgia">Georgia</option>
-                        <option value="Palatino">Palatino</option>
+                        <option value="Palatino Linotype">Palatino</option>
                         <option value="Garamond">Garamond</option>
                         <option value="Bookman">Bookman</option>
                         <option value="Comic Sans MS">Comic Sans MS</option>
                         <option value="Trebuchet MS">Trebuchet MS</option>
-                        <option value="Arial Black">Arial Black</option>
+                        <option value="Impact">Impact</option>
                     </select>
                 </div>
+
                 <div class="control-group">
-                    <label for="textColor">Cor do Texto</label>
-                    <input type="color" id="textColor" value="#F652A0">
+                    <label for="wmSize">
+                        Tamanho
+                        <span class="value" id="sizeVal">36</span>
+                    </label>
+                    <input type="range" id="wmSize" min="10" max="100" value="36">
                 </div>
+
                 <div class="control-group">
-                    <label for="opacity">Opacidade</label>
-                    <input type="range" id="opacity" min="0" max="1" step="0.1" value="0.5">
-                    <span id="opacityValue">0.5</span>
+                    <label>Cor</label>
+                    <div class="color-row">
+                        <input type="color" id="wmColor" value="#e11d48">
+                        <span class="color-hex" id="colorHex">#e11d48</span>
+                    </div>
                 </div>
+
                 <div class="control-group">
-                    <label for="angle">Ângulo</label>
-                    <input type="range" id="angle" min="-180" max="180" value="0">
-                    <span id="angleValue">0°</span>
+                    <label for="wmOpacity">
+                        Opacidade
+                        <span class="value" id="opacityVal">0.35</span>
+                    </label>
+                    <input type="range" id="wmOpacity" min="0" max="1" step="0.05" value="0.35">
                 </div>
+
                 <div class="control-group">
-                    <label for="scale">Escala</label>
-                    <input type="range" id="scale" min="0.1" max="2" step="0.1" value="1">
-                    <span id="scaleValue">1x</span>
+                    <label for="wmAngle">
+                        Angulo
+                        <span class="value" id="angleVal">-30&deg;</span>
+                    </label>
+                    <input type="range" id="wmAngle" min="-180" max="180" value="-30">
                 </div>
-                <div class="button-group">
-                    <button id="addWatermark">Aplicar</button>
-                    <button id="removeWatermark">Remover</button>
-                    <button id="download">Baixar</button>
+
+                <div class="control-group">
+                    <label for="wmScale">
+                        Escala
+                        <span class="value" id="scaleVal">1.0x</span>
+                    </label>
+                    <input type="range" id="wmScale" min="0.1" max="2" step="0.1" value="1">
                 </div>
+
+                <div class="section-divider"></div>
+
+                <div class="toggle-row">
+                    <span>Padrao Diagonal (repetir)</span>
+                    <button class="mini-toggle active" id="togglePattern"></button>
+                </div>
+
+                <div class="toggle-row">
+                    <span>Marca d'agua centralizada</span>
+                    <button class="mini-toggle" id="toggleCenter"></button>
+                </div>
+
+                <div class="diagonal-info" id="patternInfo">Padrao diagonal ativo — marca d'agua sera repetida em toda a imagem</div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <div class="toast" id="toast"></div>
+
     <script>
-        // Inicialização do canvas
-        const canvas = new fabric.Canvas('canvas', {
-            width: 600,
-            height: 400
+        const $ = id => document.getElementById(id);
+
+        // State
+        let sourceImage = null;
+        let patternMode = true;
+        let centerMode = false;
+
+        // Elements
+        const canvas = $('canvas');
+        const ctx = canvas.getContext('2d');
+        const canvasWrapper = $('canvasWrapper');
+        const placeholder = $('placeholder');
+        const fileInput = $('fileInput');
+        const fileUploadZone = $('fileUploadZone');
+        const toast = $('toast');
+
+        // Controls
+        const wmText = $('wmText');
+        const wmFont = $('wmFont');
+        const wmSize = $('wmSize');
+        const wmColor = $('wmColor');
+        const wmOpacity = $('wmOpacity');
+        const wmAngle = $('wmAngle');
+        const wmScale = $('wmScale');
+        const togglePattern = $('togglePattern');
+        const toggleCenter = $('toggleCenter');
+        const patternInfo = $('patternInfo');
+
+        // Value displays
+        const sizeVal = $('sizeVal');
+        const colorHex = $('colorHex');
+        const opacityVal = $('opacityVal');
+        const angleVal = $('angleVal');
+        const scaleVal = $('scaleVal');
+
+        // Theme
+        const themeToggle = $('themeToggle');
+        const html = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            showToast(next === 'dark' ? 'Tema escuro ativado' : 'Tema claro ativado');
+            if (sourceImage) renderCanvas();
         });
 
-        // Elementos do DOM
-        const imageLoader = document.getElementById('imageLoader');
-        const addWatermarkBtn = document.getElementById('addWatermark');
-        const removeWatermarkBtn = document.getElementById('removeWatermark');
-        const downloadBtn = document.getElementById('download');
-        const watermarkText = document.getElementById('watermarkText');
-        const fontSize = document.getElementById('fontSize');
-        const fontFamily = document.getElementById('fontFamily');
-        const textColor = document.getElementById('textColor');
-        const opacity = document.getElementById('opacity');
-        const angle = document.getElementById('angle');
-        const scale = document.getElementById('scale');
+        // Toast
+        let toastTimeout;
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
+        }
 
-        // Variável para armazenar o objeto de marca d'água
-        let watermarkObject = null;
+        // Toggle handlers
+        togglePattern.addEventListener('click', () => {
+            patternMode = !patternMode;
+            togglePattern.classList.toggle('active', patternMode);
+            if (patternMode) {
+                centerMode = false;
+                toggleCenter.classList.remove('active');
+            }
+            patternInfo.textContent = patternMode
+                ? "Padrao diagonal ativo — marca d'agua sera repetida em toda a imagem"
+                : "Padrao desativado — marca d'agua unica";
+            if (sourceImage) renderCanvas();
+        });
 
-        // Função para lidar com o upload da imagem
-        imageLoader.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const imgObj = new Image();
-                    imgObj.src = event.target.result;
-                    imgObj.onload = function() {
-                        const scale = Math.min(600 / imgObj.width, 400 / imgObj.height);
-                        canvas.setDimensions({
-                            width: imgObj.width * scale,
-                            height: imgObj.height * scale
-                        });
+        toggleCenter.addEventListener('click', () => {
+            centerMode = !centerMode;
+            toggleCenter.classList.toggle('active', centerMode);
+            if (centerMode) {
+                patternMode = false;
+                togglePattern.classList.remove('active');
+                patternInfo.textContent = "Modo centralizado — marca d'agua unica no centro";
+            } else {
+                patternMode = true;
+                togglePattern.classList.add('active');
+                patternInfo.textContent = "Padrao diagonal ativo — marca d'agua sera repetida em toda a imagem";
+            }
+            if (sourceImage) renderCanvas();
+        });
 
-                        const image = new fabric.Image(imgObj, {
-                            scaleX: scale,
-                            scaleY: scale
-                        });
+        // Value update handlers
+        wmSize.addEventListener('input', () => { sizeVal.textContent = wmSize.value; if (sourceImage) renderCanvas(); });
+        wmColor.addEventListener('input', () => { colorHex.textContent = wmColor.value; if (sourceImage) renderCanvas(); });
+        wmOpacity.addEventListener('input', () => { opacityVal.textContent = parseFloat(wmOpacity.value).toFixed(2); if (sourceImage) renderCanvas(); });
+        wmAngle.addEventListener('input', () => { angleVal.innerHTML = wmAngle.value + '&deg;'; if (sourceImage) renderCanvas(); });
+        wmScale.addEventListener('input', () => { scaleVal.textContent = parseFloat(wmScale.value).toFixed(1) + 'x'; if (sourceImage) renderCanvas(); });
+        wmText.addEventListener('input', () => { if (sourceImage) renderCanvas(); });
+        wmFont.addEventListener('change', () => { if (sourceImage) renderCanvas(); });
 
-                        canvas.clear();
-                        canvas.add(image);
-                        canvas.renderAll();
+        // File upload
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                showToast('Por favor, selecione uma imagem valida');
+                return;
+            }
+            if (file.size > 20 * 1024 * 1024) {
+                showToast('Arquivo muito grande (max 20MB)');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    sourceImage = img;
+                    canvasWrapper.classList.add('has-image');
+                    placeholder.style.display = 'none';
+                    renderCanvas();
+                    showToast('Imagem carregada com sucesso!');
+                };
+                img.onerror = () => showToast('Erro ao carregar imagem');
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+        fileUploadZone.addEventListener('click', () => fileInput.click());
+        canvasWrapper.addEventListener('click', () => { if (!sourceImage) fileInput.click(); });
+
+        // Drag & Drop
+        ['dragenter', 'dragover'].forEach(ev => {
+            canvasWrapper.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); canvasWrapper.classList.add('dragover'); });
+        });
+        ['dragleave', 'drop'].forEach(ev => {
+            canvasWrapper.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); canvasWrapper.classList.remove('dragover'); });
+        });
+        canvasWrapper.addEventListener('drop', e => {
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+
+        // Render
+        function renderCanvas() {
+            if (!sourceImage) return;
+
+            const maxW = canvasWrapper.clientWidth - 32;
+            const maxH = 500;
+            const scaleFit = Math.min(maxW / sourceImage.width, maxH / sourceImage.height, 1);
+
+            canvas.width = sourceImage.width * scaleFit;
+            canvas.height = sourceImage.height * scaleFit;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(sourceImage, 0, 0, canvas.width, canvas.height);
+
+            const text = wmText.value || 'Dev Aleksandro Alves';
+            const font = wmFont.value;
+            const size = parseInt(wmSize.value) * scaleFit;
+            const color = wmColor.value;
+            const opacity = parseFloat(wmOpacity.value);
+            const angle = parseInt(wmAngle.value) * Math.PI / 180;
+            const scaleWm = parseFloat(wmScale.value);
+
+            ctx.save();
+            ctx.globalAlpha = opacity;
+            ctx.fillStyle = color;
+            ctx.font = `${size * scaleWm}px "${font}"`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            if (centerMode) {
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(angle);
+                ctx.fillText(text, 0, 0);
+            } else if (patternMode) {
+                const metrics = ctx.measureText(text);
+                const textW = metrics.width;
+                const textH = size * scaleWm;
+                const diag = Math.sqrt(canvas.width * canvas.width + canvas.height * canvas.height);
+                const spacing = textW * 1.5;
+                const vSpacing = textH * 3;
+
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(angle);
+
+                const cols = Math.ceil(diag * 2 / spacing) + 4;
+                const rows = Math.ceil(diag * 2 / vSpacing) + 4;
+                const startX = -diag;
+                const startY = -diag;
+
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        const x = startX + c * spacing + (r % 2 === 0 ? 0 : spacing * 0.5);
+                        const y = startY + r * vSpacing;
+                        ctx.fillText(text, x, y);
                     }
                 }
-                reader.readAsDataURL(file);
             }
-        });
-
-        // Função para criar/atualizar a marca d'água
-        function updateWatermark() {
-            if (watermarkObject) {
-                canvas.remove(watermarkObject);
-            }
-            
-            watermarkObject = new fabric.Text(watermarkText.value, {
-                fontSize: parseInt(fontSize.value),
-                fontFamily: fontFamily.value,
-                fill: textColor.value,
-                opacity: parseFloat(opacity.value),
-                angle: parseInt(angle.value),
-                scaleX: parseFloat(scale.value),
-                scaleY: parseFloat(scale.value),
-                left: canvas.width / 2,
-                top: canvas.height / 2,
-                originX: 'center',
-                originY: 'center'
-            });
-
-            canvas.add(watermarkObject);
-            canvas.setActiveObject(watermarkObject);
-            canvas.renderAll();
+            ctx.restore();
         }
 
-        // Event listeners para os controles da marca d'água
-        addWatermarkBtn.addEventListener('click', updateWatermark);
-        
-        [watermarkText, fontSize, fontFamily, textColor, opacity, angle, scale].forEach(elem => {
-            elem.addEventListener('input', updateWatermark);
-        });
-
-        removeWatermarkBtn.addEventListener('click', function() {
-            if (watermarkObject) {
-                canvas.remove(watermarkObject);
-                watermarkObject = null;
-                canvas.renderAll();
+        // Apply watermark
+        $('btnApply').addEventListener('click', () => {
+            if (!sourceImage) {
+                showToast('Carregue uma imagem primeiro');
+                return;
             }
+            renderCanvas();
+            showToast('Marca d\'agua aplicada!');
         });
 
-        downloadBtn.addEventListener('click', function() {
-            const dataURL = canvas.toDataURL({
-                format: 'png',
-                quality: 1
-            });
+        // Remove watermark
+        $('btnRemove').addEventListener('click', () => {
+            if (!sourceImage) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(sourceImage, 0, 0, canvas.width, canvas.height);
+            showToast('Marca d\'agua removida');
+        });
+
+        // Download
+        $('btnDownload').addEventListener('click', () => {
+            if (!sourceImage) {
+                showToast('Carregue uma imagem primeiro');
+                return;
+            }
+
+            // Full resolution export
+            const exportCanvas = document.createElement('canvas');
+            const exportCtx = exportCanvas.getContext('2d');
+            exportCanvas.width = sourceImage.width;
+            exportCanvas.height = sourceImage.height;
+
+            exportCtx.drawImage(sourceImage, 0, 0);
+
+            const text = wmText.value || 'Dev Aleksandro Alves';
+            const font = wmFont.value;
+            const size = parseInt(wmSize.value);
+            const color = wmColor.value;
+            const opacity = parseFloat(wmOpacity.value);
+            const angle = parseInt(wmAngle.value) * Math.PI / 180;
+            const scaleWm = parseFloat(wmScale.value);
+
+            exportCtx.save();
+            exportCtx.globalAlpha = opacity;
+            exportCtx.fillStyle = color;
+            exportCtx.font = `${size * scaleWm}px "${font}"`;
+            exportCtx.textAlign = 'center';
+            exportCtx.textBaseline = 'middle';
+
+            if (centerMode) {
+                exportCtx.translate(exportCanvas.width / 2, exportCanvas.height / 2);
+                exportCtx.rotate(angle);
+                exportCtx.fillText(text, 0, 0);
+            } else if (patternMode) {
+                const textW = exportCtx.measureText(text).width;
+                const textH = size * scaleWm;
+                const diag = Math.sqrt(exportCanvas.width ** 2 + exportCanvas.height ** 2);
+                const spacing = textW * 1.5;
+                const vSpacing = textH * 3;
+
+                exportCtx.translate(exportCanvas.width / 2, exportCanvas.height / 2);
+                exportCtx.rotate(angle);
+
+                const cols = Math.ceil(diag * 2 / spacing) + 4;
+                const rows = Math.ceil(diag * 2 / vSpacing) + 4;
+                const startX = -diag;
+                const startY = -diag;
+
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        const x = startX + c * spacing + (r % 2 === 0 ? 0 : spacing * 0.5);
+                        const y = startY + r * vSpacing;
+                        exportCtx.fillText(text, x, y);
+                    }
+                }
+            }
+            exportCtx.restore();
+
             const link = document.createElement('a');
-            link.download = 'watermarked_image.png';
-            link.href = dataURL;
-            document.body.appendChild(link);
+            link.download = 'watermarked_' + Date.now() + '.png';
+            link.href = exportCanvas.toDataURL('image/png');
             link.click();
-            document.body.removeChild(link);
+            showToast('Imagem baixada com sucesso!');
         });
 
-        // Atualizar os valores exibidos
-        function updateDisplayedValue(inputId, valueId, suffix = '') {
-            const input = document.getElementById(inputId);
-            const valueSpan = document.getElementById(valueId);
-            input.addEventListener('input', function() {
-                valueSpan.textContent = input.value + suffix;
-            });
-        }
-
-        updateDisplayedValue('fontSize', 'fontSizeValue');
-        updateDisplayedValue('opacity', 'opacityValue');
-        updateDisplayedValue('angle', 'angleValue', '°');
-        updateDisplayedValue('scale', 'scaleValue', 'x');
+        // Window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => { if (sourceImage) renderCanvas(); }, 150);
+        });
     </script>
 </body>
 </html>

@@ -7,8 +7,6 @@ services:
       - "8080"
     networks:
       - traefik-public
-    depends_on:
-      - favoritos
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hub-master.rule=Host(`hub.srv1767486.hstgr.cloud`)"
@@ -17,18 +15,6 @@ services:
       - "traefik.http.routers.hub-master.tls.certresolver=letsencrypt"
       - "traefik.http.services.hub-master.loadbalancer.server.port=8080"
       - "traefik.docker.network=traefik-public"
-
-  favoritos:
-    build:
-      context: .
-      dockerfile: services/favoritos/Dockerfile
-    restart: unless-stopped
-    environment:
-      FAVORITES_PASSWORD: ${FAVORITES_PASSWORD:?Defina FAVORITES_PASSWORD no arquivo .env}
-    volumes:
-      - favoritos-data:/var/www/html/data
-    networks:
-      - traefik-public
 
   organizador-relay:
     build:
@@ -144,7 +130,6 @@ services:
       - traefik-public
 
 volumes:
-  favoritos-data:
   postgres-data:
 
 networks:
