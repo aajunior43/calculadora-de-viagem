@@ -1,82 +1,521 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --background-color: #000000;
-            --font-family: 'Press Start 2P', cursive;
-            --text-color: #0f0;
-            --text-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 40px #0f0, 0 0 80px #0f0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relógio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--font:'Inter',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono','Courier New',monospace;--radius:20px;--transition:0.35s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{
+  --bg:#0a0a1a;--bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);--card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;--text-muted:#8b8ba0;
+  --primary:#6366f1;--primary-dim:rgba(99,102,241,0.12);--primary-glow:rgba(99,102,241,0.25);
+  --accent:#818cf8;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);--card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;--text-muted:#6b7280;
+  --primary:#4f46e5;--primary-dim:rgba(79,70,229,0.08);--primary-glow:rgba(79,70,229,0.15);
+  --accent:#6366f1;--green:#059669;--red:#dc2626;--yellow:#d97706;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-grad);color:var(--text);min-height:100vh;padding:20px;transition:background var(--transition),color var(--transition)}
+.app{max-width:520px;margin:0 auto;padding-bottom:40px}
 
-        body {
-            background: var(--background-color);
-            font-family: var(--font-family);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            transition: all 0.5s ease-in-out;
-        }
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:var(--primary-dim);border:1.5px solid var(--primary);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.header-title{font-size:1.1rem;font-weight:800}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.header-right{display:flex;gap:8px}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{border-color:var(--primary);transform:scale(1.05)}
 
-        #clock {
-            font-size: 48px;
-            text-shadow: var(--text-shadow);
-        }
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:16px}
 
-        #date {
-            font-size: 24px;
-            text-shadow: var(--text-shadow);
-            margin-top: 20px;
-        }
+/* Clock display */
+.clock-display{text-align:center;padding:24px 0}
+.clock-time{font-family:var(--mono);font-size:4.5rem;font-weight:800;letter-spacing:-0.02em;line-height:1;color:var(--primary);text-shadow:0 0 40px var(--primary-glow)}
+.clock-seconds{font-size:2rem;color:var(--accent);opacity:0.7}
+.clock-date{font-size:1rem;font-weight:600;color:var(--text-muted);margin-top:8px}
+.clock-day{font-size:0.85rem;font-weight:500;color:var(--text-muted);margin-top:4px;opacity:0.7}
 
-        #author {
-            font-size: 16px;
-            text-shadow: var(--text-shadow);
-            margin-top: 40px;
-        }
+/* Analog clock */
+.analog-wrap{display:none;justify-content:center;padding:20px 0}
+.analog-wrap.show{display:flex}
+.analog{position:relative;width:220px;height:220px;border-radius:50%;border:3px solid var(--primary);background:var(--card);box-shadow:0 0 30px var(--primary-glow)}
+.analog-center{position:absolute;top:50%;left:50%;width:12px;height:12px;border-radius:50%;background:var(--primary);transform:translate(-50%,-50%);z-index:10}
+.analog-hand{position:absolute;bottom:50%;left:50%;transform-origin:bottom center;border-radius:4px}
+.hand-hour{width:5px;height:60px;background:var(--text);margin-left:-2.5px;transition:transform 0.3s cubic-bezier(.4,0,.2,1)}
+.hand-minute{width:3px;height:80px;background:var(--primary);margin-left:-1.5px;transition:transform 0.3s cubic-bezier(.4,0,.2,1)}
+.hand-second{width:1.5px;height:90px;background:var(--red);margin-left:-0.75px;transition:transform 0.1s linear}
+.analog-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--primary);top:8px;left:50%;margin-left:-4px;transform-origin:center 102px}
+.analog-dot:nth-child(1){transform:rotate(0deg)}
+.analog-dot:nth-child(2){transform:rotate(30deg)}
+.analog-dot:nth-child(3){transform:rotate(60deg)}
+.analog-dot:nth-child(4){transform:rotate(90deg)}
+.analog-dot:nth-child(5){transform:rotate(120deg)}
+.analog-dot:nth-child(6){transform:rotate(150deg)}
+.analog-dot:nth-child(7){transform:rotate(180deg)}
+.analog-dot:nth-child(8){transform:rotate(210deg)}
+.analog-dot:nth-child(9){transform:rotate(240deg)}
+.analog-dot:nth-child(10){transform:rotate(270deg)}
+.analog-dot:nth-child(11){transform:rotate(300deg)}
+.analog-dot:nth-child(12){transform:rotate(330deg)}
 
-        @media (max-width: 600px) {
-            #clock {
-                font-size: 32px;
-            }
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:14px;padding:4px}
+.tab{flex:1;padding:11px 6px;border-radius:11px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.active{background:var(--primary-dim);color:var(--primary);box-shadow:0 2px 8px var(--primary-glow)}
 
-            #date {
-                font-size: 18px;
-            }
+/* Stopwatch */
+.sw-display{text-align:center;padding:20px 0}
+.sw-time{font-family:var(--mono);font-size:3.5rem;font-weight:800;color:var(--text);letter-spacing:0.02em}
+.sw-ms{font-size:1.5rem;color:var(--primary);opacity:0.7}
+.sw-laps{margin-top:12px;max-height:120px;overflow-y:auto}
+.sw-lap{display:flex;justify-content:space-between;padding:6px 12px;border-radius:8px;background:var(--primary-dim);margin-bottom:4px;font-size:0.8rem;font-weight:600}
+.sw-lap .lap-num{color:var(--text-muted)}
+.sw-lap .lap-time{color:var(--primary);font-family:var(--mono)}
 
-            #author {
-                font-size: 14px;
-            }
-        }
-    </style>
+/* Timer */
+.timer-display{text-align:center;padding:20px 0}
+.timer-time{font-family:var(--mono);font-size:3.5rem;font-weight:800;color:var(--text)}
+.timer-progress{width:100%;height:6px;border-radius:3px;background:var(--card-border);margin-top:16px;overflow:hidden}
+.timer-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width 0.5s linear}
+.timer-presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;justify-content:center}
+.timer-preset{padding:8px 16px;border-radius:20px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text-muted);font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all var(--transition)}
+.timer-preset:hover{border-color:var(--primary);color:var(--text)}
+.timer-inputs{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.timer-inputs input{width:64px;padding:10px;border-radius:10px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--mono);font-size:1.2rem;font-weight:700;text-align:center;outline:none}
+.timer-inputs input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+.timer-labels{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.timer-labels span{width:64px;text-align:center;font-size:0.65rem;font-weight:600;color:var(--text-muted);text-transform:uppercase}
+
+/* Pomodoro */
+.pomo-display{text-align:center;padding:20px 0}
+.pomo-time{font-family:var(--mono);font-size:3.5rem;font-weight:800;color:var(--primary)}
+.pomo-label{font-size:0.85rem;font-weight:600;color:var(--text-muted);margin-top:4px}
+.pomo-sessions{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.pomo-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--card-border);transition:all var(--transition)}
+.pomo-dot.done{background:var(--green);border-color:var(--green)}
+.pomo-dot.active{background:var(--primary);border-color:var(--primary);box-shadow:0 0 8px var(--primary-glow)}
+
+/* Buttons */
+.btn-row{display:flex;gap:8px;justify-content:center}
+.btn{padding:12px 24px;border-radius:12px;border:none;font-family:var(--font);font-size:0.85rem;font-weight:700;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{background:var(--card);border:1.5px solid var(--card-border);color:var(--text)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-green{background:linear-gradient(135deg,var(--green),#059669);color:#fff}
+.btn-red{background:linear-gradient(135deg,var(--red),#dc2626);color:#fff}
+.btn-red:hover{box-shadow:0 6px 20px rgba(239,68,68,0.3)}
+
+/* World clock */
+.world-list{display:none}
+.world-list.show{display:block}
+.world-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:12px;border:1px solid var(--card-border);margin-bottom:6px;transition:all var(--transition)}
+.world-item:hover{border-color:var(--primary)}
+.world-city{font-size:0.85rem;font-weight:700;color:var(--text)}
+.world-tz{font-size:0.65rem;color:var(--text-muted)}
+.world-time{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:var(--primary)}
+.world-date{font-size:0.65rem;color:var(--text-muted)}
+
+.footer{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid var(--card-border)}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;border-radius:12px;background:var(--primary);color:#fff;font-family:var(--font);font-size:0.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:500px){body{padding:12px}.card{padding:16px}.clock-time{font-size:3rem}.sw-time,.timer-time,.pomo-time{font-size:2.5rem}.analog{width:180px;height:180px}}
+</style>
 </head>
 <body>
-    <div id="clock"></div>
-    <div id="date"></div>
-    <div id="author">Aleksandro Alves</div>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">🕐</div>
+      <div>
+        <div class="header-title">Relógio</div>
+        <div class="header-sub">Digital, analógico e cronômetro</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" onclick="toggleFullscreen()" title="Tela cheia">⛶</button>
+      <button class="icon-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    </div>
+  </div>
 
-    <script>
-        function updateTime() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+  <!-- Main clock -->
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="setTab('clock')" data-tab="clock">🕐 Relógio</button>
+      <button class="tab" onclick="setTab('sw')" data-tab="sw">⏱️ Cronômetro</button>
+      <button class="tab" onclick="setTab('timer')" data-tab="timer">⏲️ Timer</button>
+      <button class="tab" onclick="setTab('pomo')" data-tab="pomo">🍅 Pomodoro</button>
+    </div>
 
-            const day = now.getDate().toString().padStart(2, '0');
-            const month = (now.getMonth() + 1).toString().padStart(2, '0');
-            const year = now.getFullYear();
-            document.getElementById('date').textContent = `${day}/${month}/${year}`;
-        }
+    <!-- Clock -->
+    <div id="tabClock">
+      <div class="clock-display">
+        <div class="clock-time"><span id="cH">00</span>:<span id="cM">00</span><span class="clock-seconds">:<span id="cS">00</span></span></div>
+        <div class="clock-date" id="cDate"></div>
+        <div class="clock-day" id="cDay"></div>
+      </div>
+      <div class="analog-wrap" id="analogWrap">
+        <div class="analog">
+          <div class="analog-dot"></div><div class="analog-dot"></div><div class="analog-dot"></div>
+          <div class="analog-dot"></div><div class="analog-dot"></div><div class="analog-dot"></div>
+          <div class="analog-dot"></div><div class="analog-dot"></div><div class="analog-dot"></div>
+          <div class="analog-dot"></div><div class="analog-dot"></div><div class="analog-dot"></div>
+          <div class="analog-hand hand-hour" id="handH"></div>
+          <div class="analog-hand hand-minute" id="handM"></div>
+          <div class="analog-hand hand-second" id="handS"></div>
+          <div class="analog-center"></div>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn btn-secondary" onclick="toggleAnalog()" id="btnAnalog">🔄 Analógico</button>
+      </div>
+    </div>
 
-        setInterval(updateTime, 1000);
-        updateTime();
-    </script>
+    <!-- Stopwatch -->
+    <div id="tabSw" style="display:none">
+      <div class="sw-display">
+        <div class="sw-time"><span id="swMin">00</span>:<span id="swSec">00</span><span class="sw-ms">.<span id="swMs">00</span></span></div>
+      </div>
+      <div class="sw-laps" id="swLaps"></div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn btn-primary" onclick="swToggle()" id="swBtn">▶ Iniciar</button>
+        <button class="btn btn-secondary" onclick="swLap()" id="swLapBtn" disabled>📍 Volta</button>
+        <button class="btn btn-red" onclick="swReset()" id="swResetBtn" disabled>⏹ Resetar</button>
+      </div>
+    </div>
+
+    <!-- Timer -->
+    <div id="tabTimer" style="display:none">
+      <div class="timer-presets">
+        <button class="timer-preset" onclick="setTimerPreset(60)">1 min</button>
+        <button class="timer-preset" onclick="setTimerPreset(300)">5 min</button>
+        <button class="timer-preset" onclick="setTimerPreset(600)">10 min</button>
+        <button class="timer-preset" onclick="setTimerPreset(900)">15 min</button>
+        <button class="timer-preset" onclick="setTimerPreset(1800)">30 min</button>
+        <button class="timer-preset" onclick="setTimerPreset(3600)">1 hora</button>
+      </div>
+      <div class="timer-inputs">
+        <div>
+          <input type="number" id="tH" value="0" min="0" max="23">
+          <div class="timer-labels"><span>horas</span></div>
+        </div>
+        <div>
+          <input type="number" id="tM" value="5" min="0" max="59">
+          <div class="timer-labels"><span>min</span></div>
+        </div>
+        <div>
+          <input type="number" id="tS" value="0" min="0" max="59">
+          <div class="timer-labels"><span>seg</span></div>
+        </div>
+      </div>
+      <div class="timer-display">
+        <div class="timer-time" id="timerDisplay">00:05:00</div>
+        <div class="timer-progress"><div class="timer-bar" id="timerBar" style="width:0%"></div></div>
+      </div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn btn-primary" onclick="timerToggle()" id="timerBtn">▶ Iniciar</button>
+        <button class="btn btn-red" onclick="timerReset()">⏹ Resetar</button>
+      </div>
+    </div>
+
+    <!-- Pomodoro -->
+    <div id="tabPomo" style="display:none">
+      <div class="pomo-display">
+        <div class="pomo-time" id="pomoTime">25:00</div>
+        <div class="pomo-label" id="pomoLabel">Foco</div>
+        <div class="pomo-sessions" id="pomoSessions">
+          <div class="pomo-dot"></div><div class="pomo-dot"></div><div class="pomo-dot"></div><div class="pomo-dot"></div>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn-primary" onclick="pomoToggle()" id="pomoBtn">▶ Iniciar</button>
+        <button class="btn btn-secondary" onclick="pomoReset()">⏹ Resetar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- World Clock -->
+  <div class="card world-list" id="worldList">
+    <div style="font-size:0.8rem;font-weight:700;color:var(--text-muted);margin-bottom:12px">🌍 Relógios do Mundo</div>
+    <div id="worldItems"></div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let showAnalog=false;
+let swInterval=null,swRunning=false,swTime=0,swLaps=[];
+let timerInterval=null,timerRunning=false,timerTotal=0,timerRemain=0;
+let pomoInterval=null,pomoRunning=false,pomoWork=25*60,pomoBreak=5*60,pomoLong=15*60;
+let pomoIsWork=true,pomoSession=0,pomoRemain=25*60;
+
+const WORLD_CITIES=[
+  {name:'Tóquio',tz:'Asia/Tokyo',flag:'🇯🇵'},
+  {name:'Londres',tz:'Europe/London',flag:'🇬🇧'},
+  {name:'Nova York',tz:'America/New_York',flag:'🇺🇸'},
+  {name:'São Paulo',tz:'America/Sao_Paulo',flag:'🇧🇷'},
+  {name:'Sydney',tz:'Australia/Sydney',flag:'🇦🇺'},
+  {name:'Dubai',tz:'Asia/Dubai',flag:'🇦🇪'},
+  {name:'Paris',tz:'Europe/Paris',flag:'🇫🇷'},
+  {name:'Moscou',tz:'Europe/Moscow',flag:'🇷🇺'},
+];
+
+/* Theme */
+function toggleTheme(){const h=document.documentElement,b=document.querySelectorAll('.icon-btn')[1];const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');b.textContent=d?'☀️':'🌙';localStorage.setItem('relogioTheme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('relogioTheme');if(s){document.documentElement.setAttribute('data-theme',s);document.querySelectorAll('.icon-btn')[1].textContent=s==='dark'?'🌙':'☀️';}})();
+
+/* Fullscreen */
+function toggleFullscreen(){
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+/* Tabs */
+function setTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));
+  ['tabClock','tabSw','tabTimer','tabPomo'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById({clock:'tabClock',sw:'tabSw',timer:'tabTimer',pomo:'tabPomo'}[t]).style.display='block';
+  document.getElementById('worldList').classList.toggle('show',t==='clock');
+}
+
+/* Clock */
+function updateClock(){
+  const now=new Date();
+  document.getElementById('cH').textContent=String(now.getHours()).padStart(2,'0');
+  document.getElementById('cM').textContent=String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('cS').textContent=String(now.getSeconds()).padStart(2,'0');
+
+  const days=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  const months=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  document.getElementById('cDate').textContent=now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('cDay').textContent=days[now.getDay()];
+
+  if(showAnalog){
+    const s=now.getSeconds(),m=now.getMinutes(),h=now.getHours()%12;
+    document.getElementById('handS').style.transform=`rotate(${s*6}deg)`;
+    document.getElementById('handM').style.transform=`rotate(${m*6+s*0.1}deg)`;
+    document.getElementById('handH').style.transform=`rotate(${h*30+m*0.5}deg)`;
+  }
+
+  // World clocks
+  WORLD_CITIES.forEach((c,i)=>{
+    const el=document.getElementById('wc'+i);
+    if(el){
+      const d=new Date().toLocaleString('pt-BR',{timeZone:c.tz,hour:'2-digit',minute:'2-digit',hour12:false});
+      el.textContent=d;
+    }
+  });
+}
+
+function toggleAnalog(){
+  showAnalog=!showAnalog;
+  document.getElementById('analogWrap').classList.toggle('show',showAnalog);
+  document.getElementById('btnAnalog').textContent=showAnalog?'🔄 Digital':'🔄 Analógico';
+}
+
+/* World clock */
+function renderWorld(){
+  const container=document.getElementById('worldItems');
+  container.innerHTML=WORLD_CITIES.map((c,i)=>`
+    <div class="world-item">
+      <div><div class="world-city">${c.flag} ${c.name}</div><div class="world-tz">${c.tz}</div></div>
+      <div style="text-align:right"><div class="world-time" id="wc${i}">--:--</div></div>
+    </div>
+  `).join('');
+  document.getElementById('worldList').classList.add('show');
+}
+
+/* Stopwatch */
+function swToggle(){
+  if(swRunning){swStop();}else{swStart();}
+}
+function swStart(){
+  swRunning=true;
+  const start=Date.now()-swTime;
+  swInterval=setInterval(()=>{swTime=Date.now()-start;swDisplay();},10);
+  document.getElementById('swBtn').textContent='⏸ Pausar';
+  document.getElementById('swBtn').className='btn btn-secondary';
+  document.getElementById('swLapBtn').disabled=false;
+  document.getElementById('swResetBtn').disabled=false;
+}
+function swStop(){
+  swRunning=false;
+  clearInterval(swInterval);
+  document.getElementById('swBtn').textContent='▶ Retomar';
+  document.getElementById('swBtn').className='btn btn-primary';
+}
+function swReset(){
+  swRunning=false;clearInterval(swInterval);swTime=0;swLaps=[];
+  document.getElementById('swBtn').textContent='▶ Iniciar';
+  document.getElementById('swBtn').className='btn btn-primary';
+  document.getElementById('swLapBtn').disabled=true;
+  document.getElementById('swResetBtn').disabled=true;
+  document.getElementById('swLaps').innerHTML='';
+  swDisplay();
+}
+function swLap(){
+  if(!swRunning)return;
+  swLaps.push(swTime);
+  const list=document.getElementById('swLaps');
+  const lap=swLaps.length;
+  const prev=swLaps.length>1?swLaps[swLaps.length-2]:0;
+  const diff=swTime-prev;
+  list.innerHTML=`<div class="sw-lap"><span class="lap-num">Volta ${lap}</span><span class="lap-time">${fmtTime(diff)}</span></div>`+list.innerHTML;
+}
+function swDisplay(){
+  document.getElementById('swMin').textContent=String(Math.floor(swTime/60000)).padStart(2,'0');
+  document.getElementById('swSec').textContent=String(Math.floor((swTime%60000)/1000)).padStart(2,'0');
+  document.getElementById('swMs').textContent=String(Math.floor((swTime%1000)/10)).padStart(2,'0');
+}
+
+/* Timer */
+function setTimerPreset(sec){
+  document.getElementById('tH').value=Math.floor(sec/3600);
+  document.getElementById('tM').value=Math.floor((sec%3600)/60);
+  document.getElementById('tS').value=sec%60;
+  timerUpdateDisplay();
+}
+function timerUpdateDisplay(){
+  const h=parseInt(document.getElementById('tH').value)||0;
+  const m=parseInt(document.getElementById('tM').value)||0;
+  const s=parseInt(document.getElementById('tS').value)||0;
+  timerTotal=h*3600+m*60+s;
+  document.getElementById('timerDisplay').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function timerToggle(){
+  if(timerRunning){timerStop();}else{timerStart();}
+}
+function timerStart(){
+  if(timerRemain<=0){timerRemain=timerTotal;}
+  if(timerRemain<=0){showToast('Defina um tempo!');return;}
+  timerRunning=true;
+  const end=Date.now()+timerRemain*1000;
+  timerInterval=setInterval(()=>{
+    timerRemain=Math.max(0,(end-Date.now())/1000);
+    timerDisplay();
+    if(timerRemain<=0){timerStop();showToast('⏰ Tempo esgotado!');new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVggoKIeGBGPHeu3c8TEA58iI2Obk1FS3ar08MUEQ9+jsDRkxAPfJLJ0ZMQD3ySdMQTDw58knTEEw8OfJJ0xBMPDnySdMQTDw58knTEEw8O').play();}
+  },100);
+  document.getElementById('timerBtn').textContent='⏸ Pausar';
+  document.getElementById('timerBtn').className='btn btn-secondary';
+}
+function timerStop(){
+  timerRunning=false;clearInterval(timerInterval);
+  document.getElementById('timerBtn').textContent='▶ Retomar';
+  document.getElementById('timerBtn').className='btn btn-primary';
+}
+function timerReset(){
+  timerRunning=false;clearInterval(timerInterval);timerRemain=0;
+  document.getElementById('timerBtn').textContent='▶ Iniciar';
+  document.getElementById('timerBtn').className='btn btn-primary';
+  timerUpdateDisplay();
+  document.getElementById('timerBar').style.width='0%';
+}
+function timerDisplay(){
+  const h=Math.floor(timerRemain/3600);
+  const m=Math.floor((timerRemain%3600)/60);
+  const s=Math.floor(timerRemain%60);
+  document.getElementById('timerDisplay').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  const pct=timerTotal>0?((timerTotal-timerRemain)/timerTotal)*100:0;
+  document.getElementById('timerBar').style.width=pct+'%';
+}
+document.getElementById('tH').addEventListener('input',timerUpdateDisplay);
+document.getElementById('tM').addEventListener('input',timerUpdateDisplay);
+document.getElementById('tS').addEventListener('input',timerUpdateDisplay);
+
+/* Pomodoro */
+function pomoToggle(){
+  if(pomoRunning){pomoStop();}else{pomoStart();}
+}
+function pomoStart(){
+  pomoRunning=true;
+  pomoRemain=pomoIsWork?pomoWork:pomoBreak;
+  pomoInterval=setInterval(()=>{
+    pomoRemain--;
+    pomoDisplay();
+    if(pomoRemain<=0){
+      clearInterval(pomoInterval);
+      if(pomoIsWork){
+        pomoSession++;
+        updatePomoSessions();
+        pomoIsWork=false;
+        pomoRemain=pomoSession%4===0?pomoLong:pomoBreak;
+        showToast('☕ Hora de descansar!');
+      }else{
+        pomoIsWork=true;
+        pomoRemain=pomoWork;
+        showToast('🍅 Hora de focar!');
+      }
+      pomoDisplay();
+    }
+  },1000);
+  document.getElementById('pomoBtn').textContent='⏸ Pausar';
+  document.getElementById('pomoBtn').className='btn btn-secondary';
+}
+function pomoStop(){
+  pomoRunning=false;clearInterval(pomoInterval);
+  document.getElementById('pomoBtn').textContent='▶ Retomar';
+  document.getElementById('pomoBtn').className='btn btn-primary';
+}
+function pomoReset(){
+  pomoRunning=false;clearInterval(pomoInterval);pomoIsWork=true;pomoRemain=pomoWork;pomoSession=0;
+  document.getElementById('pomoBtn').textContent='▶ Iniciar';
+  document.getElementById('pomoBtn').className='btn btn-primary';
+  pomoDisplay();updatePomoSessions();
+}
+function pomoDisplay(){
+  const m=Math.floor(pomoRemain/60),s=pomoRemain%60;
+  document.getElementById('pomoTime').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  document.getElementById('pomoLabel').textContent=pomoIsWork?'🎯 Foco':'☕ Pausa';
+  document.getElementById('pomoTime').style.color=pomoIsWork?'var(--primary)':'var(--green)';
+}
+function updatePomoSessions(){
+  document.querySelectorAll('#pomoSessions .pomo-dot').forEach((d,i)=>{
+    d.className='pomo-dot'+(i<pomoSession%4?' done':i===pomoSession%4&&pomoSession<4?' active':'');
+  });
+}
+
+/* Helpers */
+function fmtTime(ms){
+  const m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000),cs=Math.floor((ms%1000)/10);
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+String(cs).padStart(2,'0');
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+/* Keyboard */
+document.addEventListener('keydown',e=>{
+  if(e.key===' '&&document.getElementById('tabSw').style.display!=='none'){e.preventDefault();swToggle();}
+  if(e.key==='l'&&document.getElementById('tabSw').style.display!=='none'){swLap();}
+  if(e.key==='f'){e.preventDefault();toggleFullscreen();}
+});
+
+/* Init */
+renderWorld();
+setInterval(updateClock,1000);
+updateClock();
+timerUpdateDisplay();
+pomoDisplay();
+</script>
 </body>
 </html>
