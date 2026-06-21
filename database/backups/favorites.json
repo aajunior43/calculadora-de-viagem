@@ -1,0 +1,508 @@
+ {"id":1,"name":"Gmail","url":"https://mail.google.com/mail/u/0/h","created_at":"2026-06-21T17:40:39.93803+00:00"}
+ {"id":2,"name":"Google Alerts - Envia alerta de noticias pelo email","url":"https://www.google.com.br/alerts","created_at":"2026-06-21T17:40:39.942312+00:00"}
+ {"id":3,"name":"Google Trends - Coisas mais pesquisadas no momento","url":"https://trends.google.com.br/trends/?geo=BR","created_at":"2026-06-21T17:40:39.942957+00:00"}
+ {"id":4,"name":"Google Feud - Jogo","url":"https://www.html-et-caetera.com/google-feud/pt/","created_at":"2026-06-21T17:40:39.94397+00:00"}
+ {"id":5,"name":"What's Came First? - Jogo","url":"https://artsandculture.google.com/experiment/what-came-first/ZQGBUPErEE3bVg","created_at":"2026-06-21T17:40:39.944343+00:00"}
+ {"id":6,"name":"Rápido, desenhe! -Jogo","url":"https://quickdraw.withgoogle.com/","created_at":"2026-06-21T17:40:39.945209+00:00"}
+ {"id":7,"name":"DALL-E mini - Gerador de imagem","url":"https://www.craiyon.com/","created_at":"2026-06-21T17:40:39.947006+00:00"}
+ {"id":8,"name":"Site confiável","url":"https://www.siteconfiavel.com.br/","created_at":"2026-06-21T17:40:39.947331+00:00"}
+ {"id":9,"name":"Chess.com - Jogo","url":"https://www.chess.com/","created_at":"2026-06-21T17:40:39.947638+00:00"}
+ {"id":10,"name":"Lichess - Jogo","url":"https://lichess.org/","created_at":"2026-06-21T17:40:39.948976+00:00"}
+ {"id":11,"name":"Artigo - Jogo","url":"https://artigo.app/","created_at":"2026-06-21T17:40:39.950069+00:00"}
+ {"id":12,"name":"Geoguessr - Jogo","url":"http://www.geoguessr.com/","created_at":"2026-06-21T17:40:39.950963+00:00"}
+ {"id":13,"name":"Yandex Imagens - Melhor buscados de imagens","url":"https://yandex.com/images/","created_at":"2026-06-21T17:40:39.951248+00:00"}
+ {"id":14,"name":"Lampions Bet - Site de apostas","url":"https://www.lampions.bet/","created_at":"2026-06-21T17:40:39.951671+00:00"}
+ {"id":15,"name":"SteamDB - Promoção de jogos","url":"https://steamdb.info/","created_at":"2026-06-21T17:40:39.952905+00:00"}
+ {"id":16,"name":"Fast - Teste de velocidade da internet","url":"https://fast.com/pt/","created_at":"2026-06-21T17:40:39.953186+00:00"}
+ {"id":17,"name":"Virus Total - Checar arquivos","url":"https://www.virustotal.com/gui/home/upload","created_at":"2026-06-21T17:40:39.953486+00:00"}
+ {"id":18,"name":"Let's Enhance - Upscaler de imagens","url":"https://letsenhance.io/","created_at":"2026-06-21T17:40:39.953918+00:00"}
+ {"id":19,"name":"DreamStudio - Gerador de imagem","url":"https://stabilityai.us.auth0.com/u/login","created_at":"2026-06-21T17:40:39.955081+00:00"}
+ {"id":20,"name":"Videoder - App de baixar videos","url":"https://www.videoder.com/pt","created_at":"2026-06-21T17:40:39.955425+00:00"}
+ {"id":21,"name":"Extrator de Imagens - Baixar todas imagens de um site","url":"https://pt.rakko.tools/tools/56/","created_at":"2026-06-21T17:40:39.955948+00:00"}
+ {"id":22,"name":"Bitly 0 Encurtador de URL","url":"https://bityli.com/","created_at":"2026-06-21T17:40:39.957923+00:00"}
+ {"id":23,"name":"BotoStore - Melhores bots","url":"https://botostore.com/","created_at":"2026-06-21T17:40:39.95917+00:00"}
+ {"id":24,"name":"Just Delete Me - Como deletar contas de diversos sites","url":"https://backgroundchecks.org/justdeleteme/","created_at":"2026-06-21T17:40:39.961216+00:00"}
+ {"id":25,"name":"Wayback Machine - Arquivos de sites","url":"https://web.archive.org/","created_at":"2026-06-21T17:40:39.96149+00:00"}
+ {"id":26,"name":"Deepl Translator - Melhor tradutor","url":"https://www.deepl.com/pt-BR/translator","created_at":"2026-06-21T17:40:39.961794+00:00"}
+ {"id":27,"name":"Hunter - Procurar emails de empresas","url":"https://hunter.io/","created_at":"2026-06-21T17:40:39.962922+00:00"}
+ {"id":28,"name":"Dólar Hoje - Cotação do dolar","url":"https://dolarhoje.com/","created_at":"2026-06-21T17:40:39.963208+00:00"}
+ {"id":29,"name":"Globe - Jogo","url":"https://globle-game.com/","created_at":"2026-06-21T17:40:39.963519+00:00"}
+ {"id":30,"name":"Letreco - Jogo","url":"https://www.gabtoschi.com/letreco/","created_at":"2026-06-21T17:40:39.964189+00:00"}
+ {"id":31,"name":"Contexto - Jogo","url":"https://contexto.me/","created_at":"2026-06-21T17:40:39.965005+00:00"}
+ {"id":32,"name":"Pgsharp - Hack Pokemon GO","url":"https://www.pgsharp.com/","created_at":"2026-06-21T17:40:39.965314+00:00"}
+ {"id":33,"name":"Termo - Jogo","url":"https://term.ooo/","created_at":"2026-06-21T17:40:39.965971+00:00"}
+ {"id":34,"name":"Ipogo - Hack Pokemon GO","url":"https://ipogo.app/","created_at":"2026-06-21T17:40:39.966971+00:00"}
+ {"id":35,"name":"Wikirota - Calcular distância e custos de viagem","url":"https://www.wikirota.com/","created_at":"2026-06-21T17:40:39.967289+00:00"}
+ {"id":36,"name":"Taggo - Meu cartão virtual","url":"https://taggo.one/aleksandroalves","created_at":"2026-06-21T17:40:39.9676+00:00"}
+ {"id":37,"name":"Stripchat","url":"https://pt.stripchat.com/","created_at":"2026-06-21T17:40:39.968201+00:00"}
+ {"id":38,"name":"Copy AI - AI para criar copy","url":"https://app.copy.ai/","created_at":"2026-06-21T17:40:39.968666+00:00"}
+ {"id":39,"name":"Palavra do dia - Jogo","url":"https://palavra-do-dia.pt/","created_at":"2026-06-21T17:40:39.969991+00:00"}
+ {"id":40,"name":"Eternal Box - IA que transforma uma musica infinita","url":"https://eternalbox.dev/jukebox_index.html","created_at":"2026-06-21T17:40:39.970301+00:00"}
+ {"id":41,"name":"Blaze IPTV","url":"http://blaze.koffice.site/login/","created_at":"2026-06-21T17:40:39.970612+00:00"}
+ {"id":42,"name":"Loja Blaze","url":"https://www.lojablaze.online/","created_at":"2026-06-21T17:40:39.970923+00:00"}
+ {"id":43,"name":"FakeYou - Sintetizador de voz","url":"https://fakeyou.com/","created_at":"2026-06-21T17:40:39.972086+00:00"}
+ {"id":44,"name":"Palavres","url":"https://palavr.es/","created_at":"2026-06-21T17:40:39.972607+00:00"}
+ {"id":45,"name":"Moviedle","url":"https://likewisetv.com/arcade/moviedle","created_at":"2026-06-21T17:40:39.972961+00:00"}
+ {"id":46,"name":"Posterdle","url":"https://likewisetv.com/arcade/posterdle","created_at":"2026-06-21T17:40:39.973462+00:00"}
+ {"id":47,"name":"Doctranslator","url":"https://www.onlinedoctranslator.com/pt/translationform","created_at":"2026-06-21T17:40:39.97412+00:00"}
+ {"id":48,"name":"Gerador de Gmail","url":"https://generator.email/blog/gmail-generator","created_at":"2026-06-21T17:40:39.97519+00:00"}
+ {"id":49,"name":"Gerador de Gmail 2","url":"https://tools.electronicbub.com/pt/gerador-de-e-mail-do-gmail/","created_at":"2026-06-21T17:40:39.97543+00:00"}
+ {"id":50,"name":"Pré-pós SEO","url":"https://www.prepostseo.com/","created_at":"2026-06-21T17:40:39.975753+00:00"}
+ {"id":51,"name":"TokBoard","url":"https://tokboard.com/","created_at":"2026-06-21T17:40:39.977+00:00"}
+ {"id":52,"name":"Picwish","url":"https://picwish.com/","created_at":"2026-06-21T17:40:39.977281+00:00"}
+ {"id":53,"name":"Trendingtopics","url":"https://trendingtopics.com.br/brasil#","created_at":"2026-06-21T17:40:39.977578+00:00"}
+ {"id":54,"name":"Fuso Horario Mundial","url":"https://fusohorariomundial.com.br/tabela","created_at":"2026-06-21T17:40:39.977857+00:00"}
+ {"id":55,"name":"PVPOKE","url":"https://pt-br.pvpoke-re.com/battle/","created_at":"2026-06-21T17:40:39.97907+00:00"}
+ {"id":56,"name":"Pogo Stat","url":"https://pogostat.com/","created_at":"2026-06-21T17:40:39.979383+00:00"}
+ {"id":57,"name":"IMG2GO","url":"https://www.img2go.com/pt","created_at":"2026-06-21T17:40:39.979653+00:00"}
+ {"id":58,"name":"MidJourney","url":"https://www.midjourney.com/","created_at":"2026-06-21T17:40:39.980966+00:00"}
+ {"id":59,"name":"Playground AI","url":"https://playgroundai.com/","created_at":"2026-06-21T17:40:39.981302+00:00"}
+ {"id":60,"name":"Mage Space","url":"https://www.mage.space/","created_at":"2026-06-21T17:40:39.981567+00:00"}
+ {"id":61,"name":"CLIP Interrogator","url":"https://huggingface.co/spaces/pharma/CLIP-Interrogator","created_at":"2026-06-21T17:40:39.981873+00:00"}
+ {"id":62,"name":"Pxhere","url":"https://pxhere.com/pt","created_at":"2026-06-21T17:40:39.983071+00:00"}
+ {"id":63,"name":"Stable Diffusion Prompt Generator","url":"https://huggingface.co/spaces/Gustavosta/MagicPrompt-Stable-Diffusion","created_at":"2026-06-21T17:40:39.983389+00:00"}
+ {"id":64,"name":"Tempmail","url":"https://temp-mail.org/pt/","created_at":"2026-06-21T17:40:39.983634+00:00"}
+ {"id":65,"name":"Photopea","url":"https://www.photopea.com/","created_at":"2026-06-21T17:40:39.985007+00:00"}
+ {"id":66,"name":"Buscapé","url":"https://www.buscape.com.br/","created_at":"2026-06-21T17:40:39.985345+00:00"}
+ {"id":67,"name":"Copy Google Drive","url":"https://script.google.com/macros/s/AKfycbxbGNGajrxv-HbX2sVY2OTu7yj9VvxlOMOeQblZFuq7rYm7uyo/exec","created_at":"2026-06-21T17:40:39.985717+00:00"}
+ {"id":68,"name":"Investing","url":"https://br.investing.com/equities/","created_at":"2026-06-21T17:40:39.986049+00:00"}
+ {"id":69,"name":"Passei Direto","url":"https://www.passeidireto.com/","created_at":"2026-06-21T17:40:39.987012+00:00"}
+ {"id":70,"name":"GGMax","url":"https://ggmax.com.br/","created_at":"2026-06-21T17:40:39.987926+00:00"}
+ {"id":71,"name":"Ulist","url":"https://guihkx.github.io/ulist/","created_at":"2026-06-21T17:40:39.988231+00:00"}
+ {"id":72,"name":"MyFonts","url":"https://www.myfonts.com/pages/whatthefont","created_at":"2026-06-21T17:40:39.989261+00:00"}
+ {"id":73,"name":"Whatfontis","url":"https://www.whatfontis.com/","created_at":"2026-06-21T17:40:39.990015+00:00"}
+ {"id":74,"name":"Extract","url":"https://extract.me/pt/","created_at":"2026-06-21T17:40:39.990339+00:00"}
+ {"id":75,"name":"Toffee Share","url":"https://toffeeshare.com/","created_at":"2026-06-21T17:40:39.991075+00:00"}
+ {"id":76,"name":"Yandex Images","url":"https://yandex.com/images/","created_at":"2026-06-21T17:40:39.991485+00:00"}
+ {"id":77,"name":"Tome","url":"https://beta.tome.app/","created_at":"2026-06-21T17:40:39.992081+00:00"}
+ {"id":78,"name":"Speed test Cloudflare","url":"https://speed.cloudflare.com/","created_at":"2026-06-21T17:40:39.993161+00:00"}
+ {"id":79,"name":"Visualizador De Imagens","url":"https://andersonmak.com/scripts/visualizador-imagens.html","created_at":"2026-06-21T17:40:39.993971+00:00"}
+ {"id":80,"name":"Birme Redimensionar imagem","url":"https://www.birme.net/","created_at":"2026-06-21T17:40:39.994249+00:00"}
+ {"id":81,"name":"Emailondeck","url":"https://www.emailondeck.com/pt/","created_at":"2026-06-21T17:40:39.994987+00:00"}
+ {"id":82,"name":"Pixabay","url":"https://pixabay.com/pt/","created_at":"2026-06-21T17:40:39.995974+00:00"}
+ {"id":83,"name":"Upscale","url":"https://www.upscale.media/pt","created_at":"2026-06-21T17:40:39.996292+00:00"}
+ {"id":84,"name":"Imgupscaler","url":"https://imgupscaler.com/","created_at":"2026-06-21T17:40:39.996575+00:00"}
+ {"id":85,"name":"Pexels","url":"https://www.pexels.com/pt-br/","created_at":"2026-06-21T17:40:39.997964+00:00"}
+ {"id":86,"name":"Smart Upscaler","url":"https://icons8.com.br/upscaler","created_at":"2026-06-21T17:40:39.999012+00:00"}
+ {"id":87,"name":"Maximum Diffusion","url":"https://huggingface.co/spaces/Nickhilearla135095/maximum_diffusion","created_at":"2026-06-21T17:40:39.999942+00:00"}
+ {"id":88,"name":"Upscaler","url":"https://www.upscale.media/pt/upload","created_at":"2026-06-21T17:40:40.000203+00:00"}
+ {"id":89,"name":"Watermark Remover","url":"https://www.watermarkremover.io/pt/upload","created_at":"2026-06-21T17:40:40.001133+00:00"}
+ {"id":90,"name":"Remover Fundo","url":"https://www.erase.bg/pt/upload","created_at":"2026-06-21T17:40:40.001442+00:00"}
+ {"id":91,"name":"Restaurar Face","url":"https://arc.tencent.com/en/ai-demos/faceRestoration","created_at":"2026-06-21T17:40:40.001993+00:00"}
+ {"id":92,"name":"Jogos Online","url":"https://poki.com.br/","created_at":"2026-06-21T17:40:40.00306+00:00"}
+ {"id":93,"name":"Tempmailo","url":"https://tempmailo.com/","created_at":"2026-06-21T17:40:40.003964+00:00"}
+ {"id":94,"name":"Mail Temp","url":"https://mail.tm/pt/","created_at":"2026-06-21T17:40:40.004277+00:00"}
+ {"id":95,"name":"Wetransfer","url":"https://wetransfer.com/","created_at":"2026-06-21T17:40:40.004706+00:00"}
+ {"id":96,"name":"ChatSonic","url":"https://app.writesonic.com/pt-pt/login","created_at":"2026-06-21T17:40:40.006007+00:00"}
+ {"id":97,"name":"Download Imagens","url":"https://products.aspose.app/html/pt/image-downloader","created_at":"2026-06-21T17:40:40.006955+00:00"}
+ {"id":98,"name":"Ytscribe","url":"https://ytscribe.com/","created_at":"2026-06-21T17:40:40.007319+00:00"}
+ {"id":99,"name":"Stable Diffusion Colab","url":"https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/stable_diffusion_v2_webui_colab.ipynb","created_at":"2026-06-21T17:40:40.007634+00:00"}
+ {"id":100,"name":"Magic Eraser","url":"https://magicstudio.com/magiceraser","created_at":"2026-06-21T17:40:40.008207+00:00"}
+ {"id":101,"name":"Stable Diffusion 2 - Colab","url":"https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/stable_diffusion_1_5_webui_colab.ipynb","created_at":"2026-06-21T17:40:40.009239+00:00"}
+ {"id":102,"name":"Reference Pictures","url":"https://reference.pictures/","created_at":"2026-06-21T17:40:40.009524+00:00"}
+ {"id":103,"name":"Unsplash","url":"https://unsplash.com/pt-br","created_at":"2026-06-21T17:40:40.010005+00:00"}
+ {"id":104,"name":"Remove BG","url":"https://www.remove.bg/pt-br","created_at":"2026-06-21T17:40:40.010611+00:00"}
+ {"id":105,"name":"Instant Username","url":"https://instantusername.com/#/","created_at":"2026-06-21T17:40:40.011036+00:00"}
+ {"id":106,"name":"Lufi Upload","url":"https://upload.disroot.org/","created_at":"2026-06-21T17:40:40.012512+00:00"}
+ {"id":107,"name":"Civit AI","url":"https://civitai.com/","created_at":"2026-06-21T17:40:40.013946+00:00"}
+ {"id":108,"name":"SD 1111","url":"https://colab.research.google.com/github/TheLastBen/fast-stable-diffusion/blob/main/fast_stable_diffusion_AUTOMATIC1111.ipynb#scrollTo=Y9EBc437WDOs","created_at":"2026-06-21T17:40:40.014992+00:00"}
+ {"id":109,"name":"Pirate Bay","url":"https://pirate-bays.net/torrent-search","created_at":"2026-06-21T17:40:40.015317+00:00"}
+ {"id":110,"name":"BT Met Utorrent","url":"https://btmet.com/","created_at":"2026-06-21T17:40:40.015928+00:00"}
+ {"id":111,"name":"Btdig","url":"https://btdig.com/","created_at":"2026-06-21T17:40:40.016991+00:00"}
+ {"id":112,"name":"PromptHero","url":"https://prompthero.com/","created_at":"2026-06-21T17:40:40.01732+00:00"}
+ {"id":113,"name":"Umbler Email","url":"https://mail.umbler.com/","created_at":"2026-06-21T17:40:40.017619+00:00"}
+ {"id":114,"name":"Meu Pastebin","url":"https://pastebin.com/u/aajunior43","created_at":"2026-06-21T17:40:40.017984+00:00"}
+ {"id":115,"name":"YouTube Scribe","url":"https://ytscribe.com/","created_at":"2026-06-21T17:40:40.018669+00:00"}
+ {"id":116,"name":"Chatsonic","url":"https://app.writesonic.com/pt-pt/login","created_at":"2026-06-21T17:40:40.019999+00:00"}
+ {"id":117,"name":"Mail Temp","url":"https://mail.tm/pt/","created_at":"2026-06-21T17:40:40.020921+00:00"}
+ {"id":118,"name":"GPT Zero","url":"https://gptzero.me/","created_at":"2026-06-21T17:40:40.021235+00:00"}
+ {"id":119,"name":"Prompt Hunt","url":"https://www.prompthunt.com/","created_at":"2026-06-21T17:40:40.021509+00:00"}
+ {"id":120,"name":"Wonder Dynamics","url":"https://app.wonderdynamics.com/","created_at":"2026-06-21T17:40:40.022988+00:00"}
+ {"id":121,"name":"Open Art","url":"https://openart.ai/","created_at":"2026-06-21T17:40:40.023366+00:00"}
+ {"id":122,"name":"Cat Bird AI","url":"https://www.catbird.ai/","created_at":"2026-06-21T17:40:40.024181+00:00"}
+ {"id":123,"name":"Midjourney Showcase","url":"https://www.midjourney.com/showcase/recent/","created_at":"2026-06-21T17:40:40.024454+00:00"}
+ {"id":124,"name":"Getimg","url":"https://getimg.ai/","created_at":"2026-06-21T17:40:40.025102+00:00"}
+ {"id":125,"name":"´Prodia Ai","url":"https://app.prodia.com/","created_at":"2026-06-21T17:40:40.025841+00:00"}
+ {"id":126,"name":"Futurepedia","url":"https://www.futurepedia.io/","created_at":"2026-06-21T17:40:40.026182+00:00"}
+ {"id":127,"name":"DreamStudio","url":"https://dreamstudio.ai/generate","created_at":"2026-06-21T17:40:40.026497+00:00"}
+ {"id":128,"name":"Graviti","url":"https://webui.graviti.com/","created_at":"2026-06-21T17:40:40.02693+00:00"}
+ {"id":129,"name":"Copy Generator","url":"https://app.copygenerator.ai/","created_at":"2026-06-21T17:40:40.027889+00:00"}
+ {"id":130,"name":"AgentGPT","url":"https://agentgpt.reworkd.ai/","created_at":"2026-06-21T17:40:40.028218+00:00"}
+ {"id":131,"name":"Picso","url":"https://picso.ai/","created_at":"2026-06-21T17:40:40.02882+00:00"}
+ {"id":132,"name":"Character AI","url":"https://beta.character.ai/","created_at":"2026-06-21T17:40:40.029355+00:00"}
+ {"id":133,"name":"Open Assistant","url":"https://open-assistant.io/chat","created_at":"2026-06-21T17:40:40.03008+00:00"}
+ {"id":134,"name":"Colab55","url":"https://www.colab55.com/me","created_at":"2026-06-21T17:40:40.030747+00:00"}
+ {"id":135,"name":"Seek Art","url":"https://seek.art/","created_at":"2026-06-21T17:40:40.031071+00:00"}
+ {"id":136,"name":"Future Tools","url":"https://www.futuretools.io/","created_at":"2026-06-21T17:40:40.031992+00:00"}
+ {"id":137,"name":"Plazmapunk","url":"https://www.plazmapunk.com/app","created_at":"2026-06-21T17:40:40.032305+00:00"}
+ {"id":138,"name":"AICA","url":"https://aica.vercel.app/","created_at":"2026-06-21T17:40:40.032991+00:00"}
+ {"id":139,"name":"RunDiffusion","url":"https://app.rundiffusion.com/","created_at":"2026-06-21T17:40:40.033319+00:00"}
+ {"id":140,"name":"Replicate","url":"https://replicate.com/","created_at":"2026-06-21T17:40:40.034222+00:00"}
+ {"id":141,"name":"God Mode","url":"https://godmode.space/","created_at":"2026-06-21T17:40:40.034502+00:00"}
+ {"id":142,"name":"Cri.ai Prompts","url":"https://prompt.criai.net.br/","created_at":"2026-06-21T17:40:40.035059+00:00"}
+ {"id":143,"name":"CLIP Interrogator","url":"https://huggingface.co/spaces/pharma/CLIP-Interrogator","created_at":"2026-06-21T17:40:40.036067+00:00"}
+ {"id":144,"name":"Perplexity","url":"https://www.perplexity.ai/","created_at":"2026-06-21T17:40:40.036422+00:00"}
+ {"id":145,"name":"Gigapixel AI","url":"https://www.topazlabs.com/gigapixel-ai","created_at":"2026-06-21T17:40:40.036997+00:00"}
+ {"id":146,"name":"Clipdrop Relight","url":"https://clipdrop.co/relight","created_at":"2026-06-21T17:40:40.038062+00:00"}
+ {"id":147,"name":"Pixelbin IO","url":"https://console.pixelbin.io/organization/292159/dashboard","created_at":"2026-06-21T17:40:40.038377+00:00"}
+ {"id":148,"name":"Mlabs","url":"https://accounts.mlabs.io/","created_at":"2026-06-21T17:40:40.038652+00:00"}
+ {"id":149,"name":"Leonardo AI","url":"https://app.leonardo.ai/auth/login","created_at":"2026-06-21T17:40:40.039988+00:00"}
+ {"id":150,"name":"Kaiber","url":"https://www.kaiber.ai/","created_at":"2026-06-21T17:40:40.04101+00:00"}
+ {"id":151,"name":"Mage Space","url":"https://www.mage.space/","created_at":"2026-06-21T17:40:40.041318+00:00"}
+ {"id":152,"name":"Playground AI","url":"https://playgroundai.com/","created_at":"2026-06-21T17:40:40.041585+00:00"}
+ {"id":153,"name":"Getimg AI","url":"https://getimg.ai/","created_at":"2026-06-21T17:40:40.042999+00:00"}
+ {"id":154,"name":"Dream Like","url":"https://dreamlike.art/","created_at":"2026-06-21T17:40:40.043681+00:00"}
+ {"id":155,"name":"Dream Studio","url":"https://beta.dreamstudio.ai/generate","created_at":"2026-06-21T17:40:40.043995+00:00"}
+ {"id":156,"name":"Magic Prompt","url":"https://huggingface.co/spaces/Gustavosta/MagicPrompt-Stable-Diffusion","created_at":"2026-06-21T17:40:40.045073+00:00"}
+ {"id":157,"name":"Leia PIX","url":"https://convert.leiapix.com/","created_at":"2026-06-21T17:40:40.045392+00:00"}
+ {"id":158,"name":"You","url":"https://you.com/search?q=who+are+you&tbm=youchat&cfr=chat","created_at":"2026-06-21T17:40:40.045801+00:00"}
+ {"id":159,"name":"Witeboard","url":"https://witeboard.com/028e2350-df0a-11ed-b429-73a650fc22c7","created_at":"2026-06-21T17:40:40.046831+00:00"}
+ {"id":160,"name":"Kleki","url":"https://kleki.com/","created_at":"2026-06-21T17:40:40.047174+00:00"}
+ {"id":161,"name":"Coolors","url":"https://coolors.co/palettes/trending","created_at":"2026-06-21T17:40:40.047512+00:00"}
+ {"id":162,"name":"Pelando","url":"https://www.pelando.com.br/","created_at":"2026-06-21T17:40:40.048103+00:00"}
+ {"id":163,"name":"Alternative","url":"https://alternativeto.net/","created_at":"2026-06-21T17:40:40.048803+00:00"}
+ {"id":164,"name":"Nperf","url":"https://www.nperf.com/pt/","created_at":"2026-06-21T17:40:40.050013+00:00"}
+ {"id":165,"name":"Leonardo AI","url":"https://app.leonardo.ai/ai-generations","created_at":"2026-06-21T17:40:40.050308+00:00"}
+ {"id":166,"name":"Picfinder","url":"https://picfinder.ai/","created_at":"2026-06-21T17:40:40.050601+00:00"}
+ {"id":167,"name":"Instant Art","url":"https://instantart.io/","created_at":"2026-06-21T17:40:40.050865+00:00"}
+ {"id":168,"name":"Blaze IPTV","url":"https://blaze.koffice.site/login/","created_at":"2026-06-21T17:40:40.053058+00:00"}
+ {"id":169,"name":"Check list Pokémon GO","url":"https://9db.jp/pokemongo/data/6406","created_at":"2026-06-21T17:40:40.05417+00:00"}
+ {"id":170,"name":"Check list Pokémon GO II","url":"https://leekduck.com/shiny/","created_at":"2026-06-21T17:40:40.054505+00:00"}
+ {"id":171,"name":"Ihit","url":"https://ihit.com.br/loja/","created_at":"2026-06-21T17:40:40.054982+00:00"}
+ {"id":172,"name":"Adobe Enhancer","url":"https://podcast.adobe.com/enhance","created_at":"2026-06-21T17:40:40.057035+00:00"}
+ {"id":173,"name":"Taggo One","url":"https://taggo.one/","created_at":"2026-06-21T17:40:40.05737+00:00"}
+ {"id":174,"name":"Lexica","url":"https://lexica.art/","created_at":"2026-06-21T17:40:40.057684+00:00"}
+ {"id":175,"name":"Reference Picture","url":"https://reference.pictures/figure-drawing-rachel/","created_at":"2026-06-21T17:40:40.058967+00:00"}
+ {"id":176,"name":"Color Adobe","url":"https://color.adobe.com/pt/create/color-wheel","created_at":"2026-06-21T17:40:40.059296+00:00"}
+ {"id":177,"name":"Kaiber","url":"https://app.kaiber.ai/","created_at":"2026-06-21T17:40:40.059581+00:00"}
+ {"id":178,"name":"Site Confiável","url":"https://www.siteconfiavel.com.br/site/promptstacks-com","created_at":"2026-06-21T17:40:40.061003+00:00"}
+ {"id":179,"name":"Check list Pokémon GO III","url":"https://rplus.github.io/Pokemon-shiny/","created_at":"2026-06-21T17:40:40.061339+00:00"}
+ {"id":180,"name":"PNG Tree","url":"https://pt.pngtree.com/","created_at":"2026-06-21T17:40:40.061622+00:00"}
+ {"id":181,"name":"Caractere Invisível","url":"https://fabricioventura.com/caractere","created_at":"2026-06-21T17:40:40.06294+00:00"}
+ {"id":182,"name":"Archive ORG","url":"https://web.archive.org/","created_at":"2026-06-21T17:40:40.063376+00:00"}
+ {"id":183,"name":"Pastebin","url":"https://pastebin.com/","created_at":"2026-06-21T17:40:40.063984+00:00"}
+ {"id":184,"name":"Seedr","url":"https://www.seedr.cc/","created_at":"2026-06-21T17:40:40.065058+00:00"}
+ {"id":185,"name":"Envato elements","url":"https://elements.envato.com/pt-br/","created_at":"2026-06-21T17:40:40.065349+00:00"}
+ {"id":186,"name":"The Pirate Bay","url":"https://pirate-bays.net/","created_at":"2026-06-21T17:40:40.065654+00:00"}
+ {"id":187,"name":"Cursos Top","url":"https://downloadcursos.top/","created_at":"2026-06-21T17:40:40.066987+00:00"}
+ {"id":188,"name":"Geforce Now","url":"https://abya.com/gfn/pt-BR","created_at":"2026-06-21T17:40:40.067317+00:00"}
+ {"id":189,"name":"Vector Magic","url":"https://pt.vectormagic.com/","created_at":"2026-06-21T17:40:40.067604+00:00"}
+ {"id":190,"name":"Color Hunt","url":"https://colorhunt.com/","created_at":"2026-06-21T17:40:40.06793+00:00"}
+ {"id":191,"name":"Ferramentas","url":"https://www.negociosemmente.com.br/ferramentas","created_at":"2026-06-21T17:40:40.069035+00:00"}
+ {"id":192,"name":"Prompt Base","url":"https://promptbase.com/","created_at":"2026-06-21T17:40:40.069312+00:00"}
+ {"id":193,"name":"D-ID","url":"https://studio.d-id.com/","created_at":"2026-06-21T17:40:40.070013+00:00"}
+ {"id":194,"name":"Prompts GPT Pago","url":"https://comprechat.circle.so/c/inicie-aqui","created_at":"2026-06-21T17:40:40.070348+00:00"}
+ {"id":195,"name":"Prompts GPT Pago II","url":"https://ideiaschatgpt.com.br/prompts/","created_at":"2026-06-21T17:40:40.071097+00:00"}
+ {"id":196,"name":"Estilos Midjourney","url":"https://github.com/willwulfken/MidJourney-Styles-and-Keywords-Reference/blob/main/README.md","created_at":"2026-06-21T17:40:40.072068+00:00"}
+ {"id":197,"name":"Remover marca d'água de video","url":"https://online-video-cutter.com/pt/remove-logo","created_at":"2026-06-21T17:40:40.072651+00:00"}
+ {"id":198,"name":"Estilos Midjourney","url":"https://www.midlibrary.io/","created_at":"2026-06-21T17:40:40.074214+00:00"}
+ {"id":199,"name":"Varias ferramentas Premium em uma só","url":"https://tuconjunta.com/","created_at":"2026-06-21T17:40:40.074532+00:00"}
+ {"id":200,"name":"10 Min email temporário","url":"https://10minemail.com/pt/","created_at":"2026-06-21T17:40:40.075203+00:00"}
+ {"id":201,"name":"Prompts pagos GPT","url":"https://chatgpt-lucrativo.notion.site/chatgpt-lucrativo/Marketing-Copie-e-Cole-500-Comandos-Secretos-para-ChatGPT-99-prompts-para-otimizar-tarefas-9faaa2f9fb5f45bea41f7c763917ce23","created_at":"2026-06-21T17:40:40.076007+00:00"}
+ {"id":202,"name":"Designi","url":"https://www.designi.com.br/","created_at":"2026-06-21T17:40:40.076363+00:00"}
+ {"id":203,"name":"Freepik","url":"https://br.freepik.com/","created_at":"2026-06-21T17:40:40.076875+00:00"}
+ {"id":204,"name":"Prompts pagos GPT","url":"https://comprechat.circle.so/c/diversos/","created_at":"2026-06-21T17:40:40.077854+00:00"}
+ {"id":205,"name":"Vectorizer IO","url":"https://www.vectorizer.io/","created_at":"2026-06-21T17:40:40.078184+00:00"}
+ {"id":206,"name":"IMI Prompt","url":"https://www.imiprompt.com/","created_at":"2026-06-21T17:40:40.078452+00:00"}
+ {"id":207,"name":"Essa pessoa não existe","url":"https://this-person-does-not-exist.com/pt","created_at":"2026-06-21T17:40:40.079091+00:00"}
+ {"id":208,"name":"Future Lab","url":"https://www.futureailab.com/","created_at":"2026-06-21T17:40:40.079965+00:00"}
+ {"id":209,"name":"GPT Open Source","url":"https://chat.lmsys.org/","created_at":"2026-06-21T17:40:40.080289+00:00"}
+ {"id":210,"name":"AI Fusion","url":"https://aifusionapp.com/","created_at":"2026-06-21T17:40:40.081042+00:00"}
+ {"id":211,"name":"Adobe Animate","url":"https://express.adobe.com/express-apps/animate-from-audio/","created_at":"2026-06-21T17:40:40.081339+00:00"}
+ {"id":212,"name":"Stadio AI","url":"https://stadio.ai/","created_at":"2026-06-21T17:40:40.082096+00:00"}
+ {"id":213,"name":"Dream Like","url":"https://dreamlike.art/","created_at":"2026-06-21T17:40:40.082509+00:00"}
+ {"id":214,"name":"Run Diffusion","url":"https://app.rundiffusion.com/","created_at":"2026-06-21T17:40:40.083058+00:00"}
+ {"id":215,"name":"Plasma Punk","url":"https://www.plazmapunk.com/","created_at":"2026-06-21T17:40:40.083966+00:00"}
+ {"id":216,"name":"ART Station","url":"https://www.artstation.com/","created_at":"2026-06-21T17:40:40.084265+00:00"}
+ {"id":217,"name":"Estilos Midjourney","url":"https://rentry.org/artists_sd-v1-4_iv","created_at":"2026-06-21T17:40:40.084678+00:00"}
+ {"id":218,"name":"Microsoft Designer","url":"https://designer.microsoft.com/","created_at":"2026-06-21T17:40:40.085602+00:00"}
+ {"id":219,"name":"Open Assistent GPT","url":"https://open-assistant.io/pt-BR/chat/","created_at":"2026-06-21T17:40:40.086022+00:00"}
+ {"id":220,"name":"Scenario","url":"https://app.scenario.com/login","created_at":"2026-06-21T17:40:40.087086+00:00"}
+ {"id":221,"name":"Pixai Art","url":"https://pixai.art/","created_at":"2026-06-21T17:40:40.089018+00:00"}
+ {"id":222,"name":"Discord","url":"https://discord.com/login","created_at":"2026-06-21T17:40:40.089314+00:00"}
+ {"id":223,"name":"Prodia IA","url":"https://app.prodia.com/","created_at":"2026-06-21T17:40:40.089622+00:00"}
+ {"id":224,"name":"Graviti","url":"https://webui.graviti.com/?__theme=dark","created_at":"2026-06-21T17:40:40.090964+00:00"}
+ {"id":225,"name":"InvokeAI Colab","url":"https://colab.research.google.com/github/peaashmeter/invoke-ai-gui-colab/blob/main/invoke_ai_gui_colab.ipynb","created_at":"2026-06-21T17:40:40.091253+00:00"}
+ {"id":226,"name":"Camenduru","url":"https://github.com/camenduru/stable-diffusion-webui-colab","created_at":"2026-06-21T17:40:40.09178+00:00"}
+ {"id":227,"name":"Nightcafe","url":"https://nightcafe.studio/","created_at":"2026-06-21T17:40:40.09308+00:00"}
+ {"id":228,"name":"DreamBooth","url":"https://colab.research.google.com/github/TheLastBen/fast-stable-diffusion/blob/main/fast-DreamBooth.ipynb","created_at":"2026-06-21T17:40:40.093983+00:00"}
+ {"id":229,"name":"Wirestock - Vender imagens em varios banco de imagens de uma vez","url":"https://wirestock.io/","created_at":"2026-06-21T17:40:40.094297+00:00"}
+ {"id":230,"name":"Pimeyes - Buscador de rostos na internet","url":"https://pimeyes.com/en","created_at":"2026-06-21T17:40:40.094621+00:00"}
+ {"id":231,"name":"Hero - Varios prompts para chatGPT","url":"https://hero.page/","created_at":"2026-06-21T17:40:40.095278+00:00"}
+ {"id":232,"name":"AItools - Varias ferramentas de IA","url":"https://aitools.lol/","created_at":"2026-06-21T17:40:40.096074+00:00"}
+ {"id":233,"name":"Gumroad - Vender produtos digitais","url":"https://app.gumroad.com","created_at":"2026-06-21T17:40:40.09638+00:00"}
+ {"id":234,"name":"Library - Varias ferramentas de IA","url":"https://library.phygital.plus/","created_at":"2026-06-21T17:40:40.097066+00:00"}
+ {"id":235,"name":"AutoGPT","url":"https://autogpt.thesamur.ai/agi","created_at":"2026-06-21T17:40:40.097948+00:00"}
+ {"id":236,"name":"CamelAGI","url":"https://camelagi.thesamur.ai/","created_at":"2026-06-21T17:40:40.098222+00:00"}
+ {"id":237,"name":"Alternativa do Chat GPT","url":"https://chatbot.theb.ai/#/chat/1002","created_at":"2026-06-21T17:40:40.098514+00:00"}
+ {"id":238,"name":"GFPGAN - Upscale de imagens no google colab","url":"https://colab.research.google.com/drive/1k2Zod6kSHEvraybHl50Lys0LerhyTMCo?usp=sharing","created_at":"2026-06-21T17:40:40.099436+00:00"}
+ {"id":239,"name":"Copy Folder - Transferir arquivos compartilhados para o Google Drive","url":"https://workspacetips.io/tools/copy-folder/","created_at":"2026-06-21T17:40:40.099962+00:00"}
+ {"id":240,"name":"Pornpen AI - PN","url":"https://pornpen.ai/","created_at":"2026-06-21T17:40:40.10088+00:00"}
+ {"id":241,"name":"Made Porn - PN","url":"https://made.porn","created_at":"2026-06-21T17:40:40.102332+00:00"}
+ {"id":242,"name":"AI Hentai - PN","url":"https://ai-hentai.net","created_at":"2026-06-21T17:40:40.102999+00:00"}
+ {"id":243,"name":"Pornpen Art - PN","url":"https://pornpen.art","created_at":"2026-06-21T17:40:40.104065+00:00"}
+ {"id":244,"name":"AI Pornjourney - PN","url":"https://aipornjourney.com","created_at":"2026-06-21T17:40:40.10438+00:00"}
+ {"id":245,"name":"Deviantart","url":"https://www.deviantart.com","created_at":"2026-06-21T17:40:40.104681+00:00"}
+ {"id":246,"name":"Adobe Firefly","url":"https://firefly.adobe.com","created_at":"2026-06-21T17:40:40.105986+00:00"}
+ {"id":247,"name":"Artstation","url":"https://www.artstation.com","created_at":"2026-06-21T17:40:40.106311+00:00"}
+ {"id":248,"name":"Hotpot AI","url":"https://hotpot.ai/art-generator","created_at":"2026-06-21T17:40:40.106615+00:00"}
+ {"id":249,"name":"Face Restoration - IA restaurar face","url":"https://arc.tencent.com/en/ai-demos/faceRestoration","created_at":"2026-06-21T17:40:40.106932+00:00"}
+ {"id":250,"name":"ESRGAN - Upscaler","url":"https://replicate.com/xinntao/realesrgan","created_at":"2026-06-21T17:40:40.108103+00:00"}
+ {"id":251,"name":"Convert DPI - Converter imagens para Banco de imagens","url":"https://convert-dpi.com/br/","created_at":"2026-06-21T17:40:40.108402+00:00"}
+ {"id":252,"name":"Calculadora de regra de 3","url":"https://www.4devs.com.br/calculadora_regra_tres_simples","created_at":"2026-06-21T17:40:40.108712+00:00"}
+ {"id":253,"name":"Bing Creator - IA de criar imagem","url":"https://www.bing.com/images/create","created_at":"2026-06-21T17:40:40.109051+00:00"}
+ {"id":254,"name":"Adobe Firefly - IA","url":"https://firefly.adobe.com/generate","created_at":"2026-06-21T17:40:40.109918+00:00"}
+ {"id":255,"name":"CRIAI - Ferramenta de gerar prompts de Imagem","url":"https://prompt.criai.net.br/","created_at":"2026-06-21T17:40:40.110294+00:00"}
+ {"id":256,"name":"Sinkin AI","url":"https://sinkin.ai/","created_at":"2026-06-21T17:40:40.110987+00:00"}
+ {"id":257,"name":"Patience. AI","url":"https://www.patience.ai","created_at":"2026-06-21T17:40:40.111433+00:00"}
+ {"id":258,"name":"Snack Prompt - Rede social de prompts para GPT","url":"https://snackprompt.com/","created_at":"2026-06-21T17:40:40.111999+00:00"}
+ {"id":259,"name":"Eleven Labs - Ia Sintetiza texto e clona voz","url":"https://beta.elevenlabs.io","created_at":"2026-06-21T17:40:40.112837+00:00"}
+ {"id":260,"name":"Theresanaiforthat - Biblioteca de IAS","url":"https://theresanaiforthat.com/","created_at":"2026-06-21T17:40:40.114005+00:00"}
+ {"id":261,"name":"Prompt Vibes - Biblioteca de Prompts","url":"https://www.promptvibes.com/","created_at":"2026-06-21T17:40:40.114281+00:00"}
+ {"id":262,"name":"MidJourney-Styles-and-Keywords-Reference","url":"https://github.com/willwulfken/MidJourney-Styles-and-Keywords-Reference","created_at":"2026-06-21T17:40:40.114711+00:00"}
+ {"id":263,"name":"Chatabc","url":"https://aajunior43.chatabc.ai","created_at":"2026-06-21T17:40:40.115999+00:00"}
+ {"id":264,"name":"PIC Enhancer - Upscale","url":"https://picsenhancer.com/upload","created_at":"2026-06-21T17:40:40.116316+00:00"}
+ {"id":265,"name":"Phygital - Varias ferramentas SD","url":"https://app.phygital.plus/","created_at":"2026-06-21T17:40:40.116637+00:00"}
+ {"id":266,"name":"Aitech Viral - Biblioteca de IA","url":"https://aitechviral.com/","created_at":"2026-06-21T17:40:40.117964+00:00"}
+ {"id":267,"name":"Onlyfans ai","url":"https://onlyfansai.net/","created_at":"2026-06-21T17:40:40.119006+00:00"}
+ {"id":268,"name":"Heuristica","url":"https://www.heuristi.ca/","created_at":"2026-06-21T17:40:40.119327+00:00"}
+ {"id":269,"name":"Promptden","url":"https://promptden.com/","created_at":"2026-06-21T17:40:40.119646+00:00"}
+ {"id":270,"name":"Runpod","url":"https://runpod.io","created_at":"2026-06-21T17:40:40.12068+00:00"}
+ {"id":271,"name":"Arthub","url":"https://arthub.ai","created_at":"2026-06-21T17:40:40.121004+00:00"}
+ {"id":272,"name":"Artifylabs","url":"https://artifylabs.io/restore","created_at":"2026-06-21T17:40:40.121317+00:00"}
+ {"id":273,"name":"FlowGPT","url":"https://flowgpt.com/","created_at":"2026-06-21T17:40:40.122008+00:00"}
+ {"id":274,"name":"Pornderful","url":"https://pornderful.ai/","created_at":"2026-06-21T17:40:40.122823+00:00"}
+ {"id":275,"name":"Pornjoy","url":"https://pornjoy.ai/","created_at":"2026-06-21T17:40:40.123217+00:00"}
+ {"id":276,"name":"Onlyfakes","url":"https://onlyfakes.app/","created_at":"2026-06-21T17:40:40.123568+00:00"}
+ {"id":277,"name":"Pornshow","url":"https://pornshow.ai/home","created_at":"2026-06-21T17:40:40.124256+00:00"}
+ {"id":278,"name":"Hero","url":"https://hero.page/","created_at":"2026-06-21T17:40:40.125076+00:00"}
+ {"id":279,"name":"Etsy - Comprer e vender Prompts","url":"https://www.etsy.com/","created_at":"2026-06-21T17:40:40.125379+00:00"}
+ {"id":280,"name":"SCISPACE - IA para estudos cientificos","url":"https://typeset.io/","created_at":"2026-06-21T17:40:40.127003+00:00"}
+ {"id":281,"name":"Seaart AI - Gerar imagens","url":"https://www.seaart.ai/","created_at":"2026-06-21T17:40:40.128067+00:00"}
+ {"id":282,"name":"ChatPDF - ChaatGPT para PDF","url":"https://www.chatpdf.com/","created_at":"2026-06-21T17:40:40.128405+00:00"}
+ {"id":283,"name":"cohesive","url":"https://cohesive.so/","created_at":"2026-06-21T17:40:40.128736+00:00"}
+ {"id":284,"name":"Calculadora de AR","url":"https://calculateaspectratio.com/","created_at":"2026-06-21T17:40:40.129965+00:00"}
+ {"id":285,"name":"Umbler - Email","url":"https://mail.umbler.com/","created_at":"2026-06-21T17:40:40.130268+00:00"}
+ {"id":286,"name":"Heygen","url":"https://www.heygen.com/","created_at":"2026-06-21T17:40:40.13057+00:00"}
+ {"id":287,"name":"Flowgpt","url":"https://flowgpt.com/","created_at":"2026-06-21T17:40:40.130881+00:00"}
+ {"id":288,"name":"DR. Far Far","url":"https://www.dr-farfar.com/","created_at":"2026-06-21T17:40:40.132963+00:00"}
+ {"id":289,"name":"Addmefast - Trocar seguidores","url":"https://addmefast.com/","created_at":"2026-06-21T17:40:40.133278+00:00"}
+ {"id":290,"name":"Woxo - Ia de criar vídeo","url":"https://woxo.tech/","created_at":"2026-06-21T17:40:40.133608+00:00"}
+ {"id":291,"name":"Fornecedor do Brasil - Painel de seguidores","url":"https://fornecedorbrasil.com/","created_at":"2026-06-21T17:40:40.13497+00:00"}
+ {"id":292,"name":"Turbo Leads - Comprar contas para extração","url":"https://turboleads.mycartpanda.com/","created_at":"2026-06-21T17:40:40.136+00:00"}
+ {"id":293,"name":"Matconte - Bots top para telegram","url":"https://matheusconte.com.br/","created_at":"2026-06-21T17:40:40.136308+00:00"}
+ {"id":294,"name":"SMS Virtual - Comprar chip","url":"https://smsvirtual.com.br/","created_at":"2026-06-21T17:40:40.136548+00:00"}
+ {"id":295,"name":"ZapCloud - Disparos em massa","url":"https://zapcloud.com.br/","created_at":"2026-06-21T17:40:40.13718+00:00"}
+ {"id":296,"name":"Maya IA","url":"https://www.mayaai.net/","created_at":"2026-06-21T17:40:40.138092+00:00"}
+ {"id":297,"name":"Thinkdiffusion","url":"https://www.thinkdiffusion.com/","created_at":"2026-06-21T17:40:40.138378+00:00"}
+ {"id":298,"name":"Scribd Downloader - Baixar arquivos do Scribd","url":"https://docdownloader.com/","created_at":"2026-06-21T17:40:40.13892+00:00"}
+ {"id":299,"name":"Imgnai","url":"https://app.imgnai.com/generate","created_at":"2026-06-21T17:40:40.139867+00:00"}
+ {"id":300,"name":"Archive","url":"https://archive.org/","created_at":"2026-06-21T17:40:40.140294+00:00"}
+ {"id":301,"name":"Ifind - Consulta ilegal","url":"https://i-find.org/","created_at":"2026-06-21T17:40:40.140772+00:00"}
+ {"id":302,"name":"Uploud de PDF para o GPT ler","url":"https://aipdf.app/","created_at":"2026-06-21T17:40:40.14212+00:00"}
+ {"id":303,"name":"Vercel - Hospedar repositório do Github","url":"https://vercel.com/","created_at":"2026-06-21T17:40:40.142424+00:00"}
+ {"id":304,"name":"Unicórnio Shop - Comprar contas premium","url":"https://unicornshop.cc/","created_at":"2026-06-21T17:40:40.142784+00:00"}
+ {"id":305,"name":"HG Store 98 - Loja de uniforme de futebol","url":"https://hgstore98.com/","created_at":"2026-06-21T17:40:40.143987+00:00"}
+ {"id":306,"name":"Pronto Mail - E-mail criptografado","url":"https://mail.proton.me/","created_at":"2026-06-21T17:40:40.144319+00:00"}
+ {"id":307,"name":"Hispy - Ferramenta de espionagem","url":"https://www.hispy.io/","created_at":"2026-06-21T17:40:40.144596+00:00"}
+ {"id":308,"name":"Exploit DB - Termos de Google Dorks","url":"https://www.exploit-db.com/google-hacking-database","created_at":"2026-06-21T17:40:40.144972+00:00"}
+ {"id":309,"name":"Voice Clone - Dankicode","url":"https://voiceclone.dankicode.ai/login.php","created_at":"2026-06-21T17:40:40.146209+00:00"}
+ {"id":310,"name":"Adarsus - Remover metadados","url":"https://www.adarsus.com/en/remove-metadata-online-document-image-video","created_at":"2026-06-21T17:40:40.146513+00:00"}
+ {"id":311,"name":"Egirls - Onlyfans criados por IA","url":"https://egirls.wtf/","created_at":"2026-06-21T17:40:40.146801+00:00"}
+ {"id":312,"name":"Painel Blaze IPTV - novo","url":"https://painel.blaze.tv.br/index.php","created_at":"2026-06-21T17:40:40.147261+00:00"}
+ {"id":313,"name":"POE - Várias IAs","url":"https://poe.com/chat/2nkam00wubbc92bnuz8","created_at":"2026-06-21T17:40:40.148182+00:00"}
+ {"id":314,"name":"Face Swapper","url":"https://faceswapper.ai/swapper","created_at":"2026-06-21T17:40:40.148429+00:00"}
+ {"id":315,"name":"LensGO AI","url":"https://lensgo.ai/","created_at":"2026-06-21T17:40:40.148834+00:00"}
+ {"id":316,"name":"Estica - Loja para vender camisetas","url":"https://estica.com.br/","created_at":"2026-06-21T17:40:40.150069+00:00"}
+ {"id":317,"name":"Dólar Hoje","url":"https://dolarhoje.com/","created_at":"2026-06-21T17:40:40.150377+00:00"}
+ {"id":318,"name":"Ideogram AI","url":"https://ideogram.ai/t/trending","created_at":"2026-06-21T17:40:40.150642+00:00"}
+ {"id":319,"name":"G Prompter - Gerar Prompts","url":"https://www.g-prompter.com/en/prompt/photo","created_at":"2026-06-21T17:40:40.151203+00:00"}
+ {"id":320,"name":"Heylink - Árvore de link","url":"https://heylink.me/","created_at":"2026-06-21T17:40:40.152077+00:00"}
+ {"id":321,"name":"Vibx - Comprar e vender pelo telegram","url":"https://www.marketplace.vibx.com.br/","created_at":"2026-06-21T17:40:40.152414+00:00"}
+ {"id":322,"name":"PI IA","url":"https://pi.ai/talk","created_at":"2026-06-21T17:40:40.152936+00:00"}
+ {"id":323,"name":"Dispara Ai - Enviar mensagem em massa","url":"https://app.dispara.ai/","created_at":"2026-06-21T17:40:40.154241+00:00"}
+ {"id":324,"name":"GOVIP - Ótimo site para Designer","url":"https://govip.com.br/login","created_at":"2026-06-21T17:40:40.154547+00:00"}
+ {"id":325,"name":"PasteFo","url":"https://paste.fo/","created_at":"2026-06-21T17:40:40.154922+00:00"}
+ {"id":326,"name":"Porn Store","url":"https://pornstore.org/","created_at":"2026-06-21T17:40:40.155347+00:00"}
+ {"id":327,"name":"User Drive - Upload","url":"https://usersdrive.com/","created_at":"2026-06-21T17:40:40.156192+00:00"}
+ {"id":328,"name":"Dditor de imagem com IA","url":"https://avc.ai/","created_at":"2026-06-21T17:40:40.156449+00:00"}
+ {"id":329,"name":"Placeit - Mockups Online","url":"https://placeit.net/","created_at":"2026-06-21T17:40:40.157061+00:00"}
+ {"id":330,"name":"Modyfy IA","url":"https://www.modyfi.com/","created_at":"2026-06-21T17:40:40.158067+00:00"}
+ {"id":331,"name":"Simples Scrapre GPT","url":"https://simplescraper.io/scrapetoai/","created_at":"2026-06-21T17:40:40.158345+00:00"}
+ {"id":332,"name":"Topai - Melhores IAs","url":"https://topai.tools/","created_at":"2026-06-21T17:40:40.158761+00:00"}
+ {"id":333,"name":"Agenda Hero - Adiciona seus afazeres no Google Agenda","url":"https://agendahero.com/magic?utm_source=topai.tools&utm_medium=website_topai&utm_campaign=topai.tools","created_at":"2026-06-21T17:40:40.159525+00:00"}
+ {"id":334,"name":"Kreai","url":"https://www.krea.ai/home","created_at":"2026-06-21T17:40:40.159959+00:00"}
+ {"id":335,"name":"Palavras Chave","url":"https://keywordsheeter.com/","created_at":"2026-06-21T17:40:40.161066+00:00"}
+ {"id":336,"name":"DPI de imagens","url":"https://convert-dpi.com/br/","created_at":"2026-06-21T17:40:40.161506+00:00"}
+ {"id":337,"name":"Nbox Ai - Varias LLMs","url":"https://chat.nbox.ai","created_at":"2026-06-21T17:40:40.161794+00:00"}
+ {"id":338,"name":"Educafit - Curso de educação física","url":"https://educafit.com.br/","created_at":"2026-06-21T17:40:40.162506+00:00"}
+ {"id":339,"name":"ChatGOT","url":"https://start.chatgot.io/","created_at":"2026-06-21T17:40:40.16308+00:00"}
+ {"id":340,"name":"Theb Ai","url":"https://beta.theb.ai/home","created_at":"2026-06-21T17:40:40.164071+00:00"}
+ {"id":341,"name":"Cg Dream","url":"https://cgdream.ai/","created_at":"2026-06-21T17:40:40.164367+00:00"}
+ {"id":342,"name":"Pandora Box","url":"https://www.pandorasbox.ai/nsfw","created_at":"2026-06-21T17:40:40.164688+00:00"}
+ {"id":343,"name":"Product Hunt","url":"https://www.producthunt.com/","created_at":"2026-06-21T17:40:40.167005+00:00"}
+ {"id":344,"name":"Pixio","url":"https://pixio.myapps.ai/","created_at":"2026-06-21T17:40:40.167304+00:00"}
+ {"id":345,"name":"Mylens","url":"https://mylens.ai/","created_at":"2026-06-21T17:40:40.167609+00:00"}
+ {"id":346,"name":"Squaad Ai","url":"https://squaadai.com/","created_at":"2026-06-21T17:40:40.168+00:00"}
+ {"id":347,"name":"Guinness","url":"https://www.guinnessworldrecords.com.br/","created_at":"2026-06-21T17:40:40.169034+00:00"}
+ {"id":348,"name":"Download videos Youtube","url":"https://www.downloadbazar.com/","created_at":"2026-06-21T17:40:40.169379+00:00"}
+ {"id":349,"name":"TTS Openai","url":"https://huggingface.co/spaces/ysharma/OpenAI_TTS_New","created_at":"2026-06-21T17:40:40.169688+00:00"}
+ {"id":350,"name":"Suno AI","url":"https://www.suno.ai/","created_at":"2026-06-21T17:40:40.170273+00:00"}
+ {"id":351,"name":"Midjourney Stats","url":"https://midjourneystats.com/","created_at":"2026-06-21T17:40:40.171083+00:00"}
+ {"id":352,"name":"Aitoptools","url":"https://aitoptools.com/","created_at":"2026-06-21T17:40:40.171345+00:00"}
+ {"id":353,"name":"Producthunt","url":"https://www.producthunt.com/","created_at":"2026-06-21T17:40:40.17198+00:00"}
+ {"id":354,"name":"Shakker ai","url":"https://www.shakker.ai/","created_at":"2026-06-21T17:40:40.173065+00:00"}
+ {"id":355,"name":"Glif","url":"https://glif.app/glifs","created_at":"2026-06-21T17:40:40.173494+00:00"}
+ {"id":356,"name":"Claude AI","url":"https://claude.ai/chats","created_at":"2026-06-21T17:40:40.173884+00:00"}
+ {"id":357,"name":"Pikaso","url":"https://www.freepik.com/pikaso","created_at":"2026-06-21T17:40:40.174971+00:00"}
+ {"id":358,"name":"Estante virtual","url":"https://www.estantevirtual.com.br/","created_at":"2026-06-21T17:40:40.175292+00:00"}
+ {"id":359,"name":"Biblioteca PN","url":"https://www.tblop.com/","created_at":"2026-06-21T17:40:40.176084+00:00"}
+ {"id":360,"name":"Prompt Midjourney","url":"https://artificin.com/prompt-builder","created_at":"2026-06-21T17:40:40.176407+00:00"}
+ {"id":361,"name":"Grupos discord","url":"https://disboard.org/pt-pt","created_at":"2026-06-21T17:40:40.177088+00:00"}
+ {"id":362,"name":"Erome PN","url":"https://www.erome.com/","created_at":"2026-06-21T17:40:40.178016+00:00"}
+ {"id":363,"name":"Papelaria Unicornio","url":"https://papelariaunicornio.com.br/","created_at":"2026-06-21T17:40:40.178307+00:00"}
+ {"id":364,"name":"Traduzir PDF","url":"https://translate.google.com/?sl=en&tl=pt&op=docs","created_at":"2026-06-21T17:40:40.178624+00:00"}
+ {"id":365,"name":"Love PDF","url":"https://www.ilovepdf.com/pt","created_at":"2026-06-21T17:40:40.179759+00:00"}
+ {"id":366,"name":"Portion","url":"https://portions-b809c128e647.herokuapp.com/","created_at":"2026-06-21T17:40:40.180036+00:00"}
+ {"id":367,"name":"Videohighlight","url":"https://videohighlight.com/","created_at":"2026-06-21T17:40:40.181126+00:00"}
+ {"id":368,"name":"Programiz","url":"https://www.programiz.com/html/online-compiler/","created_at":"2026-06-21T17:40:40.181413+00:00"}
+ {"id":369,"name":"Jornal o regional","url":"https://www2.oregionaljornal.com.br/","created_at":"2026-06-21T17:40:40.181664+00:00"}
+ {"id":370,"name":"Typingmind","url":"https://www.typingmind.com/","created_at":"2026-06-21T17:40:40.182252+00:00"}
+ {"id":371,"name":"Gpte","url":"https://gpte.ai/","created_at":"2026-06-21T17:40:40.183067+00:00"}
+ {"id":372,"name":"Loja PN vibx","url":"https://marketplace.vibx.com.br/","created_at":"2026-06-21T17:40:40.183376+00:00"}
+ {"id":373,"name":"Baixar Scribd","url":"https://scribd.vpdfs.com/","created_at":"2026-06-21T17:40:40.184138+00:00"}
+ {"id":374,"name":"Pocket","url":"https://getpocket.com/pt/saves","created_at":"2026-06-21T17:40:40.184548+00:00"}
+ {"id":375,"name":"Extensão Top","url":"https://fastforward.team/","created_at":"2026-06-21T17:40:40.185092+00:00"}
+ {"id":376,"name":"Consensus","url":"https://consensus.app/","created_at":"2026-06-21T17:40:40.186066+00:00"}
+ {"id":377,"name":"Typeset","url":"https://typeset.io/","created_at":"2026-06-21T17:40:40.186364+00:00"}
+ {"id":378,"name":"Groq","url":"https://groq.com/","created_at":"2026-06-21T17:40:40.186938+00:00"}
+ {"id":379,"name":"Agents","url":"https://agents.rolemodel.ai/login","created_at":"2026-06-21T17:40:40.187964+00:00"}
+ {"id":380,"name":"Criador de prompt","url":"https://seu.design/","created_at":"2026-06-21T17:40:40.188279+00:00"}
+ {"id":381,"name":"Docs estilo midjournet","url":"https://docs.google.com/spreadsheets/u/0/d/1h6H2CqjLdZMbLjlz6EHwemfO4fkIzAfWtjRAMSa2KHE/htmlview?pli=1&utm","created_at":"2026-06-21T17:40:40.188582+00:00"}
+ {"id":382,"name":"Prompt Helper Midjourney","url":"https://midjourney-prompt-helper.netlify.app/","created_at":"2026-06-21T17:40:40.18906+00:00"}
+ {"id":383,"name":"Arthub","url":"https://arthub.ai/","created_at":"2026-06-21T17:40:40.190026+00:00"}
+ {"id":384,"name":"Midjourney Style","url":"https://github.com/willwulfken/MidJourney-Styles-and-Keywords-Reference/blob/main/Pages/MJ_V4/Style_Pages/Just_The_Style/Design_Styles.md","created_at":"2026-06-21T17:40:40.190335+00:00"}
+ {"id":385,"name":"Tune Chat","url":"https://chat.tune.app/","created_at":"2026-06-21T17:40:40.191075+00:00"}
+ {"id":386,"name":"Biblioteca de GPTs","url":"https://gptsdex.com/","created_at":"2026-06-21T17:40:40.192016+00:00"}
+ {"id":387,"name":"Stable diffusion CheatSheet","url":"https://supagruen.github.io/StableDiffusion-CheatSheet/","created_at":"2026-06-21T17:40:40.192314+00:00"}
+ {"id":388,"name":"Mistral","url":"https://auth.mistral.ai/ui/login","created_at":"2026-06-21T17:40:40.1926+00:00"}
+ {"id":389,"name":"Caça style","url":"https://glif.app/@fab1an/glifs/clska7jpn002u132h3zjl0m9v","created_at":"2026-06-21T17:40:40.193199+00:00"}
+ {"id":390,"name":"Printwhatyoulike","url":"https://www.printwhatyoulike.com/home/index","created_at":"2026-06-21T17:40:40.194182+00:00"}
+ {"id":391,"name":"Glbgpt","url":"https://glbgpt.com/mChatGpt","created_at":"2026-06-21T17:40:40.194491+00:00"}
+ {"id":392,"name":"Oksuro","url":"https://oksuro.com/","created_at":"2026-06-21T17:40:40.195003+00:00"}
+ {"id":393,"name":"Gov assinatura eletronica","url":"https://www.gov.br/governodigital/pt-br/identidade/assinatura-eletronica","created_at":"2026-06-21T17:40:40.196072+00:00"}
+ {"id":394,"name":"Apob","url":"https://beta.apob.ai/","created_at":"2026-06-21T17:40:40.196355+00:00"}
+ {"id":395,"name":"You IA","url":"https://you.com/","created_at":"2026-06-21T17:40:40.196787+00:00"}
+ {"id":396,"name":"Stylar","url":"https://www.stylar.ai/","created_at":"2026-06-21T17:40:40.198092+00:00"}
+ {"id":397,"name":"Status Midjourney","url":"https://status.midjourney.com/","created_at":"2026-06-21T17:40:40.198412+00:00"}
+ {"id":398,"name":"Prompts Ideas","url":"https://promptsideas.com/","created_at":"2026-06-21T17:40:40.199024+00:00"}
+ {"id":399,"name":"Turbo Scribe AI","url":"https://turboscribe.ai/dashboard","created_at":"2026-06-21T17:40:40.199975+00:00"}
+ {"id":400,"name":"Downdetector","url":"https://downdetector.com.br/","created_at":"2026-06-21T17:40:40.200982+00:00"}
+ {"id":401,"name":"TopGG","url":"https://top.gg/","created_at":"2026-06-21T17:40:40.201272+00:00"}
+ {"id":402,"name":"Promptlibrary","url":"https://promptlibrary.org/","created_at":"2026-06-21T17:40:40.201694+00:00"}
+ {"id":403,"name":"Promeai","url":"https://www.promeai.pro/","created_at":"2026-06-21T17:40:40.203006+00:00"}
+ {"id":404,"name":"Reka","url":"https://chat.reka.ai/auth/login","created_at":"2026-06-21T17:40:40.203339+00:00"}
+ {"id":405,"name":"Lummi","url":"https://www.lummi.ai/","created_at":"2026-06-21T17:40:40.20362+00:00"}
+ {"id":406,"name":"Ytscribe","url":"https://ytscribe.com/","created_at":"2026-06-21T17:40:40.203887+00:00"}
+ {"id":407,"name":"Caractere invisível","url":"https://fabricioventura.com/caractere?utm_source=pocket_saves","created_at":"2026-06-21T17:40:40.205042+00:00"}
+ {"id":408,"name":"Aistudio","url":"https://aistudio.google.com/","created_at":"2026-06-21T17:40:40.205323+00:00"}
+ {"id":409,"name":"Mallow","url":"https://mallow.ai/","created_at":"2026-06-21T17:40:40.20572+00:00"}
+ {"id":410,"name":"Udio","url":"https://www.udio.com/","created_at":"2026-06-21T17:40:40.20696+00:00"}
+ {"id":411,"name":"Mymemo","url":"https://app.mymemo.ai/","created_at":"2026-06-21T17:40:40.207441+00:00"}
+ {"id":412,"name":"Midgenai","url":"https://www.midgenai.com/","created_at":"2026-06-21T17:40:40.208084+00:00"}
+ {"id":413,"name":"Recraft","url":"https://www.recraft.ai/","created_at":"2026-06-21T17:40:40.209076+00:00"}
+ {"id":414,"name":"Breakerfollow","url":"https://www.breakerfollow.com/","created_at":"2026-06-21T17:40:40.209349+00:00"}
+ {"id":415,"name":"Zero-gpu-s","url":"https://huggingface.co/spaces/enzostvs/zero-gpu-spaces?utm_source=pocket_saves","created_at":"2026-06-21T17:40:40.20971+00:00"}
+ {"id":416,"name":"Abacus AI","url":"https://apps.abacus.ai/","created_at":"2026-06-21T17:40:40.211013+00:00"}
+ {"id":417,"name":"Status invest","url":"https://statusinvest.com.br/","created_at":"2026-06-21T17:40:40.211299+00:00"}
+ {"id":418,"name":"Investidor 10","url":"https://investidor10.com.br/","created_at":"2026-06-21T17:40:40.211578+00:00"}
+ {"id":419,"name":"Topinvest simulados","url":"https://simulados.topinvest.com.br/","created_at":"2026-06-21T17:40:40.21186+00:00"}
+ {"id":420,"name":"Whimsical","url":"https://whimsical.com","created_at":"2026-06-21T17:40:40.213011+00:00"}
+ {"id":421,"name":"Markmap","url":"https://markmap.js.org/repl","created_at":"2026-06-21T17:40:40.213385+00:00"}
+ {"id":422,"name":"Phind","url":"https://www.phind.com","created_at":"2026-06-21T17:40:40.21399+00:00"}
+ {"id":423,"name":"Make","url":"https://www.make.com","created_at":"2026-06-21T17:40:40.214812+00:00"}
+ {"id":424,"name":"Zapier","url":"https://zapier.com","created_at":"2026-06-21T17:40:40.215237+00:00"}
+ {"id":425,"name":"Labs perplexity","url":"https://labs.perplexity.ai/","created_at":"2026-06-21T17:40:40.216091+00:00"}
+ {"id":426,"name":"Git Mind","url":"https://gitmind.com/pt/","created_at":"2026-06-21T17:40:40.216395+00:00"}
+ {"id":427,"name":"Lmsys Arena Chatbot","url":"https://chat.lmsys.org/","created_at":"2026-06-21T17:40:40.216976+00:00"}
+ {"id":428,"name":"Invideo AI","url":"https://invideo.io/ai/","created_at":"2026-06-21T17:40:40.217991+00:00"}
+ {"id":429,"name":"Mapify","url":"https://mapify.so/","created_at":"2026-06-21T17:40:40.218309+00:00"}
+ {"id":430,"name":"Tost","url":"https://tost.ai/","created_at":"2026-06-21T17:40:40.218628+00:00"}
+ {"id":431,"name":"Role model","url":"https://chat.rolemodel.ai/c/new","created_at":"2026-06-21T17:40:40.219869+00:00"}
+ {"id":432,"name":"Llama coder","url":"https://llamacoder.together.ai/","created_at":"2026-06-21T17:40:40.220193+00:00"}
+ {"id":433,"name":"Giz AI","url":"https://app.giz.ai/","created_at":"2026-06-21T17:40:40.220496+00:00"}
+ {"id":434,"name":"Openai TSS","url":"https://platform.openai.com/playground/tts?utm_source=pocket_saves","created_at":"2026-06-21T17:40:40.221+00:00"}
+ {"id":435,"name":"Style Midjourney","url":"https://github.com/willwulfken/MidJourney-Styles-and-Keywords-Reference?utm_source=pocket_shared","created_at":"2026-06-21T17:40:40.222087+00:00"}
+ {"id":436,"name":"Pix Verse","url":"https://app.pixverse.ai/","created_at":"2026-06-21T17:40:40.22241+00:00"}
+ {"id":437,"name":"Scribd download","url":"https://scribd.vpdfs.com/","created_at":"2026-06-21T17:40:40.222699+00:00"}
+ {"id":438,"name":"Similar sites","url":"https://www.similarsites.com/","created_at":"2026-06-21T17:40:40.223923+00:00"}
+ {"id":439,"name":"Lovable","url":"https://lovable.dev/login?redirect=%2Fprojects%2F95b6cf99-6386-4ef2-ae14-ed6598a55145","created_at":"2026-06-21T17:40:40.224288+00:00"}
+ {"id":440,"name":"Artflow","url":"https://app.artflow.ai/","created_at":"2026-06-21T17:40:40.224676+00:00"}
+ {"id":441,"name":"Deepseek","url":"https://chat.deepseek.com/","created_at":"2026-06-21T17:40:40.226014+00:00"}
+ {"id":442,"name":"Mistral","url":"https://auth.mistral.ai/","created_at":"2026-06-21T17:40:40.226343+00:00"}
+ {"id":443,"name":"Liquid AI","url":"https://playground.liquid.ai/login","created_at":"2026-06-21T17:40:40.226647+00:00"}
+ {"id":444,"name":"Inner AI","url":"https://platform.innerai.com/","created_at":"2026-06-21T17:40:40.226912+00:00"}
+ {"id":445,"name":"Dzine","url":"https://www.dzine.ai/","created_at":"2026-06-21T17:40:40.227992+00:00"}
+ {"id":446,"name":"Fliki","url":"https://fliki.ai/","created_at":"2026-06-21T17:40:40.228314+00:00"}
+ {"id":447,"name":"Piclumen","url":"https://www.piclumen.com/","created_at":"2026-06-21T17:40:40.22861+00:00"}
+ {"id":448,"name":"Meta AI","url":"https://www.meta.ai/","created_at":"2026-06-21T17:40:40.229981+00:00"}
+ {"id":449,"name":"Nvidia nemotron","url":"https://build.nvidia.com/nvidia/llama-3_1-nemotron-70b-instruct?utm_source=pocket_saves","created_at":"2026-06-21T17:40:40.230326+00:00"}
+ {"id":450,"name":"Superporn","url":"https://www.superporn.com/pornstars?","created_at":"2026-06-21T17:40:40.230639+00:00"}
+ {"id":451,"name":"Tubepornstars","url":"https://www.tubepornstars.com/pt-br/","created_at":"2026-06-21T17:40:40.230916+00:00"}
+ {"id":452,"name":"Pornstars","url":"https://pornstars.tube/","created_at":"2026-06-21T17:40:40.231976+00:00"}
+ {"id":453,"name":"Hailuoai","url":"https://hailuoai.video/","created_at":"2026-06-21T17:40:40.2323+00:00"}
+ {"id":454,"name":"Adapta","url":"https://adapta.org/","created_at":"2026-06-21T17:40:40.232604+00:00"}
+ {"id":455,"name":"Assoass","url":"https://www.assoass.com/pt-br/category/anal","created_at":"2026-06-21T17:40:40.234005+00:00"}
+ {"id":456,"name":"Toppornsites","url":"https://toppornsites.com/","created_at":"2026-06-21T17:40:40.234334+00:00"}
+ {"id":457,"name":"Findtubes","url":"https://www.findtubes.com/pt-br/category/anal","created_at":"2026-06-21T17:40:40.234651+00:00"}
+ {"id":458,"name":"Adobe - Comprimir PDF","url":"https://www.adobe.com/br/acrobat/online/compress-pdf.html","created_at":"2026-06-21T17:40:40.234987+00:00"}
+ {"id":459,"name":"Promptperfect","url":"https://promptperfect.jina.ai/","created_at":"2026-06-21T17:40:40.236108+00:00"}
+ {"id":460,"name":"Hotshot","url":"https://hotshot.co/","created_at":"2026-06-21T17:40:40.236434+00:00"}
+ {"id":461,"name":"Profundo","url":"https://www.profundo.app/","created_at":"2026-06-21T17:40:40.236728+00:00"}
+ {"id":462,"name":"Gofretes","url":"https://gofretes.com.br/","created_at":"2026-06-21T17:40:40.237991+00:00"}
+ {"id":463,"name":"Ai music","url":"https://aimusic.so/","created_at":"2026-06-21T17:40:40.238305+00:00"}
+ {"id":464,"name":"Freeflo","url":"https://freeflo.ai/","created_at":"2026-06-21T17:40:40.2386+00:00"}
+ {"id":465,"name":"Prompter","url":"https://prompter.fofr.a","created_at":"2026-06-21T17:40:40.238917+00:00"}
+ {"id":466,"name":"Felo AI","url":"https://felo.ai/search","created_at":"2026-06-21T17:40:40.240102+00:00"}
+ {"id":467,"name":"Basedlabs","url":"https://www.basedlabs.ai/generate","created_at":"2026-06-21T17:40:40.241071+00:00"}
+ {"id":468,"name":"Together AI","url":"https://api.together.ai/signin","created_at":"2026-06-21T17:40:40.241374+00:00"}
+ {"id":469,"name":"Color IO","url":"https://app.color.io/","created_at":"2026-06-21T17:40:40.241886+00:00"}
+ {"id":470,"name":"LM Arena","url":"https://lmarena.ai/","created_at":"2026-06-21T17:40:40.243023+00:00"}
+ {"id":471,"name":"Notebook LM","url":"https://notebooklm.google.com/","created_at":"2026-06-21T17:40:40.243346+00:00"}
+ {"id":472,"name":"Name that pornstar","url":"https://namethatpornstar.com/","created_at":"2026-06-21T17:40:40.243675+00:00"}
+ {"id":473,"name":"Fap folder","url":"https://fapfolder.club/","created_at":"2026-06-21T17:40:40.244119+00:00"}
+ {"id":474,"name":"Telegra","url":"https://telegra.ph/","created_at":"2026-06-21T17:40:40.244988+00:00"}
+ {"id":475,"name":"EGP TCE","url":"https://egp.tce.pr.gov.br/","created_at":"2026-06-21T17:40:40.246078+00:00"}
+ {"id":476,"name":"Instituto Federal do Rio Grande do Sul - Cursos","url":"https://moodle.ifrs.edu.br/","created_at":"2026-06-21T17:40:40.246975+00:00"}
+ {"id":477,"name":"Ttsopenai","url":"https://ttsopenai.com/","created_at":"2026-06-21T17:40:40.247282+00:00"}
+ {"id":478,"name":"TCE ENTIDADE","url":"https://servicos.tce.pr.gov.br/tcepr/tribunal/relacon/Entidade","created_at":"2026-06-21T17:40:40.247546+00:00"}
+ {"id":479,"name":"SENADO Cursos","url":"https://saberes.senado.leg.br/","created_at":"2026-06-21T17:40:40.248979+00:00"}
+ {"id":480,"name":"Websim","url":"https://websim.ai/","created_at":"2026-06-21T17:40:40.250081+00:00"}
+ {"id":481,"name":"Pornpics","url":"https://www.pornpics.com/","created_at":"2026-06-21T17:40:40.250936+00:00"}
+ {"id":482,"name":"Findtubes","url":"https://www.findtubes.com/pt-br/","created_at":"2026-06-21T17:40:40.251234+00:00"}
+ {"id":483,"name":"Vidu","url":"https://www.vidu.studio/","created_at":"2026-06-21T17:40:40.251504+00:00"}
+ {"id":484,"name":"Lumalabs","url":"https://lumalabs.ai/","created_at":"2026-06-21T17:40:40.252047+00:00"}
+ {"id":485,"name":"arxiv","url":"https://arxiv.org/","created_at":"2026-06-21T17:40:40.25299+00:00"}
+ {"id":486,"name":"Pomodoro timer","url":"https://app.pomodorotimer.online/pt","created_at":"2026-06-21T17:40:40.253327+00:00"}
+ {"id":487,"name":"V0","url":"https://v0.dev/","created_at":"2026-06-21T17:40:40.254012+00:00"}
+ {"id":488,"name":"Tool finder","url":"https://toolfinder.co/","created_at":"2026-06-21T17:40:40.2544+00:00"}
+ {"id":489,"name":"Deep swapper","url":"https://www.deepswapper.com/","created_at":"2026-06-21T17:40:40.255171+00:00"}
+ {"id":490,"name":"Face swapper","url":"https://faceswapper.ai","created_at":"2026-06-21T17:40:40.255543+00:00"}
+ {"id":491,"name":"Teradownloader","url":"https://teradownloader.com","created_at":"2026-06-21T17:40:40.256131+00:00"}
+ {"id":492,"name":"Hailuoai","url":"https://hailuoai.com/","created_at":"2026-06-21T17:40:40.257182+00:00"}
+ {"id":493,"name":"Markdown to pdf","url":"https://www.markdowntopdf.com/","created_at":"2026-06-21T17:40:40.257455+00:00"}
+ {"id":494,"name":"Preciso imprimir","url":"https://precisoimprimir.com.br/","created_at":"2026-06-21T17:40:40.257783+00:00"}
+ {"id":495,"name":"Raidrive","url":"https://www.raidrive.com/","created_at":"2026-06-21T17:40:40.259071+00:00"}
+ {"id":496,"name":"Chatplayground","url":"https://app.chatplayground.ai/","created_at":"2026-06-21T17:40:40.259994+00:00"}
+ {"id":497,"name":"Omnigpt","url":"https://app.omnigpt.co/","created_at":"2026-06-21T17:40:40.26027+00:00"}
+ {"id":498,"name":"Recraft","url":"https://www.recraft.ai/","created_at":"2026-06-21T17:40:40.260577+00:00"}
+ {"id":499,"name":"Promptlibrary","url":"https://promptlibrary.org/","created_at":"2026-06-21T17:40:40.261496+00:00"}
+ {"id":500,"name":"Vizard","url":"https://vizard.ai/","created_at":"2026-06-21T17:40:40.262962+00:00"}
+ {"id":501,"name":"Download Terabox","url":"https://terabox.hnn.workers.dev/","created_at":"2026-06-21T17:40:40.263409+00:00"}
+ {"id":502,"name":"DNS Adguard","url":"https://auth.adguard.com/login.html","created_at":"2026-06-21T17:40:40.26423+00:00"}
+ {"id":503,"name":"Poppop AI","url":"https://poppop.ai/","created_at":"2026-06-21T17:40:40.265012+00:00"}
+ {"id":504,"name":"Komo AI","url":"https://komo.ai/","created_at":"2026-06-21T17:40:40.265346+00:00"}
+ {"id":505,"name":"Promptsideas","url":"https://promptsideas.com/","created_at":"2026-06-21T17:40:40.265995+00:00"}
+ {"id":506,"name":"Mymemo","url":"https://app.mymemo.ai/","created_at":"2026-06-21T17:40:40.266995+00:00"}
+ {"id":507,"name":"Reka AI","url":"https://chat.reka.ai/chat","created_at":"2026-06-21T17:40:40.26734+00:00"}
+

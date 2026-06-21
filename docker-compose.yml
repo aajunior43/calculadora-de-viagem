@@ -55,10 +55,17 @@ services:
       dockerfile: services/subscription-api/Dockerfile
     container_name: subscription-api
     restart: unless-stopped
+    environment:
+      DB_HOST: hub-postgres
+      DB_PORT: "5432"
+      DB_NAME: ${DB_NAME:-hub_master}
+      DB_USER: ${DB_USER:-hubmaster}
+      DB_PASS: ${DB_PASS:-hubmaster_secret_2026}
     expose:
       - "8766"
-    volumes:
-      - subscription-data:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - traefik-public
 
@@ -138,7 +145,6 @@ services:
 
 volumes:
   favoritos-data:
-  subscription-data:
   postgres-data:
 
 networks:

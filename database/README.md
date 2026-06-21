@@ -1,26 +1,36 @@
-# Hub Master - Banco de Dados Local
+# Hub Master - Banco de Dados Unificado
+
+## Visão Geral
+
+Todos os bancos de dados de todos os serviços ficam nesta única pasta, usando um único PostgreSQL (`hub-postgres`).
 
 ## Estrutura
 
 ```
 database/
-├── init/
-│   ├── 01_schema.sql         # Schema completo (tabelas, índices, triggers)
-│   └── 02_migrate_data.sql   # Dados migrados do Supabase
-├── backups/
-│   ├── links.json            # Backup JSON dos links (Supabase)
-│   ├── tags.json             # Backup JSON das tags
-│   ├── folders.json          # Backup JSON das pastas
-│   ├── link_tags.json        # Backup JSON das relações
-│   ├── profiles.json         # Backup JSON dos perfis
-│   ├── mcp_tokens.json       # Backup JSON dos tokens MCP
-│   ├── categories.json       # Backup JSON das categorias (vazio)
-│   ├── api_keys.json         # Backup JSON das API keys (vazio)
-│   └── hub_master_*.sql      # Backups do PostgreSQL (automáticos)
-├── migrate.py                # Script Python de migração (alternativo)
-├── backup.sh                 # Script de backup do PostgreSQL
-└── README.md                 # Este arquivo
+├── init/                           # Scripts SQL executados na inicialização
+│   ├── 01_schema.sql              # Schema do Link Stash (users, links, tags, etc.)
+│   ├── 02_migrate_data.sql        # Dados migrados do Supabase (128 links)
+│   └── 03_other_services.sql      # Schema + dados de subscriptions e favorites
+├── backups/                        # Backups
+│   ├── hub_master_*.sql           # Backups completos do PostgreSQL (automáticos)
+│   ├── links.json                 # Backup JSON dos links
+│   ├── tags.json                  # Backup JSON das tags
+│   ├── folders.json               # Backup JSON das pastas
+│   ├── favorites.txt              # Backup original dos favoritos (507 entradas)
+│   └── subscriptions.db           # Backup original do SQLite (vazio)
+├── backup.sh                       # Script de backup unificado
+├── migrate.py                      # Script de migração (Supabase -> PostgreSQL)
+└── README.md                       # Este arquivo
 ```
+
+## Serviços e suas tabelas
+
+| Serviço | Tabelas | Origem dos dados | Registros |
+|---------|---------|------------------|-----------|
+| Link Stash | users, profiles, links, tags, folders, link_tags, categories, api_keys, mcp_tokens | Supabase (migrado) | 128 links, 14 tags, 3 pastas |
+| Subscription API | subscriptions | SQLite (migrado) | 0 (vazio) |
+| Favoritos | favorites | Arquivo txt (migrado) | 507 entradas |
 
 ## Configuração
 
@@ -34,26 +44,13 @@ DB_PASS=hubmaster_secret_2026
 
 ### Container Docker
 
-O PostgreSQL roda como container `hub-postgres` na rede `traefik-public`.
+O PostgreSQL roda como container `hub-postgres`:
 
 - **Imagem:** postgres:16-alpine
-- **Porta:** 5432 (expose interno)
+- **Porta:** 5432 (interno, não exposta)
 - **Volume:** postgres-data (dados persistentes)
+- **Init scripts:** `./database/init/` montados em `/docker-entrypoint-initdb.d`
 - **Healthcheck:** pg_isready a cada 10s
-
-## Tabelas
-
-| Tabela | Descrição | Registros migrados |
-|--------|-----------|-------------------|
-| users | Usuários (substitui auth.users do Supabase) | 1 |
-| profiles | Perfis dos usuários | 1 |
-| categories | Categorias de links | 0 |
-| tags | Tags de links | 14 |
-| folders | Pastas hierárquicas | 3 |
-| links | Links salvos | 128 |
-| link_tags | Relacionamento links↔tags | 9 |
-| api_keys | Chaves de API | 0 |
-| mcp_tokens | Tokens MCP | 1 |
 
 ## Comandos úteis
 
@@ -62,7 +59,7 @@ O PostgreSQL roda como container `hub-postgres` na rede `traefik-public`.
 docker exec -it hub-postgres psql -U hubmaster -d hub_master
 ```
 
-### Backup manual
+### Backup completo
 ```bash
 ./database/backup.sh
 ```
@@ -72,19 +69,39 @@ docker exec -it hub-postgres psql -U hubmaster -d hub_master
 docker exec -i hub-postgres psql -U hubmaster -d hub_master < database/backups/hub_master_YYYYMMDD_HHMMSS.sql
 ```
 
-### Ver tabelas
+### Ver todas as tabelas
 ```bash
 docker exec hub-postgres psql -U hubmaster -d hub_master -c "\dt"
 ```
 
-### Ver links
+### Ver contagem de registros por tabela
+```bash
+docker exec hub-postgres psql -U hubmaster -d hub_master -c "
+SELECT relname as tabela, n_live_tup as registros
+FROM pg_stat_user_tables
+ORDER BY relname;
+"
+```
+
+### Ver links do Link Stash
 ```bash
 docker exec hub-postgres psql -U hubmaster -d hub_master -c "SELECT title, url FROM links ORDER BY created_at DESC LIMIT 10;"
 ```
 
+### Ver favoritos
+```bash
+docker exec hub-postgres psql -U hubmaster -d hub_master -c "SELECT name, url FROM favorites LIMIT 10;"
+```
+
+### Ver subscriptions
+```bash
+docker exec hub-postgres psql -U hubmaster -d hub_master -c "SELECT * FROM subscriptions;"
+```
+
 ## Origem dos dados
 
-Migrado do Supabase: `qywjbutxdklmhihscahy.supabase.co`
-- Usuário: aajunior43@gmail.com
-- User ID: 516358a0-a386-4c69-bb53-83609a79e8e0
-- Data da migração: 2026-06-21
+| Banco | Origem | Data da migração |
+|-------|--------|------------------|
+| Link Stash | Supabase: `qywjbutxdklmhihscahy.supabase.co` | 2026-06-21 |
+| Subscriptions | SQLite: `/data/subscriptions.db` (container) | 2026-06-21 |
+| Favorites | Arquivo txt: `/var/www/html/data/favorites.txt` (container) | 2026-06-21 |
