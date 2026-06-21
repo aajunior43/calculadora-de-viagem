@@ -1,132 +1,426 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Números Aleatórios</title>
-    <style>
-        :root {
-            --background-color: #0f0c29;
-            --background-gradient: linear-gradient(315deg, #0f0c29 0%, #302b63 74%, #24243e);
-            --primary-color: #08d9d6;
-            --secondary-color: #ff2e63;
-            --text-color: #eaeaea;
-            --input-background-color: #2a2a72;
-            --input-text-color: #eaeaea;
-            --button-color: #ff2e63;
-            --button-hover-color: #e61c5d;
-            --result-background-color: #302b63;
-            --result-text-color: #eaeaea;
-        }
-        body {
-            background: var(--background-gradient);
-            color: var(--text-color);
-            font-family: 'Segoe UI', sans-serif;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        h1 {
-            color: var(--primary-color);
-        }
-        .inputs, .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        input[type="number"], input[type="checkbox"] + label {
-            padding: 10px;
-            background-color: var(--input-background-color);
-            color: var(--input-text-color);
-            border: none;
-            border-radius: 5px;
-            margin: 5px;
-            font-size: 1rem;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: var(--button-color);
-            color: var(--text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 1rem;
-        }
-        button:hover {
-            background-color: var(--button-hover-color);
-        }
-        #numerosGerados {
-            padding: 15px;
-            margin-top: 20px;
-            background-color: var(--result-background-color);
-            color: var(--result-text-color);
-            border-radius: 5px;
-            width: 100%;
-            max-width: 600px;
-            word-wrap: break-word;
-            text-align: center;
-            border: 2px solid var(--primary-color);
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 0.85em;
-            color: var(--secondary-color);
-        }
-        @media (max-width: 600px) {
-            .inputs, .buttons {
-                flex-direction: column;
-            }
-            input[type="number"], input[type="checkbox"] + label, button {
-                width: 100%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Números Aleatórios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--font:'Inter',system-ui,-apple-system,sans-serif;--radius:20px;--transition:0.35s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{
+  --bg:#0a0a1a;--bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);--card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;--text-muted:#8b8ba0;
+  --primary:#f59e0b;--primary-dim:rgba(245,158,11,0.12);--primary-glow:rgba(245,158,11,0.25);
+  --accent:#eab308;--red:#ef4444;--green:#10b981;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--tag-bg:rgba(255,255,255,0.05);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);--card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;--text-muted:#6b7280;
+  --primary:#d97706;--primary-dim:rgba(217,119,6,0.08);--primary-glow:rgba(217,119,6,0.15);
+  --accent:#b45309;--red:#dc2626;--green:#059669;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);--tag-bg:rgba(0,0,0,0.04);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-grad);color:var(--text);min-height:100vh;padding:20px;transition:background var(--transition),color var(--transition)}
+.app{max-width:520px;margin:0 auto;padding-bottom:40px}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:var(--primary-dim);border:1.5px solid var(--primary);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.header-title{font-size:1.1rem;font-weight:800}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.theme-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
+
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:16px}
+
+/* Mode tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:14px;padding:4px}
+.tab{flex:1;padding:12px 8px;border-radius:11px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:6px}
+.tab.active{background:var(--primary-dim);color:var(--primary);box-shadow:0 2px 8px var(--primary-glow)}
+.tab:hover:not(.active){color:var(--text)}
+
+.input-group{margin-bottom:14px}
+.input-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.input-label span{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.input-label .val-display{font-size:0.85rem;font-weight:700;color:var(--text)}
+.input-wrap{position:relative}
+.input-wrap input[type="number"],.input-wrap input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--font);font-size:1.1rem;font-weight:600;outline:none;transition:all var(--transition)}
+.input-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+.input-wrap input::placeholder{color:var(--text-muted);font-weight:400}
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+/* Range slider */
+.range-row{display:flex;align-items:center;gap:12px}
+.range-row input[type="range"]{flex:1;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--card-border);outline:none;transition:all var(--transition)}
+.range-row input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--primary);cursor:pointer;box-shadow:0 2px 8px var(--primary-glow);transition:all var(--transition)}
+.range-row input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.range-val{font-size:1.2rem;font-weight:800;color:var(--primary);min-width:36px;text-align:center}
+
+/* Options grid */
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.option-chip{display:flex;align-items:center;gap:8px;padding:12px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--tag-bg);color:var(--text-muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all var(--transition);user-select:none}
+.option-chip:hover{border-color:var(--primary);color:var(--text)}
+.option-chip.active{border-color:var(--primary);background:var(--primary-dim);color:var(--primary)}
+.option-chip input{display:none}
+.check-box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:0.7rem;transition:all var(--transition);flex-shrink:0}
+.option-chip.active .check-box{border-color:var(--primary);background:var(--primary);color:#fff}
+.option-chip .opt-label{font-size:0.78rem}
+.option-chip .opt-example{font-size:0.65rem;color:var(--text-muted);margin-top:2px}
+.option-chip.active .opt-example{color:var(--primary);opacity:0.7}
+
+/* Result display */
+.result-display{display:none;padding:28px;border-radius:16px;background:linear-gradient(135deg,var(--primary-dim),rgba(234,179,8,0.06));border:1.5px solid rgba(245,158,11,0.2);text-align:center;margin-bottom:16px;position:relative;overflow:hidden}
+.result-display.show{display:block;animation:slideUp 0.3s ease}
+.result-label{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.result-value{font-size:2.2rem;font-weight:800;color:var(--primary);letter-spacing:0.15em;line-height:1.2;word-break:break-all;font-family:'Courier New',monospace}
+.result-meta{margin-top:10px;font-size:0.75rem;color:var(--text-muted);font-weight:500}
+.result-actions{display:flex;gap:8px;margin-top:14px;justify-content:center}
+.result-actions button{padding:10px 18px;border-radius:10px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;gap:6px}
+.result-actions button:hover{border-color:var(--primary);color:var(--primary)}
+.result-actions button.copied{border-color:var(--green);color:var(--green);background:rgba(16,185,129,0.1)}
+
+/* History */
+.history{margin-top:16px}
+.history-title{font-size:0.75rem;font-weight:700;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.history-clear{font-size:0.65rem;color:var(--red);cursor:pointer;font-weight:600;background:rgba(239,68,68,0.1);padding:4px 10px;border-radius:8px;border:none;font-family:var(--font)}
+.history-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid var(--card-border);margin-bottom:6px;cursor:pointer;transition:all var(--transition)}
+.history-item:hover{border-color:var(--primary);background:var(--primary-dim)}
+.history-val{font-size:0.82rem;font-weight:600;color:var(--text);font-family:'Courier New',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-info{font-size:0.65rem;color:var(--text-muted);margin-left:8px;white-space:nowrap}
+
+/* Presets */
+.presets-label{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.presets-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.preset-btn{padding:7px 14px;border-radius:20px;border:1.5px solid var(--card-border);background:var(--tag-bg);color:var(--text-muted);font-family:var(--font);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;gap:5px}
+.preset-btn:hover{border-color:var(--primary);color:var(--text);transform:translateY(-1px)}
+.preset-btn .preset-icon{font-size:0.85rem}
+
+.btn{width:100%;padding:14px;border-radius:14px;border:none;font-family:var(--font);font-size:0.9rem;font-weight:700;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{background:var(--card);border:1.5px solid var(--card-border);color:var(--text);margin-top:8px}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-row{display:flex;gap:8px}
+.btn-row .btn{flex:1}
+
+.footer{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid var(--card-border)}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;border-radius:12px;background:var(--primary);color:#fff;font-family:var(--font);font-size:0.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:500px){body{padding:12px}.card{padding:18px}.options-grid{grid-template-columns:1fr}.result-value{font-size:1.6rem}}
+</style>
 </head>
 <body>
-    <h1>Gerador de Números Aleatórios</h1>
-    <div class="inputs">
-        <input type="number" id="quantidadeCaracteres" placeholder="Quantidade de caracteres" min="1" max="100" value="8">
-        <label><input type="checkbox" id="checkboxNumeros" checked> Números</label>
-        <label><input type="checkbox" id="checkboxLetras" checked> Letras</label>
-        <label><input type="checkbox" id="checkboxLetrasMaiusculas" checked> Letras Maiúsculas</label>
-        <label><input type="checkbox" id="checkboxCaracteresEspeciais" checked> Caracteres Especiais</label>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">🎲</div>
+      <div>
+        <div class="header-title">Números Aleatórios</div>
+        <div class="header-sub">Senhas, códigos e sorteios</div>
+      </div>
     </div>
-    <div class="buttons">
-        <button id="gerarNumeros" onclick="gerarNumeros()">Gerar</button>
-        <button id="copiarNumeros" onclick="copiarNumeros()">Copiar</button>
-    </div>
-    <div id="numerosGerados"></div>
-    <footer class="footer">
-        Criado por Aleksandro Alves Da Rocha Junior
-    </footer>
-    <script>
-        function gerarNumeros() {
-            const quantidade = document.getElementById('quantidadeCaracteres').value;
-            let caracteres = '';
-            let resultado = '';
-            if (document.getElementById('checkboxNumeros').checked) caracteres += '0123456789';
-            if (document.getElementById('checkboxLetras').checked) caracteres += 'abcdefghijklmnopqrstuvwxyz';
-            if (document.getElementById('checkboxLetrasMaiusculas').checked) caracteres += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            if (document.getElementById('checkboxCaracteresEspeciais').checked) caracteres += '!@#$%^&*()_+=-[]{}|;:",.<>?';
-            for (let i = 0; i < quantidade; i++) {
-                resultado += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-            }
-            document.getElementById('numerosGerados').textContent = resultado;
-        }
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
 
-        function copiarNumeros() {
-            const textoParaCopiar = document.getElementById('numerosGerados').textContent;
-            navigator.clipboard.writeText(textoParaCopiar)
-                .then(() => alert('Copiado para a área de transferência: ' + textoParaCopiar))
-                .catch(err => console.error('Erro ao copiar: ', err));
-        }
-    </script>
+  <div class="card">
+    <!-- Mode tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="setMode('password')" data-tab="password">🔑 Senha</button>
+      <button class="tab" onclick="setMode('number')" data-tab="number">🔢 Número</button>
+      <button class="tab" onclick="setMode('sorteio')" data-tab="sorteio">🎰 Sorteio</button>
+    </div>
+
+    <!-- Password mode -->
+    <div id="modePassword">
+      <div class="input-group">
+        <div class="input-label"><span>Tamanho da senha</span><span class="val-display" id="passLen">16</span></div>
+        <div class="range-row">
+          <input type="range" id="passRange" min="4" max="64" value="16" oninput="document.getElementById('passLen').textContent=this.value">
+        </div>
+      </div>
+
+      <div class="presets-label">Presets rápidos</div>
+      <div class="presets-grid">
+        <button class="preset-btn" onclick="setPassPreset(8,'num')"><span class="preset-icon">🔢</span> PIN 8</button>
+        <button class="preset-btn" onclick="setPassPreset(6,'num')"><span class="preset-icon">🎰</span> Loteria</button>
+        <button class="preset-btn" onclick="setPassPreset(12,'all')"><span class="preset-icon">🔑</span> Média</button>
+        <button class="preset-btn" onclick="setPassPreset(16,'all')"><span class="preset-icon">🛡️</span> Forte</button>
+        <button class="preset-btn" onclick="setPassPreset(32,'all')"><span class="preset-icon">🏰</span> Ultra</button>
+        <button class="preset-btn" onclick="setPassPreset(4,'hex')"><span class="preset-icon">🎨</span> Hex</button>
+      </div>
+
+      <div class="options-grid">
+        <label class="option-chip active" onclick="toggleOpt(this)" data-char="num">
+          <span class="check-box">✓</span>
+          <div><div class="opt-label">Números</div><div class="opt-example">0-9</div></div>
+        </label>
+        <label class="option-chip active" onclick="toggleOpt(this)" data-char="lower">
+          <span class="check-box">✓</span>
+          <div><div class="opt-label">Minúsculas</div><div class="opt-example">a-z</div></div>
+        </label>
+        <label class="option-chip active" onclick="toggleOpt(this)" data-char="upper">
+          <span class="check-box">✓</span>
+          <div><div class="opt-label">Maiúsculas</div><div class="opt-example">A-Z</div></div>
+        </label>
+        <label class="option-chip active" onclick="toggleOpt(this)" data-char="special">
+          <span class="check-box">✓</span>
+          <div><div class="opt-label">Especiais</div><div class="opt-example">!@#$%</div></div>
+        </label>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Quantidade</span></div>
+        <div class="input-wrap"><input type="number" id="passCount" value="1" min="1" max="50"></div>
+      </div>
+    </div>
+
+    <!-- Number mode -->
+    <div id="modeNumber" style="display:none">
+      <div class="input-group">
+        <div class="input-label"><span>Valor mínimo</span></div>
+        <div class="input-wrap"><input type="number" id="numMin" value="1" placeholder="Mínimo"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Valor máximo</span></div>
+        <div class="input-wrap"><input type="number" id="numMax" value="100" placeholder="Máximo"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Quantidade</span></div>
+        <div class="input-wrap"><input type="number" id="numCount" value="1" min="1" max="100"></div>
+      </div>
+      <label class="option-chip" id="optUnique" onclick="this.classList.toggle('active')" style="margin-bottom:16px">
+        <span class="check-box">✓</span>
+        <span>Sem repetição</span>
+      </label>
+    </div>
+
+    <!-- Sorteio mode -->
+    <div id="modeSorteio" style="display:none">
+      <div class="input-group">
+        <div class="input-label"><span>Números de</span></div>
+        <div class="input-wrap"><input type="number" id="sortFrom" value="1" placeholder="Início"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>até</span></div>
+        <div class="input-wrap"><input type="number" id="sortTo" value="60" placeholder="Fim"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Sortear quantos?</span></div>
+        <div class="input-wrap"><input type="number" id="sortCount" value="6" min="1" max="50"></div>
+      </div>
+      <label class="option-chip" id="optSortAsc" onclick="this.classList.toggle('active')" style="margin-bottom:16px;border-color:var(--primary);background:var(--primary-dim);color:var(--primary)">
+        <span class="check-box" style="border-color:var(--primary);background:var(--primary);color:#fff">✓</span>
+        <span>Ordenar crescente</span>
+      </label>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generate()"><span>⚡</span> Gerar</button>
+      <button class="btn btn-secondary" onclick="clearAll()"><span>🗑️</span> Limpar</button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-display" id="resultCard">
+    <div class="result-label">Resultado</div>
+    <div class="result-value" id="resultValue">—</div>
+    <div class="result-meta" id="resultMeta"></div>
+    <div class="result-actions">
+      <button onclick="copyResult()" id="copyBtn">📋 Copiar</button>
+      <button onclick="regenerate()">🔄 Regenerar</button>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="card history" id="historyCard" style="display:none">
+    <div class="history-title">
+      <span>🕐 Histórico</span>
+      <button class="history-clear" onclick="clearHistory()">Limpar</button>
+    </div>
+    <div id="historyList"></div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let mode='password';
+let history=JSON.parse(localStorage.getItem('rngHistory')||'[]');
+let lastResult='';
+
+/* Theme */
+function toggleTheme(){const h=document.documentElement,b=document.querySelector('.theme-btn');const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');b.textContent=d?'☀️':'🌙';localStorage.setItem('rngTheme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('rngTheme');if(s){document.documentElement.setAttribute('data-theme',s);document.querySelector('.theme-btn').textContent=s==='dark'?'🌙':'☀️';}})();
+
+/* Mode */
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===m));
+  document.getElementById('modePassword').style.display=m==='password'?'block':'none';
+  document.getElementById('modeNumber').style.display=m==='number'?'block':'none';
+  document.getElementById('modeSorteio').style.display=m==='sorteio'?'block':'none';
+  document.getElementById('resultCard').classList.remove('show');
+}
+
+/* Options */
+function toggleOpt(el){el.classList.toggle('active');}
+
+function setPassPreset(len,type){
+  document.getElementById('passRange').value=len;
+  document.getElementById('passLen').textContent=len;
+  const opts={num:false,lower:false,upper:false,special:false};
+  if(type==='num')opts.num=true;
+  else if(type==='hex'){opts.num=true;opts.lower=true;}
+  else if(type==='all'){opts.num=true;opts.lower=true;opts.upper=true;opts.special=true;}
+  document.querySelectorAll('#modePassword .option-chip').forEach(c=>{
+    const ch=c.dataset.char;
+    c.classList.toggle('active',opts[ch]);
+  });
+}
+
+/* Generate */
+function generate(){
+  if(mode==='password')genPassword();
+  else if(mode==='number')genNumber();
+  else genSorteio();
+}
+
+function genPassword(){
+  const len=parseInt(document.getElementById('passRange').value);
+  const count=parseInt(document.getElementById('passCount').value)||1;
+  const active=[...document.querySelectorAll('#modePassword .option-chip.active')].map(c=>c.dataset.char);
+  if(active.length===0){showToast('Selecione pelo menos um tipo de caractere!');return;}
+
+  let chars='';
+  if(active.includes('num'))chars+='0123456789';
+  if(active.includes('lower'))chars+='abcdefghijklmnopqrstuvwxyz';
+  if(active.includes('upper'))chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if(active.includes('special'))chars+='!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+  const results=[];
+  for(let i=0;i<count;i++){
+    let r='';
+    for(let j=0;j<len;j++) r+=chars.charAt(Math.floor(Math.random()*chars.length));
+    results.push(r);
+  }
+  showResult(results.join('\n'),`${count} senha(s) de ${len} caracteres`);
+  results.forEach(r=>addHistory(r,`${len} chars`));
+}
+
+function genNumber(){
+  const min=parseInt(document.getElementById('numMin').value);
+  const max=parseInt(document.getElementById('numMax').value);
+  const count=parseInt(document.getElementById('numCount').value)||1;
+  const unique=document.getElementById('optUnique').classList.contains('active');
+
+  if(isNaN(min)||isNaN(max)){showToast('Defina min e max!');return;}
+  if(min>=max){showToast('Mínimo deve ser menor que máximo!');return;}
+  if(unique&&count>(max-min+1)){showToast('Quantidade maior que o intervalo disponível!');return;}
+
+  const results=[];
+  const used=new Set();
+  for(let i=0;i<count;i++){
+    let n;
+    do{n=Math.floor(Math.random()*(max-min+1))+min;}while(unique&&used.has(n));
+    used.add(n);
+    results.push(n);
+  }
+  showResult(results.join(', '),`${count} número(s) entre ${min} e ${max}${unique?' (sem repetição)':''}`);
+  addHistory(results.join(', '),`${min}-${max}`);
+}
+
+function genSorteio(){
+  const from=parseInt(document.getElementById('sortFrom').value);
+  const to=parseInt(document.getElementById('sortTo').value);
+  const count=parseInt(document.getElementById('sortCount').value)||6;
+  const asc=document.getElementById('optSortAsc').classList.contains('active');
+
+  if(isNaN(from)||isNaN(to)){showToast('Defina o intervalo!');return;}
+  if(from>=to){showToast('Início deve ser menor que fim!');return;}
+  if(count>(to-from+1)){showToast('Quantidade maior que o intervalo!');return;}
+
+  const pool=[];
+  for(let i=from;i<=to;i++)pool.push(i);
+  const results=[];
+  for(let i=0;i<count;i++){
+    const idx=Math.floor(Math.random()*pool.length);
+    results.push(pool.splice(idx,1)[0]);
+  }
+  if(asc)results.sort((a,b)=>a-b);
+  showResult(results.join(' - '),`Sorteio: ${count} de ${from} a ${to}`);
+  addHistory(results.join(' - '),`Sorteio ${from}-${to}`);
+}
+
+function showResult(value,meta){
+  lastResult=value;
+  document.getElementById('resultValue').textContent=value;
+  document.getElementById('resultMeta').textContent=meta;
+  const card=document.getElementById('resultCard');
+  card.classList.add('show');
+  card.style.animation='none';
+  requestAnimationFrame(()=>{card.style.animation='slideUp 0.3s ease';});
+}
+
+/* Copy */
+function copyResult(){
+  navigator.clipboard.writeText(lastResult).then(()=>{
+    const b=document.getElementById('copyBtn');b.textContent='✅ Copiado!';b.classList.add('copied');
+    showToast('Copiado!');setTimeout(()=>{b.textContent='📋 Copiar';b.classList.remove('copied');},2000);
+  });
+}
+
+function regenerate(){generate();}
+
+function clearAll(){
+  document.getElementById('resultCard').classList.remove('show');
+}
+
+/* History */
+function addHistory(val,info){
+  history.unshift({val,info,time:Date.now()});
+  if(history.length>20)history.pop();
+  localStorage.setItem('rngHistory',JSON.stringify(history));
+  renderHistory();
+}
+function renderHistory(){
+  const card=document.getElementById('historyCard');
+  const list=document.getElementById('historyList');
+  if(history.length===0){card.style.display='none';return;}
+  card.style.display='block';
+  list.innerHTML=history.slice(0,10).map(h=>`
+    <div class="history-item" onclick="navigator.clipboard.writeText('${h.val.replace(/'/g,"\\'")}');showToast('Copiado!')">
+      <span class="history-val">${h.val}</span>
+      <span class="history-info">${h.info}</span>
+    </div>
+  `).join('');
+}
+function clearHistory(){history=[];localStorage.removeItem('rngHistory');renderHistory();}
+
+/* Toast */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+/* Keyboard */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey&&e.target.tagName!=='TEXTAREA'){e.preventDefault();generate();}
+  if(e.key==='Escape')clearAll();
+});
+
+renderHistory();
+</script>
 </body>
 </html>
