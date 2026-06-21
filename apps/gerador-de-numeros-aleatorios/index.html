@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Números Aleatórios</title>
+    <style>
+        :root {
+            --background-color: #0f0c29;
+            --background-gradient: linear-gradient(315deg, #0f0c29 0%, #302b63 74%, #24243e);
+            --primary-color: #08d9d6;
+            --secondary-color: #ff2e63;
+            --text-color: #eaeaea;
+            --input-background-color: #2a2a72;
+            --input-text-color: #eaeaea;
+            --button-color: #ff2e63;
+            --button-hover-color: #e61c5d;
+            --result-background-color: #302b63;
+            --result-text-color: #eaeaea;
+        }
+        body {
+            background: var(--background-gradient);
+            color: var(--text-color);
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: var(--primary-color);
+        }
+        .inputs, .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        input[type="number"], input[type="checkbox"] + label {
+            padding: 10px;
+            background-color: var(--input-background-color);
+            color: var(--input-text-color);
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 1rem;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: var(--button-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: var(--button-hover-color);
+        }
+        #numerosGerados {
+            padding: 15px;
+            margin-top: 20px;
+            background-color: var(--result-background-color);
+            color: var(--result-text-color);
+            border-radius: 5px;
+            width: 100%;
+            max-width: 600px;
+            word-wrap: break-word;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.85em;
+            color: var(--secondary-color);
+        }
+        @media (max-width: 600px) {
+            .inputs, .buttons {
+                flex-direction: column;
+            }
+            input[type="number"], input[type="checkbox"] + label, button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerador de Números Aleatórios</h1>
+    <div class="inputs">
+        <input type="number" id="quantidadeCaracteres" placeholder="Quantidade de caracteres" min="1" max="100" value="8">
+        <label><input type="checkbox" id="checkboxNumeros" checked> Números</label>
+        <label><input type="checkbox" id="checkboxLetras" checked> Letras</label>
+        <label><input type="checkbox" id="checkboxLetrasMaiusculas" checked> Letras Maiúsculas</label>
+        <label><input type="checkbox" id="checkboxCaracteresEspeciais" checked> Caracteres Especiais</label>
+    </div>
+    <div class="buttons">
+        <button id="gerarNumeros" onclick="gerarNumeros()">Gerar</button>
+        <button id="copiarNumeros" onclick="copiarNumeros()">Copiar</button>
+    </div>
+    <div id="numerosGerados"></div>
+    <footer class="footer">
+        Criado por Aleksandro Alves Da Rocha Junior
+    </footer>
+    <script>
+        function gerarNumeros() {
+            const quantidade = document.getElementById('quantidadeCaracteres').value;
+            let caracteres = '';
+            let resultado = '';
+            if (document.getElementById('checkboxNumeros').checked) caracteres += '0123456789';
+            if (document.getElementById('checkboxLetras').checked) caracteres += 'abcdefghijklmnopqrstuvwxyz';
+            if (document.getElementById('checkboxLetrasMaiusculas').checked) caracteres += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (document.getElementById('checkboxCaracteresEspeciais').checked) caracteres += '!@#$%^&*()_+=-[]{}|;:",.<>?';
+            for (let i = 0; i < quantidade; i++) {
+                resultado += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+            document.getElementById('numerosGerados').textContent = resultado;
+        }
+
+        function copiarNumeros() {
+            const textoParaCopiar = document.getElementById('numerosGerados').textContent;
+            navigator.clipboard.writeText(textoParaCopiar)
+                .then(() => alert('Copiado para a área de transferência: ' + textoParaCopiar))
+                .catch(err => console.error('Erro ao copiar: ', err));
+        }
+    </script>
+</body>
+</html>

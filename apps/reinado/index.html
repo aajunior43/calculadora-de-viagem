@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REINADO</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>👑 REINADO</h1>
+            <p class="subtitle">Governe sabiamente e mantenha o equilíbrio do reino</p>
+        </header>
+
+        <div class="power-bars">
+            <div class="power-bar" data-tooltip="Influência religiosa e apoio clerical. Afeta a moral e estabilidade espiritual do reino.">
+                <div class="power-icon">⛪</div>
+                <div class="power-label">Religião</div>
+                <div class="bar-container">
+                    <div class="bar-fill religion" id="religion-bar"></div>
+                </div>
+                <div class="power-value" id="religion-value">50</div>
+            </div>
+
+            <div class="power-bar" data-tooltip="Força militar e capacidade defensiva. Protege contra invasões e mantém a ordem.">
+                <div class="power-icon">⚔️</div>
+                <div class="power-label">Militar</div>
+                <div class="bar-container">
+                    <div class="bar-fill military" id="military-bar"></div>
+                </div>
+                <div class="power-value" id="military-value">50</div>
+            </div>
+
+            <div class="power-bar" data-tooltip="Riqueza e recursos financeiros. Permite investimentos e sustenta o reino.">
+                <div class="power-icon">💰</div>
+                <div class="power-label">Economia</div>
+                <div class="bar-container">
+                    <div class="bar-fill economy" id="economy-bar"></div>
+                </div>
+                <div class="power-value" id="economy-value">50</div>
+            </div>
+
+            <div class="power-bar" data-tooltip="Satisfação e apoio popular. Determina a lealdade dos súditos ao reino.">
+                <div class="power-icon">👥</div>
+                <div class="power-label">Povo</div>
+                <div class="bar-container">
+                    <div class="bar-fill people" id="people-bar"></div>
+                </div>
+                <div class="power-value" id="people-value">50</div>
+            </div>
+        </div>
+
+        <div class="card-area">
+            <div class="card" id="current-card">
+                <div class="card-character" id="card-character">🧙‍♂️</div>
+                <div class="card-title" id="card-title">Conselheiro Real</div>
+                <div class="card-text" id="card-text">
+                    Meu senhor, um comerciante estrangeiro oferece uma grande quantia de ouro em troca de privilégios comerciais exclusivos. O que decidis?
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-buttons">
+            <button class="decision-btn left" id="left-decision">
+                <span class="decision-text" id="left-text">Aceitar a oferta</span>
+                <div class="decision-effects" id="left-effects">
+                    💰 +15 | 👥 -10
+                </div>
+            </button>
+            
+            <button class="decision-btn right" id="right-decision">
+                <span class="decision-text" id="right-text">Recusar educadamente</span>
+                <div class="decision-effects" id="right-effects">
+                    👥 +10 | 💰 -5
+                </div>
+            </button>
+        </div>
+
+        <div class="game-info">
+            <div class="turn-counter">Ano: <span id="year">1</span></div>
+            <div class="game-controls">
+                <button class="theme-btn" id="theme-btn" data-tooltip="Alternar entre modo claro e escuro">🌙</button>
+                <button class="audio-btn" id="audio-btn" data-tooltip="Ativar/desativar sons e música">🔊</button>
+                <button class="stats-btn" id="stats-btn" data-tooltip="Ver estatísticas detalhadas, conquistas e histórico">📊 Estatísticas</button>
+                <button class="restart-btn" id="restart-btn" style="display: none;" data-tooltip="Começar um novo reinado">Novo Reino</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-over-modal" id="game-over-modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="game-over-title">Fim do Reino!</h2>
+            <p id="game-over-message">Sua decisão levou o reino à ruína...</p>
+            <button class="restart-btn" onclick="restartGame()">Tentar Novamente</button>
+        </div>
+    </div>
+
+    <div class="stats-modal" id="stats-modal" style="display: none;">
+        <div class="stats-modal-content">
+            <div class="stats-header">
+                <h2>📊 Estatísticas do Reino</h2>
+                <button class="close-stats" id="close-stats">✕</button>
+            </div>
+            
+            <div class="stats-tabs">
+                <button class="stats-tab active" data-tab="overview">📈 Visão Geral</button>
+                <button class="stats-tab" data-tab="achievements">🏅 Conquistas</button>
+                <button class="stats-tab" data-tab="history">📚 Histórico</button>
+                <button class="stats-tab" data-tab="ranking">🏆 Ranking</button>
+                <button class="stats-tab" data-tab="charts">📊 Gráficos</button>
+            </div>
+            
+            <div class="stats-content">
+                <div class="stats-panel active" id="overview-panel">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>🏰 Reino Atual</h3>
+                            <div class="stat-value" id="current-year">Ano 1</div>
+                            <div class="stat-label">Anos de Reinado</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>👑 Melhor Reinado</h3>
+                            <div class="stat-value" id="best-reign">0</div>
+                            <div class="stat-label">Anos Sobrevividos</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>🎯 Total de Decisões</h3>
+                            <div class="stat-value" id="total-decisions">0</div>
+                            <div class="stat-label">Decisões Tomadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>⚖️ Equilíbrio Médio</h3>
+                            <div class="stat-value" id="avg-balance">50%</div>
+                            <div class="stat-label">Estabilidade</div>
+                        </div>
+                    </div>
+                    
+                    <div class="power-stats">
+                        <h3>📊 Estatísticas por Poder</h3>
+                        <div class="power-stats-grid" id="power-stats-grid">
+                            <!-- Será preenchido dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-panel" id="achievements-panel">
+                    <h3>🏅 Conquistas Desbloqueadas</h3>
+                    <div class="achievements-summary">
+                        <div class="achievement-counter">
+                            <span class="achievement-count" id="achievement-count">0</span>
+                            <span class="achievement-total">/ <span id="achievement-total">20</span></span>
+                            <div class="achievement-label">Conquistas</div>
+                        </div>
+                        <div class="achievement-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="achievement-progress"></div>
+                            </div>
+                            <div class="progress-text" id="achievement-progress-text">0% Completo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="achievements-grid" id="achievements-grid">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+                
+                <div class="stats-panel" id="history-panel">
+                    <h3>📚 Histórico de Reinados</h3>
+                    <div class="history-list" id="history-list">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+                
+                <div class="stats-panel" id="ranking-panel">
+                    <h3>🏆 Ranking de Performances</h3>
+                    <div class="ranking-list" id="ranking-list">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+                
+                <div class="stats-panel" id="charts-panel">
+                    <h3>📈 Evolução dos Poderes</h3>
+                    <div class="chart-container">
+                        <canvas id="powers-chart"></canvas>
+                    </div>
+                    <div class="chart-controls">
+                        <button class="chart-btn" onclick="showChart('current')">Reino Atual</button>
+                        <button class="chart-btn" onclick="showChart('best')">Melhor Reinado</button>
+                        <button class="chart-btn" onclick="showChart('average')">Média Histórica</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    
+    <footer class="dev-footer">
+        <p>DEV ALEKSANDRO ALVES</p>
+    </footer>
+</body>
+</html>

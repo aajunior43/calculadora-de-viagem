@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterMark Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tiffany-blue: #BCECE0;
+            --cyan: #36EEE0;
+            --hot-pink: #F652A0;
+            --cornflower: #4C5270;
+            --white: #FFFFFF;
+            --black: #000000;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--tiffany-blue), var(--cyan));
+            color: var(--cornflower);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        h1 {
+            font-size: 3.5em;
+            color: var(--hot-pink);
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 2px;
+        }
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--cornflower);
+            margin-top: 10px;
+        }
+        .main-content {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+        .canvas-area {
+            flex: 1;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        #canvas {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .controls {
+            flex: 0 0 350px;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .control-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--cornflower);
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--tiffany-blue);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--hot-pink);
+            box-shadow: 0 0 0 3px rgba(246, 82, 160, 0.2);
+        }
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;  
+            background: var(--tiffany-blue);
+            outline: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%; 
+            background: var(--hot-pink);
+            cursor: pointer;
+            transition: all .2s ease-in-out;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: var(--cyan);
+        }
+        input[type="color"] {
+            -webkit-appearance: none;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0; 
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #addWatermark {
+            background-color: var(--hot-pink);
+            color: var(--white);
+        }
+        #removeWatermark {
+            background-color: var(--cornflower);
+            color: var(--white);
+        }
+        #download {
+            background-color: var(--cyan);
+            color: var(--cornflower);
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0;
+            background-color: var(--cyan);
+            color: var(--cornflower);
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .file-upload:hover {
+            background-color: var(--hot-pink);
+            color: var(--white);
+        }
+        .file-upload input[type="file"] {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .controls {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>WaterMark Pro</h1>
+            <p class="subtitle">Transforme suas imagens com marcas d'água personalizadas</p>
+        </header>
+        <div class="main-content">
+            <div class="canvas-area">
+                <canvas id="canvas"></canvas>
+                <div class="file-upload">
+                    <span>Escolher Imagem</span>
+                    <input type="file" id="imageLoader" accept="image/*">
+                </div>
+            </div>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="watermarkText">Texto da Marca d'Água</label>
+                    <input type="text" id="watermarkText" placeholder="Seu texto aqui">
+                </div>
+                <div class="control-group">
+                    <label for="fontSize">Tamanho da Fonte</label>
+                    <input type="range" id="fontSize" min="10" max="100" value="30">
+                    <span id="fontSizeValue">30</span>
+                </div><div class="control-group">
+                    <label for="fontFamily">Fonte</label>
+                    <select id="fontFamily">
+                        <option value="Arial">Arial</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Courier">Courier</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Palatino">Palatino</option>
+                        <option value="Garamond">Garamond</option>
+                        <option value="Bookman">Bookman</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Trebuchet MS">Trebuchet MS</option>
+                        <option value="Arial Black">Arial Black</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="textColor">Cor do Texto</label>
+                    <input type="color" id="textColor" value="#F652A0">
+                </div>
+                <div class="control-group">
+                    <label for="opacity">Opacidade</label>
+                    <input type="range" id="opacity" min="0" max="1" step="0.1" value="0.5">
+                    <span id="opacityValue">0.5</span>
+                </div>
+                <div class="control-group">
+                    <label for="angle">Ângulo</label>
+                    <input type="range" id="angle" min="-180" max="180" value="0">
+                    <span id="angleValue">0°</span>
+                </div>
+                <div class="control-group">
+                    <label for="scale">Escala</label>
+                    <input type="range" id="scale" min="0.1" max="2" step="0.1" value="1">
+                    <span id="scaleValue">1x</span>
+                </div>
+                <div class="button-group">
+                    <button id="addWatermark">Aplicar</button>
+                    <button id="removeWatermark">Remover</button>
+                    <button id="download">Baixar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script>
+        // Inicialização do canvas
+        const canvas = new fabric.Canvas('canvas', {
+            width: 600,
+            height: 400
+        });
+
+        // Elementos do DOM
+        const imageLoader = document.getElementById('imageLoader');
+        const addWatermarkBtn = document.getElementById('addWatermark');
+        const removeWatermarkBtn = document.getElementById('removeWatermark');
+        const downloadBtn = document.getElementById('download');
+        const watermarkText = document.getElementById('watermarkText');
+        const fontSize = document.getElementById('fontSize');
+        const fontFamily = document.getElementById('fontFamily');
+        const textColor = document.getElementById('textColor');
+        const opacity = document.getElementById('opacity');
+        const angle = document.getElementById('angle');
+        const scale = document.getElementById('scale');
+
+        // Variável para armazenar o objeto de marca d'água
+        let watermarkObject = null;
+
+        // Função para lidar com o upload da imagem
+        imageLoader.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imgObj = new Image();
+                    imgObj.src = event.target.result;
+                    imgObj.onload = function() {
+                        const scale = Math.min(600 / imgObj.width, 400 / imgObj.height);
+                        canvas.setDimensions({
+                            width: imgObj.width * scale,
+                            height: imgObj.height * scale
+                        });
+
+                        const image = new fabric.Image(imgObj, {
+                            scaleX: scale,
+                            scaleY: scale
+                        });
+
+                        canvas.clear();
+                        canvas.add(image);
+                        canvas.renderAll();
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Função para criar/atualizar a marca d'água
+        function updateWatermark() {
+            if (watermarkObject) {
+                canvas.remove(watermarkObject);
+            }
+            
+            watermarkObject = new fabric.Text(watermarkText.value, {
+                fontSize: parseInt(fontSize.value),
+                fontFamily: fontFamily.value,
+                fill: textColor.value,
+                opacity: parseFloat(opacity.value),
+                angle: parseInt(angle.value),
+                scaleX: parseFloat(scale.value),
+                scaleY: parseFloat(scale.value),
+                left: canvas.width / 2,
+                top: canvas.height / 2,
+                originX: 'center',
+                originY: 'center'
+            });
+
+            canvas.add(watermarkObject);
+            canvas.setActiveObject(watermarkObject);
+            canvas.renderAll();
+        }
+
+        // Event listeners para os controles da marca d'água
+        addWatermarkBtn.addEventListener('click', updateWatermark);
+        
+        [watermarkText, fontSize, fontFamily, textColor, opacity, angle, scale].forEach(elem => {
+            elem.addEventListener('input', updateWatermark);
+        });
+
+        removeWatermarkBtn.addEventListener('click', function() {
+            if (watermarkObject) {
+                canvas.remove(watermarkObject);
+                watermarkObject = null;
+                canvas.renderAll();
+            }
+        });
+
+        downloadBtn.addEventListener('click', function() {
+            const dataURL = canvas.toDataURL({
+                format: 'png',
+                quality: 1
+            });
+            const link = document.createElement('a');
+            link.download = 'watermarked_image.png';
+            link.href = dataURL;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Atualizar os valores exibidos
+        function updateDisplayedValue(inputId, valueId, suffix = '') {
+            const input = document.getElementById(inputId);
+            const valueSpan = document.getElementById(valueId);
+            input.addEventListener('input', function() {
+                valueSpan.textContent = input.value + suffix;
+            });
+        }
+
+        updateDisplayedValue('fontSize', 'fontSizeValue');
+        updateDisplayedValue('opacity', 'opacityValue');
+        updateDisplayedValue('angle', 'angleValue', '°');
+        updateDisplayedValue('scale', 'scaleValue', 'x');
+    </script>
+</body>
+</html>

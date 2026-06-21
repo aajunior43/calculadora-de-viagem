@@ -1,2 +1,11 @@
 .env
-apps/
+apps/*/node_modules
+apps/*/node_modules/
+apps/*/*/node_modules
+apps/*/*/node_modules/
+apps/*-dist/
+apps/*/dist/
+apps/*/*/dist/
+apps/*-dist
+apps/*/dist
+apps/*/*/dist

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Processos</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; --bg: #0f172a; --surface: #1e293b; --primary: #3b82f6; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; background: var(--bg); color: var(--text); padding: 24px; }
+    .container { max-width: 700px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header h1 { font-size: 2.2rem; margin-bottom: 8px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { color: var(--text-muted); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .input-group { display: flex; gap: 12px; margin-bottom: 16px; }
+    input[type="text"] { flex: 1; padding: 14px 18px; font-size: 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); outline: none; }
+    input:focus { border-color: var(--primary); }
+    button { padding: 14px 24px; font-size: 1rem; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .type-selector { display: flex; gap: 12px; margin-bottom: 16px; }
+    .type-btn { flex: 1; padding: 12px; border: 2px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); cursor: pointer; text-align: center; font-weight: 600; }
+    .type-btn.active { border-color: var(--primary); background: rgba(59,130,246,0.1); }
+    .results { margin-top: 20px; }
+    .result-item { padding: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; }
+    .result-item h4 { margin-bottom: 8px; color: var(--primary); }
+    .result-item a { color: var(--text); text-decoration: none; display: block; padding: 8px 12px; background: var(--surface); border-radius: 8px; margin-bottom: 6px; font-size: 0.9rem; transition: background 0.2s; }
+    .result-item a:hover { background: var(--border); }
+    .result-item .desc { color: var(--text-muted); font-size: 0.8rem; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Buscador de Processos</h1>
+      <p>Consulte processos judiciais por CPF ou CNPJ</p>
+    </div>
+
+    <div class="card">
+      <div class="type-selector">
+        <button class="type-btn active" onclick="selectType(this, 'cpf')">CPF</button>
+        <button class="type-btn" onclick="selectType(this, 'cnpj')">CNPJ</button>
+      </div>
+      <div class="input-group">
+        <input type="text" id="docInput" placeholder="Digite o CPF ou CNPJ..." autofocus>
+        <button class="btn-primary" onclick="generateLinks()">Buscar</button>
+      </div>
+    </div>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <script>
+    let docType = 'cpf';
+
+    function selectType(el, type) {
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      docType = type;
+      document.getElementById('docInput').placeholder = type === 'cpf' ? '000.000.000-00' : '00.000.000/0000-00';
+    }
+
+    function formatDoc(doc) {
+      return doc.replace(/\D/g, '');
+    }
+
+    function generateLinks() {
+      const raw = document.getElementById('docInput').value.trim();
+      if (!raw) return;
+      
+      const doc = formatDoc(raw);
+      const results = document.getElementById('results');
+
+      const sites = docType === 'cpf' ? [
+        { name: 'JusBrasil', url: `https://www.jusbrasil.com.br/busca?q=${doc}`, desc: 'Consulta gratuita de processos' },
+        { name: 'Escavador', url: `https://www.escavador.com/busca?q=${doc}`, desc: 'Busca processos e publicações' },
+        { name: 'CNJ - Consulta Processual', url: 'https://www.cnj.jus.br/corregedoria/justica_aberta/', desc: 'Portal nacional de justiça aberta' },
+        { name: 'Tribunal de Justiça (Google)', url: `https://www.google.com/search?q="${doc}"+"processo"+site:jusbrasil.com.br`, desc: 'Busca geral no Google' },
+      ] : [
+        { name: 'JusBrasil', url: `https://www.jusbrasil.com.br/busca?q=${doc}`, desc: 'Consulta gratuita de processos' },
+        { name: 'Escavador', url: `https://www.escavador.com/busca?q=${doc}`, desc: 'Busca processos e publicações' },
+        { name: 'Receita Federal', url: `https://solucoes.receita.fazenda.gov.br/servicos/cnpjreva/cnpjreva_solicitacao.asp`, desc: 'Dados cadastrais do CNPJ' },
+        { name: 'Consulta CNPJ (Google)', url: `https://www.google.com/search?q="${doc}"+"processo"`, desc: 'Busca geral no Google' },
+      ];
+
+      results.innerHTML = sites.map(s => `
+        <div class="result-item">
+          <h4>${s.name}</h4>
+          <a href="${s.url}" target="_blank">${s.url.substring(0, 60)}...</a>
+          <p class="desc">${s.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('docInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') generateLinks();
+    });
+  </script>
+</body>
+</html>

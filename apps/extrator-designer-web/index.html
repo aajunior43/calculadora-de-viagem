@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extrator de Estilo - Gemini</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, system-ui, sans-serif;
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-hover: #334155;
+      --primary: #6366f1;
+      --primary-hover: #5855eb;
+      --success: #22c55e;
+      --error: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header p { color: var(--text-muted); font-size: 1.1rem; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .input-group { display: flex; gap: 12px; margin-bottom: 16px; }
+    input[type="text"], input[type="password"] {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: var(--primary); }
+    input::placeholder { color: var(--text-muted); }
+    button {
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover:not(:disabled) { filter: brightness(1.1); }
+    .status {
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .status.show { display: block; }
+    .status.info { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); color: #818cf8; }
+    .status.success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: var(--success); }
+    .status.error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: var(--error); }
+    textarea {
+      width: 100%;
+      min-height: 400px;
+      padding: 18px;
+      font-size: 0.95rem;
+      font-family: 'SF Mono', Monaco, monospace;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+    }
+    textarea:focus { border-color: var(--primary); }
+    textarea::placeholder { color: var(--text-muted); }
+    .actions { display: flex; gap: 12px; margin-top: 16px; }
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .help-text {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 12px;
+    }
+    @media (max-width: 600px) {
+      .input-group { flex-direction: column; }
+      .actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Extrator de Estilo</h1>
+      <p>Cole a URL de um site e gere um prompt detalhado do estilo visual com IA</p>
+    </div>
+
+    <div class="card">
+      <div class="input-group">
+        <input type="text" id="urlInput" placeholder="https://exemplo.com" autofocus>
+        <button class="btn-primary" id="extractBtn" onclick="extract()">Extrair Estilo</button>
+      </div>
+      <div class="input-group">
+        <input type="password" id="apiKeyInput" placeholder="API Key do Gemini (AIza...)">
+      </div>
+      <p class="help-text">A API key é usada apenas para esta requisição e não é armazenada.</p>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="card" id="resultCard" style="display: none;">
+      <textarea id="result" readonly placeholder="O prompt gerado aparecerá aqui..."></textarea>
+      <div class="actions">
+        <button class="btn-primary" onclick="copyResult()">Copiar</button>
+        <button class="btn-success" onclick="downloadMd()">Baixar .md</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = `${window.location.protocol}//${window.location.hostname}:8768`;
+    let currentData = null;
+
+    function showStatus(msg, type = 'info') {
+      const el = document.getElementById('status');
+      el.textContent = msg;
+      el.className = `status show ${type}`;
+    }
+
+    async function extract() {
+      const url = document.getElementById('urlInput').value.trim();
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      
+      if (!url) return showStatus('Cole uma URL válida', 'error');
+      if (!apiKey) return showStatus('Insira sua API key do Gemini', 'error');
+
+      const btn = document.getElementById('extractBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Analisando...';
+      showStatus('Extraindo estilos da página...', 'info');
+
+      try {
+        const res = await fetch(`${API_URL}/api/extract`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, api_key: apiKey })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Erro ao extrair estilos');
+        }
+
+        const data = await res.json();
+        currentData = { ...data, url, timestamp: Date.now() };
+        
+        document.getElementById('result').value = data.prompt;
+        document.getElementById('resultCard').style.display = 'block';
+        showStatus('Prompt gerado com sucesso!', 'success');
+      } catch (err) {
+        showStatus(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Extrair Estilo';
+      }
+    }
+
+    async function copyResult() {
+      const text = document.getElementById('result').value;
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        showStatus('Copiado para área de transferência!', 'success');
+      } catch {
+        document.getElementById('result').select();
+        showStatus('Selecione e copie manualmente (Ctrl+C)', 'info');
+      }
+    }
+
+    function downloadMd() {
+      const text = document.getElementById('result').value;
+      if (!text || !currentData) return;
+      
+      const content = `# Prompt de Estilo Visual\n\n**URL:** ${currentData.url}  \n**Gerado em:** ${new Date().toLocaleString('pt-BR')}\n\n---\n\n${text}`;
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `estilo-${new Date().toISOString().split('T')[0]}.md`;
+      a.click();
+    }
+
+    document.getElementById('urlInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') extract();
+    });
+  </script>
+</body>
+</html>

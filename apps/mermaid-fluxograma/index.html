@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Diagram Studio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.14.0/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            --secondary-color: #0284c7;
+            --background: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: var(--background);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-group {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .control-group h3 {
+            font-size: 0.875rem;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        select, button, .file-input-label {
+            width: 100%;
+            padding: 0.875rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--background);
+            color: var(--text);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+
+        button, .file-input-label {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        button:active, .file-input-label:active {
+            transform: scale(0.98);
+        }
+
+        #code-input {
+            width: 100%;
+            height: 150px;
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        #output {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            min-height: 300px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .app-container {
+                flex-direction: row;
+            }
+
+            .sidebar {
+                width: 300px;
+                border-right: 1px solid var(--border);
+                border-bottom: none;
+                height: 100vh;
+                overflow-y: auto;
+                position: sticky;
+                top: 0;
+            }
+
+            .main-content {
+                padding: 2rem;
+            }
+
+            #code-input {
+                height: 200px;
+            }
+        }
+
+        /* Melhorias para touch */
+        @media (hover: hover) {
+            button:hover, .file-input-label:hover {
+                background: var(--secondary-color);
+            }
+
+            select:hover {
+                border-color: var(--primary-color);
+            }
+        }
+
+        /* Ajustes para telas pequenas */
+        @media (max-width: 480px) {
+            .control-group {
+                padding: 0.75rem;
+            }
+
+            select, button, .file-input-label {
+                padding: 0.75rem;
+            }
+
+            #output {
+                padding: 0.75rem;
+            }
+        }
+
+        .error-feedback, .success-feedback {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+        }
+
+        .error-feedback {
+            color: #dc2626;
+            background-color: #fee2e2;
+            border-left: 4px solid #dc2626;
+        }
+
+        .success-feedback {
+            color: #16a34a;
+            background-color: #dcfce7;
+            border-left: 4px solid #16a34a;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-project-diagram"></i>
+                <span>Mermaid Studio</span>
+            </div>
+            
+            <div class="control-group">
+                <h3>Exemplos</h3>
+                <select id="example-select">
+                    <option value="">Selecione um exemplo...</option>
+                    <option value="flowchart">Fluxograma</option>
+                    <option value="sequence">Diagrama de Sequência</option>
+                    <option value="class">Diagrama de Classe</option>
+                    <option value="state">Diagrama de Estado</option>
+                    <option value="er">Diagrama Entidade-Relacionamento</option>
+                    <option value="gantt">Gráfico de Gantt</option>
+                    <option value="pie">Gráfico de Pizza</option>
+                    <option value="journey">Mapa de Jornada do Usuário</option>
+                    <option value="gitgraph">Gráfico Git</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <h3>Tema do Diagrama</h3>
+                <select id="theme-select" class="mb-3">
+                    <option value="default">Tema Padrão</option>
+                    <option value="forest">Floresta</option>
+                    <option value="dark">Escuro</option>
+                    <option value="neutral">Neutro</option>
+                    <option value="base">Base</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <h3>Exportar</h3>
+                <div class="actions">
+                    <button id="download-png">
+                        <i class="fas fa-image"></i> PNG
+                    </button>
+                    <button id="download-pdf">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Importar</h3>
+                <input type="file" id="upload-file" accept=".mmd,.txt" hidden>
+                <label for="upload-file" class="file-input-label">
+                    <i class="fas fa-upload"></i> Carregar Arquivo
+                </label>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <textarea id="code-input" 
+                      placeholder="Digite ou cole seu código Mermaid aqui..."
+                      spellcheck="false"></textarea>
+
+            <div id="output">
+                <div id="placeholder">
+                    Selecione um exemplo ou comece a digitar para visualizar o diagrama
+                </div>
+            </div>
+
+            <div id="feedback-container">
+                <div id="error-message" class="error-feedback">
+                    <strong>Erro no código:</strong>
+                    <div class="error-details"></div>
+                    <div class="error-help"></div>
+                </div>
+                <div id="success-message" class="success-feedback">
+                    <strong>Código válido!</strong> O diagrama foi gerado com sucesso.
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const exampleSelect = document.getElementById('example-select');
+        const themeSelect = document.getElementById('theme-select');
+        const downloadPngBtn = document.getElementById('download-png');
+        const downloadPdfBtn = document.getElementById('download-pdf');
+        const output = document.getElementById('output');
+        const codeInput = document.getElementById('code-input');
+        const errorMessage = document.getElementById('error-message');
+        const uploadFileInput = document.getElementById('upload-file');
+        const successMessage = document.getElementById('success-message');
+
+        const examples = {
+            flowchart: 'graph TD\nA[Cliente] -->|Coloca pedido| B(Loja)\nB --> C{Estoque?}\nC -->|Sim| D[Despachar]\nC -->|Não| E[Pedir mais]\nD --> F[Entregar]\nE --> B',
+            sequence: 'sequenceDiagram\nAlice->>John: Olá John, como vai?\nJohn-->>Alice: Ótimo!\nAlice-)John: Vejo você mais tarde',
+            class: 'classDiagram\nClass01 <|-- AveryLongClass : Cool\nClass03 *-- Class04\nClass05 o-- Class06\nClass07 .. Class08\nClass09 --> C2 : Where am i?\nClass09 --* C3\nClass09 --|> Class07\nClass07 : equals()\nClass07 : Object[] elementData\nClass01 : size()\nClass01 : int chimp\nClass01 : int gorilla\nClass08 <--> C2: Cool label',
+            state: 'stateDiagram-v2\n[*] --> Still\nStill --> [*]\nStill --> Moving\nMoving --> Still\nMoving --> Crash\nCrash --> [*]',
+            er: 'erDiagram\nCUSTOMER ||--o{ ORDER : places\nORDER ||--|{ LINE-ITEM : contains\nCUSTOMER }|..|{ DELIVERY-ADDRESS : uses',
+            gantt: 'gantt\ntitle Cronograma do Projeto\ndateFormat  YYYY-MM-DD\nsection Fase 1\nTarefa 1           :a1, 2023-01-01, 30d\nTarefa 2           :after a1  , 20d\nsection Fase 2\nTarefa 3           :2023-02-15  , 12d\nTarefa 4           : 24d',
+            pie: 'pie title Vendas por Categoria\n"Eletrônicos" : 30.1\n"Roupas" : 25.9\n"Alimentos" : 20.5\n"Livros" : 15.3\n"Outros" : 8.2',
+            journey: 'journey\ntitle Jornada do Usuário\nsection Login\nAbrir site: 5: Me\nPreencher credenciais: 3: Me\nClicar em login: 4: Me\nsection Navegar\nProcurar produto: 3: Me\nAdicionar ao carrinho: 4: Me\nsection Checkout\nRever pedido: 3: Me, Loja\nConfirmar pagamento: 5: Me, Loja, Banco',
+            gitgraph: 'gitGraph\n       commit\n       commit\n       branch develop\n       checkout develop\n       commit\n       commit\n       checkout main\n       merge develop\n       commit\n       commit'
+        };
+
+        function validateMermaidCode(code) {
+            try {
+                // Tenta fazer o parse do código
+                mermaid.parse(code);
+                return { isValid: true };
+            } catch (error) {
+                return {
+                    isValid: false,
+                    error: error,
+                    line: error.hash?.line,
+                    expected: error.hash?.expected,
+                    text: error.str
+                };
+            }
+        }
+
+        function getErrorHelp(error) {
+            const commonErrors = {
+                'expect': 'Erro de sintaxe: verifique a estrutura do seu diagrama',
+                'direction': 'Direção inválida: use TD, BT, LR, ou RL',
+                'arrow': 'Seta inválida: use ->, -->, =>, ou similar',
+                'quote': 'Aspas não fechadas: verifique as strings',
+                'bracket': 'Colchetes ou parênteses não fechados',
+                'semicolon': 'Falta ponto e vírgula ao final da linha'
+            };
+
+            for (const [key, help] of Object.entries(commonErrors)) {
+                if (error.toLowerCase().includes(key.toLowerCase())) {
+                    return help;
+                }
+            }
+
+            return 'Verifique a sintaxe do seu código Mermaid';
+        }
+
+        function updateDiagram() {
+            const selectedTheme = themeSelect.value;
+            const code = codeInput.value.trim();
+            
+            // Limpa mensagens anteriores
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            codeInput.classList.remove('code-input-error');
+            
+            if (!code) {
+                output.innerHTML = '<div id="placeholder">Insira o código Mermaid para gerar o diagrama</div>';
+                return;
+            }
+
+            // Valida o código
+            const validation = validateMermaidCode(code);
+            
+            if (!validation.isValid) {
+                // Mostra erro
+                errorMessage.style.display = 'block';
+                codeInput.classList.add('code-input-error');
+                
+                const errorDetails = errorMessage.querySelector('.error-details');
+                const errorHelp = errorMessage.querySelector('.error-help');
+                
+                let errorText = `Linha ${validation.line || 'desconhecida'}: ${validation.text || validation.error}`;
+                if (validation.expected) {
+                    errorText += `\nEsperado: ${validation.expected.join(' ou ')}`;
+                }
+                
+                errorDetails.textContent = errorText;
+                errorHelp.textContent = getErrorHelp(validation.error.toString());
+                
+                return;
+            }
+
+            try {
+                output.innerHTML = `<div class="mermaid">${code}</div>`;
+                mermaid.initialize({
+                    theme: selectedTheme,
+                    logLevel: 'error',
+                    securityLevel: 'strict',
+                    startOnLoad: true,
+                    arrowMarkerAbsolute: false,
+                    flowchart: {
+                        htmlLabels: true,
+                        curve: 'linear'
+                    },
+                    sequence: {
+                        diagramMarginX: 50,
+                        diagramMarginY: 10,
+                        actorMargin: 50,
+                        width: 150,
+                        height: 65,
+                        boxMargin: 10,
+                        boxTextMargin: 5,
+                        noteMargin: 10,
+                        messageMargin: 35,
+                        mirrorActors: true,
+                        bottomMarginAdj: 1,
+                        useMaxWidth: true,
+                        rightAngles: false,
+                        showSequenceNumbers: false
+                    },
+                    gantt: {
+                        titleTopMargin: 25,
+                        barHeight: 20,
+                        barGap: 4,
+                        topPadding: 50,
+                        leftPadding: 75,
+                        gridLineStartPadding: 35,
+                        fontSize: 11,
+                        fontFamily: '"Open-Sans", "sans-serif"',
+                        numberSectionStyles: 4,
+                        axisFormat: '%Y-%m-%d'
+                    }
+                });
+                mermaid.init(undefined, ".mermaid");
+                
+                // Mostra mensagem de sucesso apenas se houver código e ele for renderizado
+                if (code && document.querySelector('.mermaid svg')) {
+                    successMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Erro na renderização:', error);
+                errorMessage.style.display = 'block';
+                errorMessage.querySelector('.error-details').textContent = 
+                    'Erro na renderização do diagrama: ' + error.message;
+            }
+        }
+
+        // Adiciona debounce para não sobrecarregar a validação
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        exampleSelect.addEventListener('change', () => {
+            const selectedExample = exampleSelect.value;
+            if (selectedExample) {
+                codeInput.value = examples[selectedExample];
+                updateDiagram();
+            }
+        });
+
+        themeSelect.addEventListener('change', updateDiagram);
+        codeInput.addEventListener('input', debounce(updateDiagram, 500));
+
+        uploadFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    codeInput.value = e.target.result;
+                    updateDiagram();
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function downloadPNG() {
+            const svgElement = document.querySelector('.mermaid svg');
+            if (svgElement) {
+                const svgData = new XMLSerializer().serializeToString(svgElement);
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                const img = new Image();
+                img.onload = function() {
+                    canvas.width = img.width * 2;
+                    canvas.height = img.height * 2;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const pngFile = canvas.toDataURL("image/png");
+                    const downloadLink = document.createElement("a");
+                    downloadLink.download = "mermaid_diagram.png";
+                    downloadLink.href = pngFile;
+                    downloadLink.click();
+                };
+                img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+            } else {
+                alert('Não foi possível gerar o PNG. Certifique-se de que o diagrama foi renderizado corretamente.');
+            }
+        }
+
+        function downloadPDF() {
+            const svgElement = document.querySelector('.mermaid svg');
+            if (svgElement) {
+                const svgData = new XMLSerializer().serializeToString(svgElement);
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                const img = new Image();
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    const imgData = canvas.toDataURL("image/png");
+                    const pdf = new jspdf.jsPDF({
+                        orientation: img.width > img.height ? 'l' : 'p',
+                        unit: 'px',
+                        format: [img.width, img.height]
+                    });
+                    pdf.addImage(imgData, 'PNG', 0, 0, img.width, img.height);
+                    pdf.save("mermaid_diagram.pdf");
+                };
+                img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+            } else {
+                alert('Não foi possível gerar o PDF. Certifique-se de que o diagrama foi renderizado corretamente.');
+            }
+        }
+
+        // Adicione estes event listeners após as definições das funções
+        downloadPngBtn.addEventListener('click', downloadPNG);
+        downloadPdfBtn.addEventListener('click', downloadPDF);
+
+        // Inicializar o Mermaid
+        mermaid.initialize({ startOnLoad: true });
+
+        // Inicializar sem mostrar mensagens
+        window.addEventListener('load', () => {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

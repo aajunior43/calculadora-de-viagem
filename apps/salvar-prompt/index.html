@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Saver</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #FFD700;
+            --accent-color: #1c1c1c;
+            --highlight-color: #FFD700;
+        }
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background-color: var(--accent-color);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--highlight-color), transparent 30%);
+            animation: rotate 10s linear infinite;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        h1 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--text-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+        }
+        textarea {
+            height: 200px;
+            resize: vertical;
+        }
+        button {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        button:hover {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+        .success-message {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prompt Saver</h1>
+        <form id="promptForm">
+            <label for="promptName">Nome do Prompt:</label>
+            <input type="text" id="promptName" required>
+            <label for="promptContent">Conteúdo do Prompt:</label>
+            <textarea id="promptContent" required></textarea>
+            <button type="submit">Salvar Prompt</button>
+        </form>
+        <div id="successMessage" class="success-message">
+            Prompt salvo com sucesso!
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('promptForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            savePrompt();
+        });
+
+        function savePrompt() {
+            const promptName = document.getElementById('promptName').value;
+            const promptContent = document.getElementById('promptContent').value;
+
+            if (!promptName || !promptContent) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            const blob = new Blob([promptContent], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = promptName + '.txt';
+            a.click();
+
+            // Mostrar mensagem de sucesso
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+
+            // Limpar os campos após salvar
+            document.getElementById('promptName').value = '';
+            document.getElementById('promptContent').value = '';
+        }
+    </script>
+</body>
+</html>

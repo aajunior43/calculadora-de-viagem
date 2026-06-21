@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Check - Calculadora de Capacidade de Tomada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #000000, #141414);
+            color: #ffffff;
+            padding: 20px;
+        }
+        .container {
+            max-width: 480px;
+            width: 100%;
+        }
+        .calculator {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .calculator::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(229, 9, 20, 0.1),
+                rgba(229, 9, 20, 0.05),
+                rgba(229, 9, 20, 0)
+            );
+            transform: rotate(-45deg);
+            z-index: -1;
+        }
+        h1 {
+            text-align: center;
+            color: #e50914;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b3b3b3;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.5);
+            border-color: #e50914;
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background-color: #e50914;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        button:hover {
+            background-color: #f40612;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(229, 9, 20, 0.3);
+        }
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .safe {
+            color: #2ecc71;
+            font-weight: 700;
+        }
+        .unsafe {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+        .explanation {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .explanation h2 {
+            color: #e50914;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .creator {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+        .icon {
+            font-size: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calculator">
+            <h1><span class="icon">⚡</span>Power Check</h1>
+            <div class="input-group">
+                <label for="power">Potência do aparelho (W)</label>
+                <input type="number" id="power" placeholder="Ex: 1100">
+            </div>
+            <div class="input-group">
+                <label for="voltage">Tensão da tomada (V)</label>
+                <input type="number" id="voltage" placeholder="Ex: 127">
+            </div>
+            <div class="input-group">
+                <label for="current">Corrente máxima da tomada (A)</label>
+                <input type="number" id="current" placeholder="Ex: 10">
+            </div>
+            <button onclick="calculate()">Verificar Compatibilidade</button>
+            <div id="result"></div>
+        </div>
+        
+        <div class="explanation">
+            <h2>Como usar o Power Check</h2>
+            <ol>
+                <li>Insira a potência do seu aparelho (encontrada na etiqueta ou manual).</li>
+                <li>Digite a tensão da sua tomada (geralmente 127V ou 220V).</li>
+                <li>Informe a corrente máxima da tomada (normalmente 10A ou 20A).</li>
+                <li>Clique em "Verificar Compatibilidade" para saber se é seguro usar o aparelho.</li>
+            </ol>
+            <p>O Power Check calcula se a corrente necessária para o seu aparelho é compatível com a capacidade da sua tomada, ajudando a prevenir sobrecargas e riscos elétricos.</p>
+        </div>
+        
+        <div class="creator">Criado por Aleksandro Alves</div>
+    </div>
+
+    <script>
+        function calculate() {
+            const power = parseFloat(document.getElementById('power').value);
+            const voltage = parseFloat(document.getElementById('voltage').value);
+            const maxCurrent = parseFloat(document.getElementById('current').value);
+
+            if (isNaN(power) || isNaN(voltage) || isNaN(maxCurrent)) {
+                document.getElementById('result').innerHTML = 'Por favor, preencha todos os campos com valores numéricos.';
+                return;
+            }
+
+            const current = power / voltage;
+            const isSafe = current <= maxCurrent;
+
+            let resultText = `A corrente necessária é de <strong>${current.toFixed(2)} A</strong>.<br><br>`;
+            resultText += isSafe 
+                ? `<span class="safe">✅ É seguro ligar o aparelho nesta tomada.</span>` 
+                : `<span class="unsafe">⚠️ Não é seguro ligar o aparelho nesta tomada.</span>`;
+
+            if (!isSafe) {
+                resultText += `<br><br>Recomendação: Use uma tomada com capacidade de pelo menos ${Math.ceil(current)} A.`;
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>

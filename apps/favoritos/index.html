@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Meus favoritos - Aleksandro Alves</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="title-container">
+    <h1>Meus favoritos - Aleksandro Alves Da Rocha Junior</h1>
+    <button class="download-button" onclick="downloadFavorites()">
+        <span>⬇️</span>
+        <span>Baixar Lista</span>
+    </button>
+</div>
+<div class="search-bar">
+    <input type="text" class="search-input" placeholder="Pesquisar favoritos...">
+</div>
+<div class="button-grid"></div>
+<button class="add-new-button" title="Adicionar novo favorito">+</button>
+<button class="edit-mode-button" title="Modo de edição">✎</button>
+<div class="add-link-form">
+    <h2>Adicionar Novo Link</h2>
+    <input type="text" id="linkName" placeholder="Nome do site">
+    <input type="url" id="linkUrl" placeholder="URL do site">
+    <input type="password" id="addPassword" placeholder="Senha de administração">
+    <button onclick="saveNewLink()">Salvar</button>
+    <button onclick="closeForm()">Cancelar</button>
+</div>
+<div class="password-modal">
+    <h2>Digite a senha para excluir</h2>
+    <input type="password" id="deletePassword" placeholder="Senha">
+    <button onclick="confirmDelete()">Confirmar</button>
+    <button onclick="closePasswordModal()">Cancelar</button>
+</div>
+<div class="edit-link-form">
+    <h2>Editar Link</h2>
+    <input type="text" id="editLinkName" placeholder="Nome do site">
+    <input type="url" id="editLinkUrl" placeholder="URL do site">
+    <button onclick="saveEditLink()">Salvar</button>
+    <button onclick="closeEditForm()">Cancelar</button>
+</div>
+<footer class="footer">
+    <span>Dev Aleksandro Alves</span>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>

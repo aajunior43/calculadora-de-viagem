@@ -1,0 +1,1331 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEV ALEKSANDRO ALVES</title>
+    <meta name="description" content="Aplicação web para criar repositórios, enviar projetos e gerenciar atividades do GitHub com dashboard e templates. Desempenho otimizado: fontes preconnect, CSS preload, scripts defers e lazy-loading. Acessível, responsivo e rápido.">
+    <meta name="theme-color" content="#2563eb">
+    <meta property="og:title" content="DEV ALEKSANDRO ALVES">
+    <meta property="og:description" content="Crie repositórios, envie projetos e gerencie sua atividade no GitHub diretamente do navegador.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
+    <link rel="preload" href="new-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="new-styles.css"></noscript>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy3N2x8nXKq8kQ1p7Hf4n2F6h2g6Zp" crossorigin="anonymous">
+</head>
+<body>
+    <a class="sr-only" href="#main-content">Pular para o conteúdo</a>
+    <noscript>
+      <div style="background:#1e293b;color:#fff;padding:12px;text-align:center;border-bottom:1px solid #334155;">
+        O JavaScript está desativado. Alguns recursos (upload, dashboard, animações) podem ficar indisponíveis.
+      </div>
+    </noscript>
+    <div class="container">
+        <!-- Camadas do céu estrelado melhorado -->
+        <div class="starry-sky" aria-hidden="true">
+            <div class="stars"></div>
+            <div class="stars2"></div>
+            <div class="stars3"></div>
+            <div class="stars4"></div>
+            <div class="stars5"></div>
+        </div>
+        <header class="header">
+            <!-- Barra de busca global -->
+            <div class="global-search" id="global-search" style="display: none;">
+                <div class="search-container">
+                    <input type="text" id="global-search-input" placeholder="Buscar em tudo... (Ctrl+K)" autocomplete="off">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                <button class="search-close" onclick="closeGlobalSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="header-top">
+                <!-- Botões de ação rápida -->
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="openGlobalSearch()" title="Busca Global (Ctrl+K)">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="quick-btn" onclick="showNotificationCenter()" title="Central de Notificações">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+                    </button>
+                    <button class="quick-btn" onclick="toggleOfflineMode()" title="Modo Offline" id="offline-toggle">
+                        <i class="fas fa-wifi"></i>
+                    </button>
+                    <button class="quick-btn" onclick="showKeyboardShortcuts()" title="Atalhos (?)">
+                        <i class="fas fa-keyboard"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="header-content">
+                <h1><i class="fas fa-rocket"></i> DEV ALEKSANDRO ALVES</h1>
+                <p class="subtitle">Crie repositórios, envie projetos e gerencie sua atividade no GitHub</p>
+            </div>
+            
+            <div class="status-bar" role="status" aria-live="polite">
+                <div class="status-item" id="connection-status">
+                    <i class="fas fa-wifi"></i>
+                    <span>Verificando conexão...</span>
+                </div>
+                <div class="status-item" id="github-status">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub: Não conectado</span>
+                </div>
+                <div class="status-item" id="offline-status" style="display: none;">
+                    <i class="fas fa-cloud-download-alt"></i>
+                    <span>Modo Offline Ativo</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content" id="main-content" role="main">
+            <!-- Menu Principal -->
+            <div class="menu-section" id="main-menu" role="region" aria-labelledby="menu-principal-heading">
+                <h2 id="menu-principal-heading" class="sr-only">Menu principal</h2>
+                <div class="menu-card">
+                    <h2><i class="fas fa-home"></i> Menu Principal</h2>
+                    <p class="menu-subtitle">Selecione uma ação abaixo para começar</p>
+                    <div class="menu-options">
+                        <button class="menu-btn primary" onclick="showSection('upload-section')">
+                            <i class="fas fa-upload"></i>
+                            <span>🚀 Enviar Projeto para GitHub</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('config-section')">
+                            <i class="fas fa-cog"></i>
+                            <span>🔧 Configurar Credenciais</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('verify-section')">
+                            <i class="fas fa-check-circle"></i>
+                            <span>📊 Verificar Sistema</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('logs-section')">
+                            <i class="fas fa-list"></i>
+                            <span>📋 Ver Logs</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="clearData()">
+                            <i class="fas fa-broom"></i>
+                            <span>🧹 Limpar Dados Salvos</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('repos-section')">
+                            <i class="fab fa-github-alt"></i>
+                            <span>📚 Meus Repositórios</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('dashboard-section')">
+                            <i class="fas fa-chart-line"></i>
+                            <span>📊 Dashboard</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('help-section')">
+                            <i class="fas fa-question-circle"></i>
+                            <span>❓ Ajuda</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('settings-section')">
+                            <i class="fas fa-sliders-h"></i>
+                            <span>⚙️ Configurações Avançadas</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('templates-section')">
+                            <i class="fas fa-file-code"></i>
+                            <span>📋 Templates de Projeto</span>
+                        </button>
+                        <button class="menu-btn menu-btn-glow" onclick="showSection('backup-section')">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>💾 Backup e Sincronização</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Upload -->
+            <div class="section" id="upload-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-upload"></i> Enviar Projeto para GitHub</h2>
+                    
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Arraste seus arquivos aqui</h3>
+                            <p>ou clique para selecionar</p>
+                            <input type="file" id="file-input" multiple webkitdirectory directory>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="repo-name">Nome do Repositório:</label>
+                        <input type="text" id="repo-name" placeholder="meu-projeto-incrivel">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="repo-description">Descrição (opcional):</label>
+                        <textarea id="repo-description" placeholder="Descrição do seu projeto..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="private-repo">
+                            Repositório Privado
+                        </label>
+                    </div>
+
+                    <div class="file-list" id="file-list" style="display: none;">
+                        <h3>Arquivos Selecionados:</h3>
+                        <div id="files-preview"></div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn primary" onclick="uploadProject()" id="upload-btn" disabled>
+                            <i class="fas fa-rocket"></i>
+                            Enviar para GitHub
+                        </button>
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+
+                    <div class="progress-section" id="progress-section" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">Preparando...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Configuração -->
+            <div class="section" id="config-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-cog"></i> Configurar Credenciais</h2>
+                    
+                    <div class="config-info">
+                        <h3>🔑 Como obter seu Token do GitHub:</h3>
+                        <ol>
+                            <li>Acesse: <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a></li>
+                            <li>Clique em "Generate new token" → "Generate new token (classic)"</li>
+                            <li>Configure as permissões: <code>repo</code>, <code>workflow</code>, <code>delete_repo</code></li>
+                            <li>Gere o token e cole abaixo</li>
+                        </ol>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="github-token">Token do GitHub:</label>
+                        <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="github-username">Nome de Usuário GitHub:</label>
+                        <input type="text" id="github-username" placeholder="seu-usuario">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="save-credentials-btn" class="btn primary" onclick="saveCredentials()">
+                            <i class="fas fa-save"></i>
+                            Salvar Credenciais
+                        </button>
+                        <button class="btn" onclick="testCredentials()">
+                            <i class="fas fa-test-tube"></i>
+                            Testar Conexão
+                        </button>
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Verificação -->
+            <div class="section" id="verify-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-check-circle"></i> Verificação do Sistema</h2>
+                    
+                    <div class="verification-results" id="verification-results">
+                        <div class="verify-item">
+                            <span class="verify-label">Navegador Compatível:</span>
+                            <span class="verify-status" id="browser-status">Verificando...</span>
+                        </div>
+                        <div class="verify-item">
+                            <span class="verify-label">Conexão com GitHub:</span>
+                            <span class="verify-status" id="github-connection">Verificando...</span>
+                        </div>
+                        <div class="verify-item">
+                            <span class="verify-label">Credenciais Salvas:</span>
+                            <span class="verify-status" id="credentials-status">Verificando...</span>
+                        </div>
+                        <div class="verify-item">
+                            <span class="verify-label">Suporte a File API:</span>
+                            <span class="verify-status" id="fileapi-status">Verificando...</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn primary" onclick="runSystemCheck()">
+                            <i class="fas fa-sync"></i>
+                            Verificar Novamente
+                        </button>
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Logs -->
+            <div class="section" id="logs-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-list"></i> Logs do Sistema</h2>
+                    
+                    <div class="logs-container">
+                        <div class="logs-header">
+                            <button class="btn small" onclick="clearLogs()">
+                                <i class="fas fa-trash"></i>
+                                Limpar Logs
+                            </button>
+                            <button class="btn small" onclick="downloadLogs()">
+                                <i class="fas fa-download"></i>
+                                Baixar Logs
+                            </button>
+                        </div>
+                        <div class="logs-content" id="logs-content">
+                            <!-- Logs serão inseridos aqui -->
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Repositórios -->
+            <div class="section" id="repos-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fab fa-github-alt"></i> Meus Repositórios GitHub</h2>
+                    
+                    <div class="repos-controls">
+                        <div class="search-bar">
+                            <input type="text" id="repo-search" placeholder="Buscar repositórios..." 
+                                   oninput="searchRepositories()" 
+                                   onkeyup="searchRepositories()">
+                            <button class="btn small" onclick="clearSearch()">
+                                <i class="fas fa-times"></i>
+                                Limpar
+                            </button>
+                        </div>
+                        <div class="filter-controls">
+                            <select id="repo-filter" onchange="searchRepositories()">
+                                <option value="all">Todos</option>
+                                <option value="owner">Meus</option>
+                                <option value="public">Públicos</option>
+                                <option value="private">Privados</option>
+                                <option value="favorites">⭐ Favoritos</option>
+                                <option value="recent">📅 Recentes</option>
+                            </select>
+                            <select id="repo-sort" onchange="searchRepositories()">
+                                <option value="updated">Atualizado</option>
+                                <option value="created">Criado</option>
+                                <option value="name">Nome</option>
+                                <option value="stars">Stars</option>
+                                <option value="size">Tamanho</option>
+                                <option value="language">Linguagem</option>
+                            </select>
+                            <div class="action-group">
+                                <button class="btn primary small" onclick="loadRepositories()">
+                                    <i class="fas fa-sync"></i>
+                                    Atualizar
+                                </button>
+                                <button class="btn small" onclick="exportRepositoriesData()">
+                                    <i class="fas fa-download"></i>
+                                    Exportar
+                                </button>
+                                <button class="btn small" onclick="showBulkActions()">
+                                    <i class="fas fa-tasks"></i>
+                                    Ações em Lote
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="repos-stats" id="repos-stats" style="display: none;">
+                        <div class="stat-item">
+                            <span class="stat-number" id="total-repos">0</span>
+                            <span class="stat-label">Repositórios</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="public-repos">0</span>
+                            <span class="stat-label">Públicos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="private-repos">0</span>
+                            <span class="stat-label">Privados</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="total-stars">0</span>
+                            <span class="stat-label">Stars</span>
+                        </div>
+                    </div>
+
+                    <div class="repos-container" id="repos-container">
+                        <div class="loading-message">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Carregando repositórios...
+                        </div>
+                    </div>
+
+                    <div class="action-inline">
+                        <button class="btn primary" id="download-selected-btn" onclick="downloadSelectedRepository()" disabled>
+                            <i class="fas fa-download"></i>
+                            Baixar Repositório Selecionado
+                        </button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn" onclick="showSection('upload-section')">
+                            <i class="fas fa-plus"></i>
+                            Novo Repositório
+                        </button>
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Dashboard -->
+            <div class="section" id="dashboard-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-chart-line"></i> Dashboard do Desenvolvedor</h2>
+                    
+                    <!-- Dashboard Header com métricas principais -->
+                    <div class="dashboard-header">
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-value" id="total-commits">0</span>
+                                <span class="metric-label">Commits</span>
+                                <span class="metric-change" id="commits-change">+0%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-value" id="streak-days">0</span>
+                                <span class="metric-label">Dias Consecutivos</span>
+                                <span class="metric-change" id="streak-change">+0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-value" id="total-stars-metric">0</span>
+                                <span class="metric-label">Stars Recebidas</span>
+                                <span class="metric-change" id="stars-change">+0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-value" id="total-followers">0</span>
+                                <span class="metric-label">Seguidores</span>
+                                <span class="metric-change" id="followers-change">+0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Tabs -->
+                    <div class="dashboard-tabs">
+                        <button class="tab-btn active" onclick="showDashboardTab('overview', this)">
+                            <i class="fas fa-chart-pie"></i>
+                            Visão Geral
+                        </button>
+                        <button class="tab-btn" onclick="showDashboardTab('activity', this)">
+                            <i class="fas fa-calendar-alt"></i>
+                            Atividade
+                        </button>
+                        <button class="tab-btn" onclick="showDashboardTab('languages', this)">
+                            <i class="fas fa-code"></i>
+                            Linguagens
+                        </button>
+                        <button class="tab-btn" onclick="showDashboardTab('repositories', this)">
+                            <i class="fas fa-folder"></i>
+                            Repositórios
+                        </button>
+                    </div>
+                    
+                    <!-- Tab Content: Overview -->
+                    <div class="tab-content active" id="overview-tab">
+                        <div class="dashboard-grid">
+                            <div class="dashboard-card large">
+                                <h3><i class="fas fa-chart-area"></i> Gráfico de Contribuições</h3>
+                                <div class="chart-controls">
+                                    <select id="contribution-period" onchange="updateContributionChart()">
+                                        <option value="week">Última Semana</option>
+                                        <option value="month" selected>Último Mês</option>
+                                        <option value="quarter">Último Trimestre</option>
+                                        <option value="year">Último Ano</option>
+                                    </select>
+                                </div>
+                                <div id="contribution-chart" class="chart-container">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando gráfico...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-card">
+                                <h3><i class="fas fa-trophy"></i> Conquistas</h3>
+                                <div id="achievements-list">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-card">
+                                <h3><i class="fas fa-clock"></i> Produtividade</h3>
+                                <div id="productivity-stats">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Activity -->
+                    <div class="tab-content" id="activity-tab">
+                        <div class="dashboard-grid">
+                            <div class="dashboard-card large">
+                                <h3><i class="fas fa-calendar-check"></i> Calendário de Atividades</h3>
+                                <div id="activity-calendar" class="calendar-container">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando calendário...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-card">
+                                <h3><i class="fas fa-list-ul"></i> Atividade Recente</h3>
+                                <div id="recent-activity">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Languages -->
+                    <div class="tab-content" id="languages-tab">
+                        <div class="dashboard-grid">
+                            <div class="dashboard-card">
+                                <h3><i class="fas fa-chart-pie"></i> Distribuição de Linguagens</h3>
+                                <div id="languages-pie-chart" class="chart-container">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-card">
+                                <h3><i class="fas fa-trending-up"></i> Tendências de Linguagens</h3>
+                                <div id="languages-trend" class="chart-container">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-card large">
+                                <h3><i class="fas fa-code"></i> Estatísticas Detalhadas</h3>
+                                <div id="languages-stats">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Repositories -->
+                    <div class="tab-content" id="repositories-tab">
+                        <div class="dashboard-grid">
+                            <div class="dashboard-card">
+                                <h3><i class="fas fa-star"></i> Repositórios em Destaque</h3>
+                                <div id="starred-repos">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-card">
+                                <h3><i class="fas fa-chart-bar"></i> Performance dos Repositórios</h3>
+                                <div id="repo-performance">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-card large">
+                                <h3><i class="fas fa-history"></i> Histórico de Criação</h3>
+                                <div id="repo-timeline">
+                                    <div class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Carregando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn primary" onclick="refreshDashboard()" id="refresh-dashboard-btn">
+                            <i class="fas fa-sync"></i>
+                            Atualizar Dashboard
+                        </button>
+                        <button class="btn" onclick="exportDashboardData()">
+                            <i class="fas fa-download"></i>
+                            Exportar Dados
+                        </button>
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Templates -->
+            <div class="section" id="templates-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-file-code"></i> Templates de Projeto</h2>
+                    
+                    <div class="templates-grid" id="templates-grid">
+                        <div class="template-card" onclick="selectTemplate('web-basic')">
+                            <div class="template-icon">🌐</div>
+                            <h3>Site Básico</h3>
+                            <p>HTML, CSS e JavaScript básico</p>
+                            <div class="template-tags">
+                                <span class="tag">HTML</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">JS</span>
+                            </div>
+                        </div>
+                        
+                        <div class="template-card" onclick="selectTemplate('react-app')">
+                            <div class="template-icon">⚛️</div>
+                            <h3>React App</h3>
+                            <p>Aplicação React com estrutura completa</p>
+                            <div class="template-tags">
+                                <span class="tag">React</span>
+                                <span class="tag">JSX</span>
+                                <span class="tag">Node</span>
+                            </div>
+                        </div>
+                        
+                        <div class="template-card" onclick="selectTemplate('python-flask')">
+                            <div class="template-icon">🐍</div>
+                            <h3>Flask API</h3>
+                            <p>API REST com Python e Flask</p>
+                            <div class="template-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">Flask</span>
+                                <span class="tag">API</span>
+                            </div>
+                        </div>
+                        
+                        <div class="template-card" onclick="selectTemplate('node-express')">
+                            <div class="template-icon">🟢</div>
+                            <h3>Node.js + Express</h3>
+                            <p>Servidor backend com Express</p>
+                            <div class="template-tags">
+                                <span class="tag">Node.js</span>
+                                <span class="tag">Express</span>
+                                <span class="tag">Backend</span>
+                            </div>
+                        </div>
+                        
+                        <div class="template-card" onclick="selectTemplate('portfolio')">
+                            <div class="template-icon">💼</div>
+                            <h3>Portfólio</h3>
+                            <p>Site portfólio responsivo</p>
+                            <div class="template-tags">
+                                <span class="tag">Portfolio</span>
+                                <span class="tag">Responsive</span>
+                                <span class="tag">CSS Grid</span>
+                            </div>
+                        </div>
+                        
+                        <div class="template-card" onclick="selectTemplate('documentation')">
+                            <div class="template-icon">📚</div>
+                            <h3>Documentação</h3>
+                            <p>Site de documentação com Markdown</p>
+                            <div class="template-tags">
+                                <span class="tag">Docs</span>
+                                <span class="tag">Markdown</span>
+                                <span class="tag">GitHub Pages</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="template-preview" id="template-preview" style="display: none;">
+                        <h3>Preview do Template</h3>
+                        <div class="preview-content" id="preview-content"></div>
+                        <div class="action-buttons">
+                            <button class="btn primary" onclick="useTemplate()">
+                                <i class="fas fa-magic"></i>
+                                Usar Template
+                            </button>
+                            <button class="btn" onclick="previewTemplate()">
+                                <i class="fas fa-eye"></i>
+                                Preview Completo
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn" onclick="createCustomTemplate()">
+                            <i class="fas fa-plus"></i>
+                            Criar Template Personalizado
+                        </button>
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Configurações Avançadas -->
+            <div class="section" id="settings-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-sliders-h"></i> Configurações Avançadas</h2>
+                    
+                    <div class="settings-groups">
+                        <div class="settings-group">
+                            <h3><i class="fas fa-upload"></i> Configurações de Upload</h3>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="auto-gitignore" checked>
+                                    Gerar .gitignore automaticamente
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="auto-readme" checked>
+                                    Gerar README.md automaticamente
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="compress-images">
+                                    Comprimir imagens antes do upload
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="max-file-size">Tamanho máximo por arquivo (MB):</label>
+                                <input type="number" id="max-file-size" value="25" min="1" max="100">
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h3><i class="fas fa-code-branch"></i> Configurações Git</h3>
+                            <div class="form-group">
+                                <label for="default-branch">Branch padrão:</label>
+                                <select id="default-branch">
+                                    <option value="main">main</option>
+                                    <option value="master">master</option>
+                                    <option value="develop">develop</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="auto-commit-message">
+                                    Mensagens de commit automáticas
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="commit-prefix">Prefixo das mensagens de commit:</label>
+                                <input type="text" id="commit-prefix" placeholder="feat: " value="✨ ">
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h3><i class="fas fa-shield-alt"></i> Segurança</h3>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="scan-secrets" checked>
+                                    Detectar chaves/senhas nos arquivos
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="encrypt-credentials" checked>
+                                    Criptografar credenciais localmente
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="session-timeout">Timeout da sessão (minutos):</label>
+                                <input type="number" id="session-timeout" value="60" min="5" max="480">
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h3><i class="fas fa-palette"></i> Interface</h3>
+                            <div class="form-group">
+                                <label for="theme">Tema:</label>
+                                <select id="theme">
+                                    <option value="light">Claro</option>
+                                    <option value="dark">Escuro</option>
+                                    <option value="auto">Automático</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="language">Idioma:</label>
+                                <select id="language">
+                                    <option value="pt-BR">Português</option>
+                                    <option value="en-US">English</option>
+                                    <option value="es-ES">Español</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="animations" checked>
+                                    Habilitar animações
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn primary" onclick="saveAdvancedSettings()">
+                            <i class="fas fa-save"></i>
+                            Salvar Configurações
+                        </button>
+                        <button class="btn" onclick="resetSettings()">
+                            <i class="fas fa-undo"></i>
+                            Restaurar Padrões
+                        </button>
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Backup -->
+            <div class="section" id="backup-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-shield-alt"></i> Backup e Sincronização</h2>
+                    
+                    <div class="backup-options">
+                        <div class="backup-card">
+                            <h3><i class="fas fa-download"></i> Backup Local</h3>
+                            <p>Salve suas configurações e dados localmente</p>
+                            <div class="backup-info">
+                                <span>Último backup: <span id="last-backup">Nunca</span></span>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn primary" onclick="createBackup()">
+                                    <i class="fas fa-download"></i>
+                                    Criar Backup
+                                </button>
+                                <button class="btn" onclick="restoreBackup()">
+                                    <i class="fas fa-upload"></i>
+                                    Restaurar Backup
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="backup-card">
+                            <h3><i class="fas fa-sync"></i> Sincronização Automática</h3>
+                            <p>Sincronize automaticamente com o GitHub</p>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="auto-sync">
+                                    Habilitar sincronização automática
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="sync-interval">Intervalo (minutos):</label>
+                                <select id="sync-interval">
+                                    <option value="5">5 minutos</option>
+                                    <option value="15">15 minutos</option>
+                                    <option value="30">30 minutos</option>
+                                    <option value="60">1 hora</option>
+                                </select>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn primary" onclick="setupAutoSync()">
+                                    <i class="fas fa-cog"></i>
+                                    Configurar
+                                </button>
+                                <button class="btn" onclick="syncNow()">
+                                    <i class="fas fa-sync"></i>
+                                    Sincronizar Agora
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="backup-card">
+                            <h3><i class="fas fa-history"></i> Histórico de Versões</h3>
+                            <p>Visualize e restaure versões anteriores</p>
+                            <div class="version-history" id="version-history">
+                                <div class="loading-message">Carregando histórico...</div>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn" onclick="loadVersionHistory()">
+                                    <i class="fas fa-refresh"></i>
+                                    Atualizar Histórico
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Ajuda -->
+            <div class="section" id="help-section" style="display: none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-question-circle"></i> Ajuda e Documentação</h2>
+                    
+                    <div class="help-tabs">
+                        <div class="tab-buttons">
+                            <button class="tab-btn active" onclick="showHelpTab('quick-start', this)">Início Rápido</button>
+                            <button class="tab-btn" onclick="showHelpTab('features', this)">Recursos</button>
+                            <button class="tab-btn" onclick="showHelpTab('troubleshooting', this)">Solução de Problemas</button>
+                            <button class="tab-btn" onclick="showHelpTab('api', this)">API</button>
+                        </div>
+
+                        <div class="tab-content active" id="quick-start">
+                            <div class="help-section">
+                                <h3>🚀 Como Usar</h3>
+                                <ol>
+                                    <li>Configure suas credenciais do GitHub na seção "Configurar Credenciais"</li>
+                                    <li>Use "Enviar Projeto" para fazer upload dos seus arquivos</li>
+                                    <li>O sistema criará automaticamente o repositório no GitHub</li>
+                                    <li>Explore os templates para projetos pré-configurados</li>
+                                    <li>Use o dashboard para monitorar sua atividade</li>
+                                </ol>
+                            </div>
+
+                            <div class="help-section">
+                                <h3>🔧 Requisitos</h3>
+                                <ul>
+                                    <li>Navegador moderno (Chrome, Firefox, Safari, Edge)</li>
+                                    <li>Conexão com internet</li>
+                                    <li>Token de acesso do GitHub</li>
+                                    <li>JavaScript habilitado</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="features">
+                            <div class="help-section">
+                                <h3>✨ Recursos Disponíveis</h3>
+                                <ul>
+                                    <li><strong>Upload Automático:</strong> Arraste e solte seus arquivos</li>
+                                    <li><strong>Templates:</strong> Projetos pré-configurados para diferentes tecnologias</li>
+                                    <li><strong>Dashboard:</strong> Visualize estatísticas e atividades</li>
+                                    <li><strong>Backup:</strong> Salve e restaure suas configurações</li>
+                                    <li><strong>Logs:</strong> Acompanhe todas as operações</li>
+                                    <li><strong>Repositórios:</strong> Gerencie seus projetos GitHub</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="troubleshooting">
+                            <div class="help-section">
+                                <h3>❓ Problemas Comuns</h3>
+                                <div class="faq-item">
+                                    <h4>Token inválido</h4>
+                                    <p>Verifique se o token não expirou e tem as permissões corretas (repo, workflow, delete_repo)</p>
+                                </div>
+                                <div class="faq-item">
+                                    <h4>Repositório já existe</h4>
+                                    <p>Use um nome diferente ou conecte ao repositório existente</p>
+                                </div>
+                                <div class="faq-item">
+                                    <h4>Falha no upload</h4>
+                                    <p>Verifique sua conexão, tamanho dos arquivos (máx 25MB) e permissões</p>
+                                </div>
+                                <div class="faq-item">
+                                    <h4>Arquivos não aparecem</h4>
+                                    <p>Certifique-se de selecionar uma pasta completa ou arquivos individuais</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="api">
+                            <div class="help-section">
+                                <h3>🔌 Integração API</h3>
+                                <p>O sistema utiliza a API REST do GitHub v3. Endpoints principais:</p>
+                                <div class="code-block">
+                                    <code>
+GET /user - Informações do usuário<br>
+GET /user/repos - Lista repositórios<br>
+POST /user/repos - Cria repositório<br>
+PUT /repos/{owner}/{repo}/contents/{path} - Upload arquivo
+                                    </code>
+                                </div>
+                                <p>Permissões necessárias no token: <code>repo</code>, <code>workflow</code>, <code>delete_repo</code></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn" onclick="window.open('https://docs.github.com/en/rest', '_blank')">
+                            <i class="fab fa-github"></i>
+                            Documentação GitHub API
+                        </button>
+                        <button class="btn secondary" onclick="showSection('main-menu')">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2025 DEV ALEKSANDRO ALVES • Interface moderna com tema claro/escuro</p>
+        </footer>
+    </div>
+
+    <!-- Sistema de Notificações Melhorado -->
+    <div class="notification" id="notification" role="status" aria-live="polite" style="display: none;">
+        <div class="notification-content">
+            <span class="notification-text"></span>
+            <button class="notification-close" onclick="hideNotification()">×</button>
+        </div>
+    </div>
+
+    <!-- Central de Notificações -->
+    <div class="modal" id="notification-center-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-bell"></i> Central de Notificações</h2>
+                <button class="modal-close" onclick="closeModal('notification-center-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="notification-filters">
+                    <button class="filter-btn active" data-filter="all">Todas</button>
+                    <button class="filter-btn" data-filter="info">Info</button>
+                    <button class="filter-btn" data-filter="success">Sucesso</button>
+                    <button class="filter-btn" data-filter="warning">Aviso</button>
+                    <button class="filter-btn" data-filter="error">Erro</button>
+                </div>
+                <div class="notifications-list" id="notifications-list">
+                    <!-- Notificações serão inseridas aqui -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="clearAllNotifications()">Limpar Todas</button>
+                <button class="btn primary" onclick="closeModal('notification-center-modal')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Atalhos de Teclado -->
+    <div class="modal" id="shortcuts-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-keyboard"></i> Atalhos de Teclado</h2>
+                <button class="modal-close" onclick="closeModal('shortcuts-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="shortcuts-grid">
+                    <div class="shortcut-category">
+                        <h3>Navegação</h3>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>K</kbd>
+                            <span>Busca Global</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>H</kbd>
+                            <span>Ir para Home</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>U</kbd>
+                            <span>Upload de Projeto</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>R</kbd>
+                            <span>Repositórios</span>
+                        </div>
+                    </div>
+                    <div class="shortcut-category">
+                        <h3>Ações</h3>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>S</kbd>
+                            <span>Salvar/Auto-save</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>D</kbd>
+                            <span>Dashboard</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Ctrl</kbd> + <kbd>T</kbd>
+                            <span>Alternar Tema</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>?</kbd>
+                            <span>Mostrar Atalhos</span>
+                        </div>
+                    </div>
+                    <div class="shortcut-category">
+                        <h3>Repositórios</h3>
+                        <div class="shortcut-item">
+                            <kbd>S</kbd>
+                            <span>Focar Busca</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>F</kbd>
+                            <span>Favoritar</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Enter</kbd>
+                            <span>Selecionar</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Esc</kbd>
+                            <span>Cancelar/Fechar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn primary" onclick="closeModal('shortcuts-modal')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ações em Lote -->
+    <div class="modal" id="bulk-actions-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-tasks"></i> Ações em Lote</h2>
+                <button class="modal-close" onclick="closeModal('bulk-actions-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="bulk-selection">
+                    <p>Selecione os repositórios e escolha uma ação:</p>
+                    <div class="bulk-actions-list">
+                        <button class="bulk-action-btn" onclick="bulkFavorite()">
+                            <i class="fas fa-star"></i>
+                            Adicionar aos Favoritos
+                        </button>
+                        <button class="bulk-action-btn" onclick="bulkDownload()">
+                            <i class="fas fa-download"></i>
+                            Baixar Selecionados
+                        </button>
+                        <button class="bulk-action-btn" onclick="bulkExport()">
+                            <i class="fas fa-file-export"></i>
+                            Exportar Dados
+                        </button>
+                        <button class="bulk-action-btn danger" onclick="bulkArchive()">
+                            <i class="fas fa-archive"></i>
+                            Arquivar
+                        </button>
+                    </div>
+                </div>
+                <div class="selected-count">
+                    <span id="selected-repos-count">0 repositórios selecionados</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="clearBulkSelection()">Limpar Seleção</button>
+                <button class="btn primary" onclick="closeModal('bulk-actions-modal')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de Auto-save -->
+    <div class="toast" id="autosave-toast" style="display: none;">
+        <i class="fas fa-save"></i>
+        <span>Dados salvos automaticamente</span>
+    </div>
+
+    <script>
+      (function() {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.style.colorScheme = 'dark';
+            requestAnimationFrame(function() {
+              document.body && document.body.classList && document.body.classList.add('dark-theme');
+            });
+          } else if (theme === 'light') {
+            document.documentElement.style.colorScheme = 'light';
+            requestAnimationFrame(function() {
+              document.body && document.body.classList && document.body.classList.add('light-theme');
+            });
+          }
+        } catch(e) {}
+      })();
+    </script>
+    <script defer src="script.js"></script>
+    <script>
+      // Sistema melhorado de estrelas cadentes e efeitos celestiais
+      (function() {
+        // Respeitar prefers-reduced-motion e reduzir custo em dispositivos fracos
+        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+
+        if (reduceMotion || isLowEnd) {
+          // Desabilitar efeitos pesados para melhorar FPS/bateria
+          document.documentElement.classList.add('reduced-effects');
+          return;
+        }
+        const root = document.body;
+        
+        function spawnShootingStar() {
+          const el = document.createElement('div');
+          el.className = 'shooting-star';
+          const startX = window.innerWidth * (0.6 + Math.random() * 0.4);
+          const startY = -20 - Math.random() * 60;
+          el.style.transform = `translate(${startX}px, ${startY}px) rotate(315deg)`;
+          el.style.animation = 'shoot 1800ms ease-out forwards';
+          root.appendChild(el);
+          setTimeout(() => el.remove(), 2100);
+        }
+
+        function spawnComet() {
+          const el = document.createElement('div');
+          el.className = 'comet';
+          const startX = window.innerWidth * (0.7 + Math.random() * 0.3);
+          const startY = -40 - Math.random() * 80;
+          el.style.transform = `translate(${startX}px, ${startY}px) rotate(300deg)`;
+          el.style.animation = 'cometPath 2500ms ease-out forwards';
+          root.appendChild(el);
+          setTimeout(() => el.remove(), 2800);
+        }
+
+        function spawnMeteor() {
+          const el = document.createElement('div');
+          el.className = 'meteor';
+          const startX = window.innerWidth * (0.65 + Math.random() * 0.35);
+          const startY = -30 - Math.random() * 70;
+          el.style.transform = `translate(${startX}px, ${startY}px) rotate(320deg)`;
+          el.style.animation = 'meteorPath 2000ms ease-out forwards';
+          root.appendChild(el);
+          setTimeout(() => el.remove(), 2300);
+        }
+
+        function spawnFireball() {
+          const el = document.createElement('div');
+          el.className = 'fireball';
+          const startX = window.innerWidth * (0.75 + Math.random() * 0.25);
+          const startY = -50 - Math.random() * 100;
+          el.style.transform = `translate(${startX}px, ${startY}px) rotate(310deg)`;
+          el.style.animation = 'fireballPath 3000ms ease-out forwards';
+          root.appendChild(el);
+          setTimeout(() => el.remove(), 3300);
+        }
+
+        // Sistema de chuva de meteoros ocasional
+        function meteorShower() {
+          const count = 3 + Math.floor(Math.random() * 5); // 3-7 meteoros
+          for (let i = 0; i < count; i++) {
+            setTimeout(() => {
+              if (Math.random() < 0.7) spawnShootingStar();
+              else spawnMeteor();
+            }, i * (200 + Math.random() * 300));
+          }
+        }
+
+        // Loop principal com efeitos variados - FREQUÊNCIA REDUZIDA
+        function loop() {
+          const rand = Math.random();
+          
+          // Probabilidades reduzidas para movimento mais sutil
+          if (rand < 0.25) {
+            spawnShootingStar();
+          } else if (rand < 0.4) {
+            spawnComet();
+          } else if (rand < 0.55) {
+            spawnMeteor();
+          } else if (rand < 0.7) {
+            spawnFireball();
+          } else if (rand < 0.8) {
+            // 10% chance de chuva de meteoros (reduzida)
+            meteorShower();
+          }
+          // 20% chance de não fazer nada (pausa)
+          
+          // Intervalo mais longo para menos movimento
+          const next = 4000 + Math.random() * 6000; // entre 4s e 10s
+          setTimeout(loop, next);
+        }
+
+        // Efeito especial: pulso de energia ocasional
+        function energyPulse() {
+          const stars = document.querySelectorAll('.stars, .stars2, .stars3, .stars4, .stars5');
+          stars.forEach((star, index) => {
+            setTimeout(() => {
+              star.style.filter = 'brightness(1.5) saturate(1.3)';
+              setTimeout(() => {
+                star.style.filter = '';
+              }, 800);
+            }, index * 100);
+          });
+          
+          // Próximo pulso em 30-60 segundos
+          setTimeout(energyPulse, 30000 + Math.random() * 30000);
+        }
+
+        // Respeitar prefers-reduced-motion
+        const m = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (!m.matches) {
+          setTimeout(loop, 1000);
+          setTimeout(energyPulse, 15000); // Primeiro pulso após 15s
+        }
+      })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Grupos</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; --bg: #0f172a; --surface: #1e293b; --primary: #25d366; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; background: var(--bg); color: var(--text); padding: 24px; }
+    .container { max-width: 700px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header h1 { font-size: 2.2rem; margin-bottom: 8px; background: linear-gradient(135deg, #25d366, #128c7e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { color: var(--text-muted); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .input-group { display: flex; gap: 12px; margin-bottom: 16px; }
+    input[type="text"] { flex: 1; padding: 14px 18px; font-size: 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); outline: none; }
+    input:focus { border-color: var(--primary); }
+    button { padding: 14px 24px; font-size: 1rem; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .platforms { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .platform { padding: 16px; border: 2px solid var(--border); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg); }
+    .platform:hover, .platform.active { border-color: var(--primary); background: rgba(37,211,102,0.05); }
+    .platform .icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .platform .name { font-size: 0.9rem; font-weight: 600; }
+    .results { margin-top: 20px; }
+    .result-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; }
+    .result-item a { color: var(--primary); text-decoration: none; font-size: 0.9rem; word-break: break-all; }
+    .result-item a:hover { text-decoration: underline; }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge.whatsapp { background: rgba(37,211,102,0.15); color: #25d366; }
+    .badge.telegram { background: rgba(0,136,204,0.15); color: #0088cc; }
+    .badge.discord { background: rgba(88,101,242,0.15); color: #5865f2; }
+    .badge.reddit { background: rgba(255,69,0,0.15); color: #ff4500; }
+    .badge.facebook { background: rgba(24,119,242,0.15); color: #1877f2; }
+    .copy-btn { padding: 6px 12px; font-size: 0.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--text); cursor: pointer; }
+    .copy-btn:hover { background: var(--border); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Buscador de Grupos</h1>
+      <p>Encontre links de grupos no WhatsApp, Telegram, Discord, Reddit e Facebook</p>
+    </div>
+
+    <div class="card">
+      <div class="platforms">
+        <div class="platform active" data-platform="whatsapp" onclick="selectPlatform(this)">
+          <div class="icon">💬</div>
+          <div class="name">WhatsApp</div>
+        </div>
+        <div class="platform" data-platform="telegram" onclick="selectPlatform(this)">
+          <div class="icon">✈️</div>
+          <div class="name">Telegram</div>
+        </div>
+        <div class="platform" data-platform="discord" onclick="selectPlatform(this)">
+          <div class="icon">🎮</div>
+          <div class="name">Discord</div>
+        </div>
+        <div class="platform" data-platform="reddit" onclick="selectPlatform(this)">
+          <div class="icon">🟠</div>
+          <div class="name">Reddit</div>
+        </div>
+        <div class="platform" data-platform="facebook" onclick="selectPlatform(this)">
+          <div class="icon">👥</div>
+          <div class="name">Facebook</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <input type="text" id="searchInput" placeholder="Ex: futebol, tecnologia, estudos..." autofocus>
+        <button class="btn-primary" onclick="generateLinks()">Buscar</button>
+      </div>
+    </div>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <script>
+    let selectedPlatform = 'whatsapp';
+
+    function selectPlatform(el) {
+      document.querySelectorAll('.platform').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      selectedPlatform = el.dataset.platform;
+    }
+
+    function generateLinks() {
+      const term = document.getElementById('searchInput').value.trim();
+      const results = document.getElementById('results');
+      
+      const platforms = {
+        whatsapp: { domain: 'chat.whatsapp.com', label: 'WhatsApp', badge: 'whatsapp', icon: '💬' },
+        telegram: { domain: 't.me', label: 'Telegram', badge: 'telegram', icon: '✈️' },
+        discord: { domain: 'discord.gg', label: 'Discord', badge: 'discord', icon: '🎮' },
+        reddit: { domain: 'reddit.com/r/', label: 'Reddit', badge: 'reddit', icon: '🟠' },
+        facebook: { domain: 'facebook.com/groups/', label: 'Facebook', badge: 'facebook', icon: '👥' }
+      };
+
+      const p = platforms[selectedPlatform];
+      const searchQuery = term ? `${term} "${p.domain}"` : `"${p.domain}"`;
+      const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
+      const siteUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}&num=50`;
+
+      results.innerHTML = `
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">${p.icon} Links gerados para ${p.label}</h3>
+          <div class="result-item">
+            <div>
+              <a href="${googleUrl}" target="_blank">Busca no Google</a>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">${searchQuery}</p>
+            </div>
+            <button class="copy-btn" onclick="copyUrl('${googleUrl}')">Copiar</button>
+          </div>
+          <div class="result-item">
+            <div>
+              <a href="${siteUrl}" target="_blank">Busca (50 resultados)</a>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">Busca avançada com mais resultados</p>
+            </div>
+            <button class="copy-btn" onclick="copyUrl('${siteUrl}')">Copiar</button>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 16px;">
+            💡 Abra os links e procure por convites de grupos nos resultados do Google.
+          </p>
+        </div>
+      `;
+    }
+
+    function copyUrl(url) {
+      navigator.clipboard.writeText(url);
+    }
+
+    document.getElementById('searchInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') generateLinks();
+    });
+  </script>
+</body>
+</html>

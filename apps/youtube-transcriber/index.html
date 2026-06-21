@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Transcriber</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f23; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; margin-bottom: 5px; color: #ef4444; font-size: 1.8em; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+        
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .input-group input { flex: 1; padding: 14px 16px; background: #1a1a2e; border: 2px solid #333; border-radius: 12px; color: #fff; font-size: 1em; }
+        .input-group input:focus { outline: none; border-color: #ef4444; }
+        .input-group input::placeholder { color: #666; }
+        
+        .btn { padding: 14px 28px; border: none; border-radius: 12px; cursor: pointer; font-size: 1em; font-weight: 700; transition: all 0.2s; }
+        .btn-primary { background: #ef4444; color: white; }
+        .btn-primary:hover { background: #dc2626; }
+        .btn-primary:disabled { background: #555; cursor: not-allowed; }
+        .btn-secondary { background: #333; color: #fff; }
+        .btn-secondary:hover { background: #444; }
+        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: #000; display: none; }
+        .video-container.active { display: block; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        .video-info { background: #1a1a2e; border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; display: none; }
+        .video-info.active { display: block; }
+        .video-info h3 { color: #fff; margin-bottom: 5px; }
+        .video-info .channel { color: #888; font-size: 0.9em; }
+        
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+        .controls select { padding: 10px 14px; background: #1a1a2e; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 0.9em; }
+        .controls label { color: #888; font-size: 0.9em; }
+        
+        .transcript-box { background: #1a1a2e; border: 1px solid #333; border-radius: 12px; padding: 20px; min-height: 300px; max-height: 600px; overflow-y: auto; display: none; }
+        .transcript-box.active { display: block; }
+        .transcript-box h3 { color: #ef4444; margin-bottom: 15px; }
+        
+        .transcript-line { padding: 8px 12px; border-radius: 6px; margin-bottom: 4px; cursor: pointer; transition: background 0.2s; line-height: 1.6; }
+        .transcript-line:hover { background: #2a2a4e; }
+        .transcript-line .time { color: #ef4444; font-size: 0.85em; font-weight: 600; margin-right: 10px; }
+        
+        .loading { text-align: center; padding: 40px; color: #888; }
+        .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #333; border-top-color: #ef4444; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .error { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; color: #ef4444; margin-bottom: 20px; display: none; }
+        .error.active { display: block; }
+        
+        .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        
+        .badge { display: inline-block; background: #ef4444; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: 600; margin-left: 10px; }
+        
+        .how-to { background: #1a1a2e; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .how-to h3 { color: #ef4444; margin-bottom: 10px; }
+        .how-to ol { padding-left: 20px; }
+        .how-to li { margin-bottom: 8px; color: #aaa; }
+        .how-to code { background: #0f0f23; padding: 2px 6px; border-radius: 4px; color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 YouTube Transcriber</h1>
+        <p class="subtitle">Extraia a transcrição de qualquer vídeo do YouTube</p>
+        
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Cole a URL do YouTube aqui... (ex: https://www.youtube.com/watch?v=...)" />
+            <button class="btn btn-primary" id="btnFetch" onclick="fetchTranscript()">🔍 Transcrever</button>
+        </div>
+        
+        <div class="error" id="errorBox"></div>
+        
+        <div class="video-container" id="videoContainer">
+            <iframe id="videoPlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        
+        <div class="video-info" id="videoInfo">
+            <h3 id="videoTitle"></h3>
+            <span class="channel" id="videoChannel"></span>
+        </div>
+        
+        <div class="controls" id="controls" style="display: none;">
+            <label>Idioma:</label>
+            <select id="langSelect" onchange="changeLanguage()">
+                <option value="pt">Português</option>
+                <option value="en">Inglês</option>
+                <option value="es">Espanhol</option>
+                <option value="fr">Francês</option>
+                <option value="de">Alemão</option>
+                <option value="it">Italiano</option>
+                <option value="ja">Japonês</option>
+                <option value="ko">Coreano</option>
+                <option value="zh">Chinês</option>
+                <option value="ru">Russo</option>
+                <option value="ar">Árabe</option>
+            </select>
+            <button class="btn btn-secondary" onclick="copyAll()">📋 Copiar Tudo</button>
+            <button class="btn btn-secondary" onclick="downloadTxt()">⬇️ Baixar TXT</button>
+            <button class="btn btn-secondary" onclick="downloadSrt()">⬇️ Baixar SRT</button>
+        </div>
+        
+        <div class="transcript-box" id="transcriptBox">
+            <h3>📝 Transcrição <span class="badge" id="lineCount">0 linhas</span></h3>
+            <div id="transcriptContent"></div>
+        </div>
+        
+        <div class="how-to">
+            <h3>❓ Como funciona</h3>
+            <ol>
+                <li>Cole a URL de qualquer vídeo do YouTube</li>
+                <li>Clique em "Transcrever"</li>
+                <li>A transcrição será extraída automaticamente</li>
+                <li>Copie, baixe em TXT ou SRT conforme necessário</li>
+            </ol>
+            <p style="color: #666; margin-top: 10px; font-size: 0.9em;">
+                <strong>Nota:</strong> Funciona apenas com vídeos que possuem legendas/CC disponíveis.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let currentVideoId = '';
+        let transcriptData = [];
+        
+        function extractVideoId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+                /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+                /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+                /(?:youtube\.com\/v\/)([a-zA-Z0-9_-]{11})/,
+                /([a-zA-Z0-9_-]{11})/
+            ];
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+        
+        function showError(msg) {
+            const box = document.getElementById('errorBox');
+            box.textContent = msg;
+            box.classList.add('active');
+        }
+        
+        function hideError() {
+            document.getElementById('errorBox').classList.remove('active');
+        }
+        
+        async function fetchTranscript() {
+            hideError();
+            const url = document.getElementById('urlInput').value.trim();
+            
+            if (!url) {
+                showError('Por favor, insira uma URL do YouTube.');
+                return;
+            }
+            
+            const videoId = extractVideoId(url);
+            if (!videoId) {
+                showError('URL inválida. Insira uma URL válida do YouTube.');
+                return;
+            }
+            
+            currentVideoId = videoId;
+            
+            // Show video
+            document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${videoId}`;
+            document.getElementById('videoContainer').classList.add('active');
+            
+            // Show loading
+            document.getElementById('transcriptBox').classList.add('active');
+            document.getElementById('transcriptContent').innerHTML = '<div class="loading"><div class="spinner"></div><p>Buscando transcrição...</p></div>';
+            document.getElementById('controls').style.display = 'none';
+            
+            // Try to get video info
+            try {
+                const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+                const response = await fetch(oembedUrl);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('videoTitle').textContent = data.title;
+                    document.getElementById('videoChannel').textContent = data.author_name;
+                    document.getElementById('videoInfo').classList.add('active');
+                }
+            } catch (e) {
+                console.log('Could not fetch video info');
+            }
+            
+            // Try to get transcript using various methods
+            await getTranscript(videoId);
+        }
+        
+        async function getTranscript(videoId) {
+            const lang = document.getElementById('langSelect').value;
+            
+            // Method 1: Try using a transcript API
+            try {
+                const response = await fetch(`https://yt.lemnoslife.com/videos?part=transcript&id=${videoId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.items && data.items[0] && data.items[0].transcript) {
+                        const transcript = data.items[0].transcript;
+                        if (transcript.content && transcript.content.length > 0) {
+                            transcriptData = transcript.content.map(item => ({
+                                time: formatTime(parseInt(item.start || item.offset || 0)),
+                                text: item.text || item.snippet || ''
+                            }));
+                            renderTranscript();
+                            return;
+                        }
+                    }
+                }
+            } catch (e) {}
+            
+            // Method 2: Try another API
+            try {
+                const response = await fetch(`https://api.kome.ai/api/tools/youtube-transcripts?video_id=${videoId}&format=text`);
+                if (response.ok) {
+                    const text = await response.text();
+                    if (text && text.length > 10) {
+                        transcriptData = text.split('\n').filter(l => l.trim()).map((line, i) => ({
+                            time: '--:--',
+                            text: line.trim()
+                        }));
+                        renderTranscript();
+                        return;
+                    }
+                }
+            } catch (e) {}
+            
+            // Method 3: Try to extract from page source
+            try {
+                const response = await fetch(`https://www.youtube.com/watch?v=${videoId}`);
+                const html = await response.text();
+                
+                // Look for captions data in the page
+                const captionMatch = html.match(/"captions":\s*(\{.*?"playerCaptionsTracklistRenderer".*?\})\s*,\s*"/s);
+                if (captionMatch) {
+                    const captionData = JSON.parse(captionMatch[1]);
+                    const tracks = captionData.playerCaptionsTracklistRenderer?.captionTracks || [];
+                    
+                    if (tracks.length > 0) {
+                        // Find best track
+                        const track = tracks.find(t => t.languageCode === lang) || tracks[0];
+                        const captionUrl = track.baseUrl;
+                        
+                        const captionResponse = await fetch(captionUrl);
+                        const captionXml = await captionResponse.text();
+                        
+                        // Parse XML captions
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(captionXml, 'text/xml');
+                        const texts = doc.querySelectorAll('text');
+                        
+                        transcriptData = Array.from(texts).map(text => ({
+                            time: formatTime(parseFloat(text.getAttribute('start') || 0)),
+                            text: text.textContent.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").replace(/&quot;/g, '"')
+                        }));
+                        
+                        renderTranscript();
+                        return;
+                    }
+                }
+            } catch (e) {}
+            
+            // If all methods fail
+            document.getElementById('transcriptContent').innerHTML = `
+                <div style="text-align: center; padding: 30px;">
+                    <p style="color: #ef4444; font-size: 1.1em; margin-bottom: 10px;">❌ Transcrição não encontrada</p>
+                    <p style="color: #888;">Este vídeo pode não ter legendas/CC disponíveis.</p>
+                    <p style="color: #666; font-size: 0.9em; margin-top: 15px;">
+                        Tente outro vídeo com legendas ativadas.
+                    </p>
+                </div>
+            `;
+        }
+        
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            if (h > 0) {
+                return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+        
+        function renderTranscript() {
+            const container = document.getElementById('transcriptContent');
+            document.getElementById('controls').style.display = 'flex';
+            document.getElementById('lineCount').textContent = `${transcriptData.length} linhas`;
+            
+            container.innerHTML = transcriptData.map((item, i) => `
+                <div class="transcript-line" onclick="copyLine(${i})">
+                    <span class="time">[${item.time}]</span>
+                    ${escapeHtml(item.text)}
+                </div>
+            `).join('');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function copyLine(index) {
+            const text = transcriptData[index].text;
+            navigator.clipboard.writeText(text);
+        }
+        
+        function copyAll() {
+            const text = transcriptData.map(item => `[${item.time}] ${item.text}`).join('\n');
+            navigator.clipboard.writeText(text);
+        }
+        
+        function downloadTxt() {
+            const text = transcriptData.map(item => `[${item.time}] ${item.text}`).join('\n');
+            downloadFile(`transcript-${currentVideoId}.txt`, text, 'text/plain');
+        }
+        
+        function downloadSrt() {
+            let srt = '';
+            transcriptData.forEach((item, i) => {
+                const start = item.time;
+                const end = transcriptData[i + 1] ? transcriptData[i + 1].time : '99:59';
+                srt += `${i + 1}\n${start} --> ${end}\n${item.text}\n\n`;
+            });
+            downloadFile(`transcript-${currentVideoId}.srt`, srt, 'text/plain');
+        }
+        
+        function downloadFile(filename, content, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function changeLanguage() {
+            if (currentVideoId) {
+                getTranscript(currentVideoId);
+            }
+        }
+        
+        // Enter key support
+        document.getElementById('urlInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fetchTranscript();
+        });
+    </script>
+</body>
+</html>

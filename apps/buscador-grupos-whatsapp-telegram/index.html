@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Ferramenta para filtrar e extrair links de grupos de WhatsApp e Telegram." />
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" />
+    <title>Links de Grupos de Whatsapp e Telegram - Cuidado!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #00ffff;    /* Cyan mais brilhante */
+            --secondary-color: #a200ff;  /* Roxo mais vibrante */
+            --accent-color: #ff0055;     /* Rosa mais vivo */
+            --dark-bg: #050505;          /* Fundo mais escuro */
+            --card-bg: rgba(8, 8, 12, 0.97); /* Cards mais opacos */
+            --text-primary: #ffffff;      /* Texto principal mais claro */
+            --text-secondary: #e0e0e0;    /* Texto secundário */
+            --border-glow: rgba(0, 255, 255, 0.2); /* Brilho das bordas */
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            letter-spacing: 0.3px;
+            line-height: 1.6;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .navbar {
+            background: rgba(8, 8, 8, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 213, 0.1);
+        }
+
+        .navbar-brand {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 213, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 255, 213, 0.1);
+        }
+
+        h4 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        h4::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary-color), transparent);
+        }
+
+        .search-section {
+            background: rgba(0, 255, 213, 0.03);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            transform: scale(1);
+            transition: all 0.2s ease;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(0, 255, 255, 0.15);
+            color: var(--text-primary);
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 255, 213, 0.1);
+        }
+
+        .checkbox-wrapper label {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 0 10px 10px 0;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .checkbox-wrapper label:hover {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .stats-badge {
+            background: var(--accent-color);
+            font-family: 'Space Grotesk', monospace;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            box-shadow: 0 0 20px rgba(255, 0, 170, 0.2);
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        footer {
+            background: rgba(8, 8, 8, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 255, 213, 0.1);
+            padding: 20px 0;
+        }
+
+        footer small {
+            color: var(--text-secondary);
+        }
+
+        /* Efeitos de Hover e Foco */
+        .btn:focus, .form-control:focus {
+            outline: none;
+        }
+
+        .result-textarea {
+            font-family: 'Space Grotesk', monospace;
+            line-height: 1.6;
+            padding: 16px;
+            color: var(--text-primary);
+            background: rgba(8, 8, 12, 0.95);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-primary {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            text-shadow: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-color);
+            color: var(--text-primary);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--primary-color);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 16px;
+            top: -10px;
+            background: var(--card-bg);
+            padding: 0 8px;
+            font-size: 0.8em;
+            color: var(--primary-color);
+        }
+
+        .success-animation {
+            animation: successPulse 0.5s ease-out;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* Toastr customização */
+        .toast-success {
+            background: var(--primary-color) !important;
+        }
+
+        .toast-error {
+            background: var(--accent-color) !important;
+        }
+
+        /* Responsividade melhorada */
+        @media (max-width: 768px) {
+            .card {
+                margin-bottom: 1.5rem;
+            }
+            
+            .main-container {
+                padding-top: 80px;
+                padding-bottom: 30px;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Melhorias visuais */
+        .card {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 
+                        0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .result-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .result-badge.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-link mr-2"></i>
+                Extrator de Links
+            </a>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <h4><i class="fas fa-search mr-2"></i>Pesquisar Grupos</h4>
+                    <div class="search-section">
+                        <input id="theme-input" class="form-control mb-3" placeholder="Digite o tema da pesquisa..." type="text" />
+                        <div class="checkbox-wrapper">
+                            <label>
+                                <input id="whatsapp-checkbox" type="checkbox" />
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </label>
+                            <label>
+                                <input id="telegram-checkbox" type="checkbox" />
+                                <i class="fab fa-telegram"></i> Telegram
+                            </label>
+                        </div>
+                        <button id="search-btn" class="btn btn-primary btn-block">
+                            <i class="fas fa-search mr-2"></i>Pesquisar
+                        </button>
+                    </div>
+
+                    <h4><i class="fas fa-paste mr-2"></i>Cole os Links</h4>
+                    <textarea class="form-control mb-3" id="input-text" placeholder="Cole seu texto aqui..." rows="6"></textarea>
+                    <button id="extract-btn" class="btn btn-primary btn-block">
+                        <i class="fas fa-filter mr-2"></i>Extrair Links
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card position-relative">
+                    <div id="link-count" class="stats-badge">0 links</div>
+                    <h4><i class="fas fa-list-ul mr-2"></i>Links Extraídos</h4>
+                    <textarea class="form-control result-textarea mb-3" id="result-text" readonly></textarea>
+                    <button id="copy-btn" class="btn btn-secondary btn-block">
+                        <i class="fas fa-copy mr-2"></i>Copiar Links
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <small>Desenvolvido por Aleksandro Alves da Rocha Junior</small>
+        </div>
+    </footer>
+
+    <div class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // Configuração do Particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#00ffd5" },
+                shape: { type: "circle" },
+                opacity: { value: 0.2, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#00ffd5",
+                    opacity: 0.1,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Configuração do Toastr
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-bottom-right",
+            timeOut: 3000
+        };
+
+        function showLoading() {
+            $('.loading-overlay').css('display', 'flex').hide().fadeIn(200);
+        }
+
+        function hideLoading() {
+            $('.loading-overlay').fadeOut(200);
+        }
+
+        function extractLinks() {
+            showLoading();
+            setTimeout(() => {
+                var text = document.getElementById('input-text').value;
+                var whatsappGroupLinks = text.match(/chat\.whatsapp\.com\/(?:invite\/)?[\w-]{22,32}/gi);
+                var telegramGroupLinks = text.match(/t\.me\/(?:joinchat\/|invite\/)?[\w-]+/gi);
+
+                var resultTextarea = document.getElementById('result-text');
+                resultTextarea.value = '';
+
+                if (whatsappGroupLinks) {
+                    resultTextarea.value += 'Links de Grupos de Whatsapp:\n';
+                    resultTextarea.value += whatsappGroupLinks.join('\n') + '\n\n';
+                }
+
+                if (telegramGroupLinks) {
+                    resultTextarea.value += 'Links de Grupos de Telegram:\n';
+                    resultTextarea.value += telegramGroupLinks.join('\n') + '\n';
+                }
+                hideLoading();
+                toastr.success('Links extraídos com sucesso!');
+                $('.card').addClass('success-animation');
+                setTimeout(() => $('.card').removeClass('success-animation'), 500);
+            }, 500);
+        }
+
+        function copyToClipboard() {
+            var resultTextarea = document.getElementById('result-text');
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(resultTextarea.value)
+                    .then(() => {
+                        toastr.success('Links copiados para a área de transferência!');
+                    })
+                    .catch(err => {
+                        toastr.error('Erro ao copiar os links');
+                        console.error('Erro ao copiar:', err);
+                    });
+            } else {
+                resultTextarea.select();
+                document.execCommand('copy');
+                toastr.success('Links copiados para a área de transferência!');
+            }
+        }
+
+        function performSearch() {
+            var theme = document.getElementById('theme-input').value.trim();
+            var whatsappSelected = document.getElementById('whatsapp-checkbox').checked;
+            var telegramSelected = document.getElementById('telegram-checkbox').checked;
+
+            if (theme === '') {
+                toastr.error('Por favor, digite um tema para a pesquisa');
+                return;
+            }
+
+            var searchQuery = theme + ' ';
+            if (whatsappSelected) searchQuery += '"chat.whatsapp.com" ';
+            if (telegramSelected) searchQuery += '"t.me"';
+
+            window.open('https://www.google.com/search?q=' + encodeURIComponent(searchQuery), '_blank');
+        }
+
+        function countExtractedLinks() {
+            var resultTextarea = document.querySelector('.result-textarea');
+            var links = resultTextarea.value.split('\n');
+            var linkCount = 0;
+
+            for (var i = 0; i < links.length; i++) {
+                if (links[i].trim() !== '') linkCount++;
+            }
+
+            document.getElementById('link-count').innerText = 'Links extraídos: ' + linkCount;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('search-btn').addEventListener('click', performSearch);
+            document.getElementById('extract-btn').addEventListener('click', function() {
+                extractLinks();
+                countExtractedLinks();
+            });
+            document.getElementById('copy-btn').addEventListener('click', copyToClipboard);
+
+            // Adiciona efeito de foco nos inputs
+            document.querySelectorAll('.form-control').forEach(el => {
+                el.addEventListener('focus', () => {
+                    el.closest('.input-group')?.classList.add('focused');
+                });
+                el.addEventListener('blur', () => {
+                    el.closest('.input-group')?.classList.remove('focused');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

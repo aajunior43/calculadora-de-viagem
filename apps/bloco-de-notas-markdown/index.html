@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Markdown Avançado</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --accent-color: #3498db;
+            --button-bg: #34495e;
+            --button-hover: #2980b9;
+            --preview-bg: #1c2833;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: var(--accent-color);
+        }
+        .toolbar, .markdown-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button, select {
+            padding: 8px 12px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover, select:hover {
+            background-color: var(--button-hover);
+        }
+        .editor-container {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 250px);
+            min-height: 400px;
+        }
+        #notepad, #preview {
+            width: 50%;
+            height: 100%;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        #notepad {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
+            resize: none;
+        }
+        #preview {
+            background-color: var(--preview-bg);
+            overflow-y: auto;
+            border: 1px solid var(--accent-color);
+        }
+        .status-bar {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        #theme-toggle {
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        /* Estilos para o preview Markdown */
+        #preview h1, #preview h2, #preview h3 {
+            border-bottom: 1px solid var(--accent-color);
+            padding-bottom: 5px;
+        }
+        #preview code {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        #preview pre {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        #preview blockquote {
+            border-left: 3px solid var(--accent-color);
+            padding-left: 10px;
+            margin-left: 0;
+            color: #bdc3c7;
+        }
+        #preview table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #preview th, #preview td {
+            border: 1px solid var(--accent-color);
+            padding: 8px;
+            text-align: left;
+        }
+        #preview th {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editor Markdown Avançado</h1>
+
+        <div class="toolbar">
+            <button id="save-btn" title="Salvar">💾 Salvar</button>
+            <button id="clear-btn" title="Limpar">🗑️ Limpar</button>
+            <button id="copy-btn" title="Copiar">📋 Copiar</button>
+            <button id="save-txt-btn" title="Salvar como TXT">📄 Salvar TXT</button>
+            <button id="save-pdf-btn" title="Salvar como PDF">📑 Salvar PDF</button>
+            <select id="font-size">
+                <option value="14px">14px</option>
+                <option value="16px" selected>16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+            </select>
+            <select id="font-family">
+                <option value="Arial" selected>Arial</option>
+                <option value="Helvetica">Helvetica</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+            <button id="theme-toggle" title="Alternar tema">🌓</button>
+        </div>
+
+        <div class="markdown-toolbar">
+            <button id="h1-btn" title="Título 1">H1</button>
+            <button id="h2-btn" title="Título 2">H2</button>
+            <button id="h3-btn" title="Título 3">H3</button>
+            <button id="bold-btn" title="Negrito">B</button>
+            <button id="italic-btn" title="Itálico">I</button>
+            <button id="strikethrough-btn" title="Tachado">S</button>
+            <button id="quote-btn" title="Citação">""</button>
+            <button id="code-btn" title="Código Inline">&lt;/&gt;</button>
+            <button id="codeblock-btn" title="Bloco de Código">```</button>
+            <button id="link-btn" title="Link">🔗</button>
+            <button id="image-btn" title="Imagem">🖼️</button>
+            <button id="ul-btn" title="Lista não ordenada">•</button>
+            <button id="ol-btn" title="Lista ordenada">1.</button>
+            <button id="checklist-btn" title="Lista de verificação">☑️</button>
+            <button id="hr-btn" title="Linha horizontal">―</button>
+            <button id="table-btn" title="Tabela">📊</button>
+        </div>
+
+        <div class="editor-container">
+            <textarea id="notepad" spellcheck="true" placeholder="Digite seu texto Markdown aqui..."></textarea>
+            <div id="preview"></div>
+        </div>
+
+        <div class="status-bar">
+            <div id="word-count">Palavras: 0 | Caracteres: 0</div>
+            <div id="last-saved">Último salvamento: Nunca</div>
+        </div>
+    </div>
+
+    <script>
+        const notepad = document.getElementById('notepad');
+        const preview = document.getElementById('preview');
+        const wordCount = document.getElementById('word-count');
+        const lastSaved = document.getElementById('last-saved');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        let savedContent = '';
+
+        // Funções principais
+        const saveNote = () => {
+            savedContent = notepad.value;
+            updateLastSaved();
+            showToast('Conteúdo salvo!');
+        };
+
+        const clearNote = () => {
+            if (confirm('Tem certeza que deseja limpar todo o conteúdo?')) {
+                notepad.value = '';
+                updateWordCount();
+                updatePreview();
+                showToast('Conteúdo limpo!');
+            }
+        };
+
+        const copyNote = () => {
+            notepad.select();
+            document.execCommand('copy');
+            showToast('Texto copiado para a área de transferência!');
+        };
+
+        const saveTXT = () => {
+            const blob = new Blob([notepad.value], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'markdown_notes.txt';
+            link.click();
+            showToast('Arquivo TXT salvo!');
+        };
+
+        const savePDF = () => {
+            showToast('Funcionalidade PDF em desenvolvimento', 'warning');
+        };
+
+        // Funções auxiliares
+        const updateWordCount = () => {
+            const text = notepad.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            const chars = notepad.value.length;
+            wordCount.textContent = `Palavras: ${words} | Caracteres: ${chars}`;
+        };
+
+        const updateLastSaved = () => {
+            const now = new Date();
+            lastSaved.textContent = `Último salvamento: ${now.toLocaleString()}`;
+        };
+
+        const showToast = (message, type = 'info') => {
+            alert(message);  // Simplificado para este exemplo
+        };
+
+        const toggleTheme = () => {
+            document.body.classList.toggle('light-theme');
+            themeToggle.textContent = document.body.classList.contains('light-theme') ? '🌙' : '🌓';
+        };
+
+        const updatePreview = () => {
+            preview.innerHTML = marked.parse(notepad.value);
+        };
+
+        // Funções de formatação Markdown
+        const insertMarkdown = (before, after = '') => {
+            const start = notepad.selectionStart;
+            const end = notepad.selectionEnd;
+            const text = notepad.value;
+            const selection = text.substring(start, end);
+            const replacement = before + selection + after;
+            notepad.value = text.substring(0, start) + replacement + text.substring(end);
+            notepad.setSelectionRange(start + before.length, end + before.length);
+            notepad.focus();
+            updatePreview();
+        };
+
+        const insertWithNewlines = (before, after = '') => {
+            insertMarkdown('\n' + before, after + '\n');
+        };
+
+        // Event Listeners
+        document.getElementById('save-btn').addEventListener('click', saveNote);
+        document.getElementById('clear-btn').addEventListener('click', clearNote);
+        document.getElementById('copy-btn').addEventListener('click', copyNote);
+        document.getElementById('save-txt-btn').addEventListener('click', saveTXT);
+        document.getElementById('save-pdf-btn').addEventListener('click', savePDF);
+        themeToggle.addEventListener('click', toggleTheme);
+
+        notepad.addEventListener('input', () => {
+            updateWordCount();
+            updatePreview();
+        });
+
+        document.getElementById('font-size').addEventListener('change', (e) => {
+            notepad.style.fontSize = e.target.value;
+        });
+
+        document.getElementById('font-family').addEventListener('change', (e) => {
+            notepad.style.fontFamily = e.target.value;
+        });
+
+        // Markdown formatting buttons
+        document.getElementById('h1-btn').addEventListener('click', () => insertWithNewlines('# '));
+        document.getElementById('h2-btn').addEventListener('click', () => insertWithNewlines('## '));
+        document.getElementById('h3-btn').addEventListener('click', () => insertWithNewlines('### '));
+        document.getElementById('bold-btn').addEventListener('click', () => insertMarkdown('**', '**'));
+        document.getElementById('italic-btn').addEventListener('click', () => insertMarkdown('*', '*'));
+        document.getElementById('strikethrough-btn').addEventListener('click', () => insertMarkdown('~~', '~~'));
+        document.getElementById('quote-btn').addEventListener('click', () => insertWithNewlines('> '));
+        document.getElementById('code-btn').addEventListener('click', () => insertMarkdown('`', '`'));
+        document.getElementById('codeblock-btn').addEventListener('click', () => insertWithNewlines('```\n', '\n```'));
+        document.getElementById('link-btn').addEventListener('click', () => insertMarkdown('[', '](url)'));
+        document.getElementById('image-btn').addEventListener('click', () => insertMarkdown('![alt text](', ')'));
+        document.getElementById('ul-btn').addEventListener('click', () => insertWithNewlines('- '));
+        document.getElementById('ol-btn').addEventListener('click', () => insertWithNewlines('1. '));
+        document.getElementById('checklist-btn').addEventListener('click', () => insertWithNewlines('- [ ] '));
+        document.getElementById('hr-btn').addEventListener('click', () => insertWithNewlines('---'));
+        document.getElementById('table-btn').addEventListener('click', () => {
+            insertWithNewlines('| Coluna 1 | Coluna 2 | Coluna 3 |\n| -------- | -------- | -------- |\n| Item 1   | Item 2   | Item 3   |');
+        });
+
+        // Inicialização
+        updatePreview();
+
+        // Salvar automaticamente a cada 30 segundos
+        setInterval(saveNote, 30000);
+    </script>
+</body>
+</html>

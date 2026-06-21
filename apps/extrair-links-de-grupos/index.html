@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" />
+    <title>Links de Grupos de Whatsapp e Telegram - Cuidado!</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #000000;
+            color: #f8bbd0;
+        }
+
+        .container {
+            border: none;
+        }
+
+        a,
+        a:hover {
+            color: #f8bbd0;
+        }
+
+        .btn-primary {
+            background-color: #d81b60;
+            color: #000000;
+            border: 2px solid #f8bbd0;
+        }
+
+        .btn-primary:hover {
+            background-color: #f8bbd0;
+            color: #d81b60;
+        }
+
+        .result-textarea {
+            background-color: #f8bbd0;
+            color: #000000;
+            border: 2px solid #d81b60;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8em;
+            color: #f8bbd0;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-5">
+        <input id="theme-input" class="form-control mb-2" placeholder="Digite o tema da pesquisa..." type="text" />
+        <label class="mr-2">
+            <input id="whatsapp-checkbox" type="checkbox" /> WhatsApp
+        </label>
+        <label class="mr-2">
+            <input id="telegram-checkbox" type="checkbox" /> Telegram
+        </label>
+        <button class="btn btn-primary mb-4" onclick="performSearch()">Pesquisar</button>
+        <h1 class="text-center mb-4">Filtrar Links de Grupos de Whatsapp e Telegram</h1>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <textarea class="form-control" id="input-text" placeholder="Cole seu texto aqui..." rows="10"></textarea>
+                <button class="btn btn-primary btn-block mt-4" onclick="extractLinks()">Extrair links</button>
+            </div>
+        </div>
+        <div class="mt-5" id="results">
+            <h2 class="text-center">Links Extraídos:</h2>
+            <textarea class="form-control result-textarea" id="result-text" readonly></textarea>
+            <button class="btn btn-secondary btn-block mt-3" onclick="copyToClipboard()">Copiar para a Área de Transferência</button>
+        </div>
+        <div id="link-count">Links extraídos: 0</div>
+    </div>
+    <script>
+        function extractLinks() {
+            var text = document.getElementById('input-text').value;
+            var whatsappGroupLinks = text.match(/chat\.whatsapp\.com\/(?:invite\/)?[\w-]{22,32}/gi);
+            var telegramGroupLinks = text.match(/t\.me\/(?:joinchat\/|invite\/)?[\w-]+/gi);
+
+            var resultTextarea = document.getElementById('result-text');
+            resultTextarea.value = '';
+
+            if (whatsappGroupLinks) {
+                resultTextarea.value += 'Links de Grupos de Whatsapp:\n';
+                resultTextarea.value += whatsappGroupLinks.join('\n') + '\n\n';
+            }
+
+            if (telegramGroupLinks) {
+                resultTextarea.value += 'Links de Grupos de Telegram:\n';
+                resultTextarea.value += telegramGroupLinks.join('\n') + '\n';
+            }
+        }
+
+        function copyToClipboard() {
+            var resultTextarea = document.getElementById('result-text');
+            resultTextarea.select();
+            document.execCommand('copy');
+        }
+
+        function performSearch() {
+            var theme = document.getElementById('theme-input').value.trim();
+            var whatsappSelected = document.getElementById('whatsapp-checkbox').checked;
+            var telegramSelected = document.getElementById('telegram-checkbox').checked;
+
+            if (theme === '') {
+                alert('Por favor, digite um tema para a pesquisa.');
+                return;
+            }
+
+            // Creating the search query based on the theme and selections
+            var searchQuery = theme + ' ';
+            if (whatsappSelected) searchQuery += '"chat.whatsapp.com" ';
+            if (telegramSelected) searchQuery += '"t.me"';
+
+            // Opening Google search in a new tab with the search query
+            window.open('https://www.google.com/search?q=' + encodeURIComponent(searchQuery), '_blank');
+        }
+
+        function countExtractedLinks() {
+            var resultTextarea = document.querySelector('.result-textarea');
+            var links = resultTextarea.value.split('\n');
+            var linkCount = 0;
+
+            // Counting non-empty lines as links
+            for (var i = 0; i < links.length; i++) {
+                if (links[i].trim() !== '') linkCount++;
+            }
+
+            // Updating the displayed count
+            document.getElementById('link-count').innerText = 'Links extraídos: ' + linkCount;
+        }
+
+        if (typeof extractLinks === 'function') {
+            var originalExtractLinks = extractLinks;
+            extractLinks = function() {
+                originalExtractLinks();
+                countExtractedLinks();
+            };
+        }
+    </script>
+    <footer>Direitos Reservados © Aleksandro Alves da Rocha Junior</footer>
+</body>
+
+</html>

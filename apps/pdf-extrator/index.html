@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Extrator de Texto PDF Ultra</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #0f0c29, #302b63, #24243e, #41295a);
+            color: #00ffcc;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .header {
+            width: 100%;
+            padding: 20px 0;
+            background-color: #393e46;
+            color: #00adb5;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .container {
+            background-color: #222831;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            margin-top: 100px;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #00adb5;
+            margin: 20px 0;
+        }
+        input[type="file"], input[type="number"], textarea, button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            background: #393e46;
+            border: 1px solid #00adb5;
+            color: #eeeeee;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #00adb5;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #00ffcc;
+        }
+        textarea {
+            height: 200px;
+            resize: vertical;
+        }
+        #pageCount {
+            color: #eeeeee;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Extrator de Texto PDF Ultra</h1>
+    </div>
+    <div class="container">
+        <input type="file" id="fileInput" accept="application/pdf" />
+        <div id="pageCount">Número de páginas: 0</div>
+        <input type="number" id="pageNumber" value="1" min="1" />
+        <button onclick="extractTextFromPage()">Extrair Texto da Página</button>
+        <button onclick="extractAllText()">Extrair Todo o Texto</button>
+        <textarea id="textContent" readonly></textarea>
+        <button onclick="copyExtractedText()">Copiar Texto</button>
+    </div>
+    <script>
+        let pdfDoc = null;
+
+        document.getElementById('fileInput').addEventListener('change', async function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileReader = new FileReader();
+                fileReader.onload = async function() {
+                    try {
+                        const typedArray = new Uint8Array(this.result);
+                        pdfDoc = await pdfjsLib.getDocument({data: typedArray}).promise;
+                        document.getElementById('pageCount').textContent = `Número de páginas: ${pdfDoc.numPages}`;
+                    } catch (error) {
+                        console.error('Error loading the PDF: ', error);
+                        alert('Erro ao carregar o PDF.');
+                    }
+                };
+                fileReader.readAsArrayBuffer(file);
+            }
+        });
+
+        async function extractTextFromPage() {
+            const pageNumber = parseInt(document.getElementById('pageNumber').value, 10);
+            if (pdfDoc && pageNumber >= 1 && pageNumber <= pdfDoc.numPages) {
+                const page = await pdfDoc.getPage(pageNumber);
+                const textContent = await page.getTextContent();
+                document.getElementById('textContent').value = textContent.items.map(item => item.str).join('\n');
+            } else {
+                alert('PDF não carregado ou número de página inválido.');
+            }
+        }
+
+        async function extractAllText() {
+            if (pdfDoc) {
+                let fullText = '';
+                for (let num = 1; num <= pdfDoc.numPages; num++) {
+                    const page = await pdfDoc.getPage(num);
+                    const textContent = await page.getTextContent();
+                    fullText += textContent.items.map(item => item.str).join('\n') + '\n\n';
+                }
+                document.getElementById('textContent').value = fullText;
+            } else {
+                alert('PDF não carregado.');
+            }
+        }
+
+        function copyExtractedText() {
+            const textArea = document.getElementById('textContent');
+            textArea.select();
+            document.execCommand('copy');
+            alert('Texto copiado para a área de transferência.');
+        }
+    </script>
+</body>
+</html>

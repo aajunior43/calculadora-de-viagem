@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizador de Extratos</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; --bg: #0f172a; --surface: #1e293b; --primary: #10b981; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; background: var(--bg); color: var(--text); padding: 24px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header h1 { font-size: 2.5rem; margin-bottom: 8px; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { color: var(--text-muted); font-size: 1.1rem; }
+    .drop-zone {
+      border: 2px dashed var(--border); border-radius: 16px; padding: 48px;
+      text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 24px;
+    }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--primary); background: rgba(16,185,129,0.05); }
+    .drop-zone .icon { font-size: 3rem; margin-bottom: 16px; }
+    .drop-zone p { color: var(--text-muted); }
+    .drop-zone .hint { font-size: 0.85rem; margin-top: 8px; }
+    input[type="file"] { display: none; }
+    .results { margin-top: 24px; }
+    .file-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .file-info h3 { font-size: 1rem; margin-bottom: 4px; }
+    .file-info p { color: var(--text-muted); font-size: 0.85rem; }
+    .file-info .suggested { color: var(--primary); font-weight: 600; }
+    .badge {
+      padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+    }
+    .badge.success { background: rgba(16,185,129,0.15); color: #10b981; }
+    .badge.info { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .status { padding: 16px; border-radius: 12px; margin-bottom: 24px; display: none; }
+    .status.show { display: block; }
+    .status.success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: var(--primary); }
+    .status.error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; }
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-right: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Organizador de Extratos</h1>
+      <p>Envie seus PDFs de extratos bancários e obtenha nomes organizados</p>
+    </div>
+
+    <div class="drop-zone" id="dropZone">
+      <div class="icon">📂</div>
+      <p>Arraste seus arquivos aqui</p>
+      <p class="hint">ou clique para selecionar (PDF, OFX)</p>
+      <input type="file" id="fileInput" multiple accept=".pdf,.ofx">
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <script>
+    const API_URL = `${window.location.protocol}//${window.location.hostname}:8769`;
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const status = document.getElementById('status');
+    const results = document.getElementById('results');
+
+    function showStatus(msg, type = 'info') {
+      status.textContent = msg;
+      status.className = `status show ${type}`;
+    }
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    async function handleFiles(files) {
+      if (!files.length) return;
+      const formData = new FormData();
+      for (const file of files) formData.append('files', file);
+
+      showStatus('<span class="spinner"></span> Processando...', 'info');
+      results.innerHTML = '';
+
+      try {
+        const res = await fetch(`${API_URL}/api/upload`, { method: 'POST', body: formData });
+        if (!res.ok) throw new Error('Erro ao processar');
+        const data = await res.json();
+
+        showStatus(`${data.count} arquivo(s) processado(s)`, 'success');
+        data.files.forEach(f => {
+          const dateStr = f.date ? `${String(f.date.month).padStart(2,'0')}/${f.date.year}` : 'Data não detectada';
+          results.innerHTML += `
+            <div class="file-card">
+              <div class="file-info">
+                <h3>${f.original}</h3>
+                <p>Sugerido: <span class="suggested">${f.suggested}</span></p>
+                <p>${dateStr} • ${(f.size / 1024).toFixed(1)} KB</p>
+              </div>
+              <span class="badge ${f.date ? 'success' : 'info'}">${f.date ? 'Data encontrada' : 'Sem data'}</span>
+            </div>`;
+        });
+      } catch (err) {
+        showStatus('Erro ao processar arquivos', 'error');
+      }
+    }
+  </script>
+</body>
+</html>

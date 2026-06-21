@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Variações de Frases</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #b197fc;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 1px solid #b197fc;
+            background-color: #2a2a2a;
+            color: #f5f5f5;
+        }
+
+        #variations {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #variations li {
+            margin-bottom: 10px;
+            background-color: #2a2a2a;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #b197fc;
+        }
+
+        .copy-button {
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #b197fc;
+            color: black;
+            border: none;
+        }
+
+        input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #b197fc;
+            color: black;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #b197fc;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Gerador de Variações de Frases</h1>
+        <form onsubmit="generateVariations(event)">
+            <div class="input-group">
+                <label for="words">Palavras com variações (separadas por vírgula):</label>
+                <input type="text" id="words" name="words">
+            </div>
+
+            <!-- Primeiro campo de variável adicional -->
+            <div class="input-group">
+                <label for="additionalVariables">Variáveis adicionais (separadas por vírgula):</label>
+                <input type="text" id="additionalVariables" name="additionalVariables">
+            </div>
+
+            <div class="input-group">
+                <label for="restOfSentence">Restante da frase:</label>
+                <input type="text" id="restOfSentence" name="restOfSentence">
+            </div>
+
+            <div class="input-group">
+                <label><input type="checkbox" id="addPrefix"> Adicionar prefixo "/imagine prompt:"</label>
+            </div>
+            <div class="input-group">
+                <label><input type="checkbox" id="variablesAtEnd"> Colocar variáveis no fim da frase</label>
+            </div>
+            <input type="submit" value="Gerar Variações">
+        </form>
+
+        <h3>Variações:</h3>
+        <ul id="variations">
+        </ul>
+
+        <div class="footer">
+            Criado por Aleksandro Alves Da Rocha Junior
+        </div>
+    </div>
+
+    <script>
+        function generateVariations(event) {
+            event.preventDefault();
+
+            const wordsInput = document.getElementById('words').value;
+            const additionalVariablesInput = document.getElementById('additionalVariables').value;
+            const restOfSentenceInput = document.getElementById('restOfSentence').value;
+            const addPrefixCheckbox = document.getElementById('addPrefix');
+            const variablesAtEndCheckbox = document.getElementById('variablesAtEnd');
+            const variationsList = document.getElementById('variations');
+
+            const words = wordsInput.split(',');
+            const additionalVariables = additionalVariablesInput.split(',');
+
+            let variationsHtml = '';
+
+            for (let word of words) {
+                for (let additionalVariable of additionalVariables) {
+                    let variation = '';
+
+                    if (variablesAtEndCheckbox.checked) {
+                        variation = `${word.trim()} ${additionalVariable.trim()} ${restOfSentenceInput.trim()}`;
+                    } else {
+                        variation = `${word.trim()} ${additionalVariable.trim()} ${restOfSentenceInput.trim()}`;
+                    }
+
+                    if (addPrefixCheckbox.checked) {
+                        variation = `/imagine prompt: ${variation}`;
+                    }
+
+                    variationsHtml += `<li>
+                        <span>${variation}</span>
+                        <button class="copy-button" onclick="copyToClipboard('${variation}')">Copiar</button>
+                    </li>`;
+                }
+            }
+
+            variationsList.innerHTML = variationsHtml;
+        }
+
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+    </script>
+
+</body>
+
+</html>
+

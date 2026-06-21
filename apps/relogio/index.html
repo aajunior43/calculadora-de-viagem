@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #000000;
+            --font-family: 'Press Start 2P', cursive;
+            --text-color: #0f0;
+            --text-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 40px #0f0, 0 0 80px #0f0;
+        }
+
+        body {
+            background: var(--background-color);
+            font-family: var(--font-family);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        #clock {
+            font-size: 48px;
+            text-shadow: var(--text-shadow);
+        }
+
+        #date {
+            font-size: 24px;
+            text-shadow: var(--text-shadow);
+            margin-top: 20px;
+        }
+
+        #author {
+            font-size: 16px;
+            text-shadow: var(--text-shadow);
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            #clock {
+                font-size: 32px;
+            }
+
+            #date {
+                font-size: 18px;
+            }
+
+            #author {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="clock"></div>
+    <div id="date"></div>
+    <div id="author">Aleksandro Alves</div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            document.getElementById('date').textContent = `${day}/${month}/${year}`;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>

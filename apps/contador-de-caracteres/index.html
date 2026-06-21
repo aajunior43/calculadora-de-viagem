@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contador de Caracteres</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #input {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 40px;
+        }
+        #output {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #E50914; /* cor vermelha da Netflix */
+        }
+    </style>
+</head>
+<body>
+    <h2>Contador de Caracteres</h2>
+    <textarea id="input" rows="5" cols="30"></textarea>
+    <div id="output">0 caracteres</div>
+
+    <script>
+        const input = document.querySelector('#input');
+        const output = document.querySelector('#output');
+
+        input.addEventListener('input', () => {
+            const count = input.value.length;
+            output.textContent = count + ' caracteres';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Busca Avançada com Google Dorks</title>
+
+    <style>
+
+        :root {
+
+            --primary-color: #E50914;
+
+            --background-color: #141414;
+
+            --text-color: #ffffff;
+
+            --input-background: #333333;
+
+            --input-border: #444444;
+
+        }
+
+        body {
+
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+
+            margin: 0;
+
+            padding: 0;
+
+            background-color: var(--background-color);
+
+            color: var(--text-color);
+
+            line-height: 1.6;
+
+        }
+
+        .container {
+
+            max-width: 800px;
+
+            margin: 0 auto;
+
+            padding: 20px;
+
+        }
+
+        h1 {
+
+            text-align: center;
+
+            color: var(--primary-color);
+
+            font-size: 2.5em;
+
+            margin-bottom: 30px;
+
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+
+        }
+
+        .busca-container {
+
+            background-color: rgba(51, 51, 51, 0.8);
+
+            padding: 30px;
+
+            border-radius: 8px;
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+            margin-bottom: 30px;
+
+        }
+
+        .busca-row {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            margin-bottom: 15px;
+
+        }
+
+        input[type="text"], select {
+
+            width: 100%;
+
+            padding: 12px;
+
+            font-size: 16px;
+
+            background-color: var(--input-background);
+
+            border: 1px solid var(--input-border);
+
+            color: var(--text-color);
+
+            border-radius: 4px;
+
+            transition: all 0.3s ease;
+
+        }
+
+        input[type="text"]:focus, select:focus {
+
+            outline: none;
+
+            border-color: var(--primary-color);
+
+            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+
+        }
+
+        select {
+
+            appearance: none;
+
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+
+            background-repeat: no-repeat;
+
+            background-position: right 10px center;
+
+        }
+
+        button {
+
+            padding: 12px 24px;
+
+            font-size: 16px;
+
+            background-color: var(--primary-color);
+
+            color: var(--text-color);
+
+            border: none;
+
+            cursor: pointer;
+
+            border-radius: 4px;
+
+            transition: all 0.3s ease;
+
+        }
+
+        button:hover {
+
+            background-color: #F40612;
+
+            transform: translateY(-2px);
+
+        }
+
+        button:active {
+
+            transform: translateY(0);
+
+        }
+
+        #resultados {
+
+            background-color: rgba(51, 51, 51, 0.8);
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+        }
+
+        #resultados a {
+
+            color: var(--primary-color);
+
+            text-decoration: none;
+
+            transition: color 0.3s;
+
+        }
+
+        #resultados a:hover {
+
+            color: #F40612;
+
+            text-decoration: underline;
+
+        }
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 30px;
+
+            font-size: 14px;
+
+            color: #999;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Busca Avançada com Google Dorks</h1>
+
+        <div class="busca-container">
+
+            <div class="busca-row">
+
+                <input type="text" id="buscaNormal" placeholder="Pesquisa normal">
+
+            </div>
+
+            <div class="busca-row">
+
+                <input type="text" id="buscaExata1" placeholder="Busca exata 1">
+
+                <input type="text" id="buscaExata2" placeholder="Busca exata 2">
+
+            </div>
+
+            <div class="busca-row">
+
+                <input type="text" id="campoDork" placeholder="Digite seu dork">
+
+                <select id="tipoDork">
+
+                    <option value="">Selecione um tipo de dork</option>
+
+                    <option value="inurl:">inurl:</option>
+
+                    <option value="intitle:">intitle:</option>
+
+                    <option value="filetype:">filetype:</option>
+
+                    <option value="site:">site:</option>
+
+                    <option value="whatsapp">Grupos WhatsApp</option>
+
+                    <option value="telegram">Grupos Telegram</option>
+
+                </select>
+
+            </div>
+
+            <div class="busca-row">
+
+                <button onclick="realizarBusca()">Buscar</button>
+
+            </div>
+
+        </div>
+
+        <div id="resultados"></div>
+
+        
+
+        <div class="footer">
+
+            Criado por Aleksandro Alves
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        function realizarBusca() {
+
+            const buscaNormal = document.getElementById('buscaNormal').value;
+
+            const buscaExata1 = document.getElementById('buscaExata1').value;
+
+            const buscaExata2 = document.getElementById('buscaExata2').value;
+
+            const campoDork = document.getElementById('campoDork').value;
+
+            const tipoDork = document.getElementById('tipoDork').value;
+
+            const divResultados = document.getElementById('resultados');
+
+
+
+            if (!buscaNormal && !buscaExata1 && !buscaExata2 && !campoDork) {
+
+                alert('Por favor, digite pelo menos um termo de busca');
+
+                return;
+
+            }
+
+
+
+            let consultaBusca = buscaNormal;
+
+
+
+            if (buscaExata1) {
+
+                consultaBusca += ` "${buscaExata1}"`;
+
+            }
+
+
+
+            if (buscaExata2) {
+
+                consultaBusca += ` "${buscaExata2}"`;
+
+            }
+
+
+
+            if (tipoDork === 'whatsapp') {
+
+                consultaBusca += ` inurl:"chat.whatsapp.com" "${campoDork || 'grupo'}"`;
+
+            } else if (tipoDork === 'telegram') {
+
+                consultaBusca += ` inurl:"t.me" "${campoDork || 'grupo'}"`;
+
+            } else if (campoDork) {
+
+                consultaBusca += ` ${tipoDork}${campoDork}`;
+
+            }
+
+
+
+            const urlBusca = `https://www.google.com/search?q=${encodeURIComponent(consultaBusca)}`;
+
+
+
+            divResultados.innerHTML = `
+
+                <p>Realizando busca para: ${consultaBusca}</p>
+
+                <p>Clique aqui para ver os resultados: <a href="${urlBusca}" target="_blank">Resultados da Busca Google</a></p>
+
+                <button onclick="copiarConsulta('${consultaBusca}')">Copiar Consulta</button>
+
+            `;
+
+        }
+
+
+
+        function copiarConsulta(consulta) {
+
+            navigator.clipboard.writeText(consulta).then(() => {
+
+                alert('Consulta copiada para a área de transferência!');
+
+            }, (err) => {
+
+                console.error('Erro ao copiar: ', err);
+
+            });
+
+        }
+
+    </script>
+
+</body>
+
+</html>
+
