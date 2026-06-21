@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Palace — AI Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #e11d48;
+    --primary-hover: #be123c;
+    --green: #10b981;
+    --bg: #0a0a0f;
+    --bg-card: rgba(255,255,255,.06);
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border: rgba(255,255,255,.08);
+    --radius: 20px;
+    --glow: 0 0 40px rgba(225,29,72,.15);
+  }
+  [data-theme="light"] {
+    --bg: #f8fafc;
+    --bg-card: rgba(255,255,255,.7);
+    --text: #0f172a;
+    --text-secondary: #475569;
+    --border: rgba(0,0,0,.08);
+    --glow: 0 0 40px rgba(190,18,60,.08);
+    --primary: #be123c;
+    --primary-hover: #e11d48;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    transition:background .4s,color .4s;
+    display:flex;
+    flex-direction:column;
+  }
+  ::selection{background:var(--primary);color:#fff}
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px}
+
+  .container{max-width:560px;width:100%;margin:0 auto;padding:16px;flex:1}
+
+  /* header */
+  header{text-align:center;padding:28px 0 8px}
+  header h1{
+    font-size:1.75rem;
+    font-weight:800;
+    letter-spacing:-.03em;
+    background:linear-gradient(135deg,var(--primary),var(--green));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  header p{font-size:.82rem;color:var(--text-secondary);margin-top:4px;font-weight:400}
+
+  .theme-toggle{
+    position:fixed;
+    top:16px;
+    right:16px;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--bg-card);
+    backdrop-filter:blur(12px);
+    color:var(--text);
+    font-size:1.1rem;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.3s;
+    z-index:100;
+  }
+  .theme-toggle:hover{border-color:var(--primary);transform:scale(1.08)}
+
+  /* tabs */
+  .tabs{
+    display:flex;
+    gap:6px;
+    margin:20px 0 16px;
+    background:var(--bg-card);
+    backdrop-filter:blur(20px);
+    border-radius:14px;
+    padding:4px;
+    border:1px solid var(--border);
+  }
+  .tab{
+    flex:1;
+    padding:10px 8px;
+    text-align:center;
+    border:none;
+    background:transparent;
+    color:var(--text-secondary);
+    font-size:.82rem;
+    font-weight:500;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+    font-family:'Inter',sans-serif;
+  }
+  .tab.active{
+    background:var(--primary);
+    color:#fff;
+    box-shadow:0 4px 16px rgba(225,29,72,.3);
+  }
+  .tab:hover:not(.active){color:var(--text)}
+
+  /* search */
+  .search-wrap{
+    position:relative;
+    margin-bottom:16px;
+  }
+  .search-wrap input{
+    width:100%;
+    padding:12px 16px 12px 44px;
+    border-radius:14px;
+    border:1px solid var(--border);
+    background:var(--bg-card);
+    backdrop-filter:blur(20px);
+    color:var(--text);
+    font-size:.88rem;
+    font-family:'Inter',sans-serif;
+    outline:none;
+    transition:.3s;
+  }
+  .search-wrap input:focus{border-color:var(--primary)}
+  .search-wrap input::placeholder{color:var(--text-secondary)}
+  .search-wrap .icon{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--text-secondary);
+    font-size:1.05rem;
+    pointer-events:none;
+  }
+
+  /* stats bar */
+  .stats-bar{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .stat{
+    flex:1;
+    min-width:70px;
+    background:var(--bg-card);
+    backdrop-filter:blur(20px);
+    border-radius:12px;
+    padding:10px 8px;
+    text-align:center;
+    border:1px solid var(--border);
+  }
+  .stat .num{
+    font-size:1.15rem;
+    font-weight:700;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .stat .label{
+    font-size:.65rem;
+    color:var(--text-secondary);
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    margin-top:2px;
+  }
+  .stat .num.green{color:var(--green)}
+  .stat .num.primary{color:var(--primary)}
+
+  /* category accordion */
+  .category{margin-bottom:12px}
+  .category-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 16px;
+    background:var(--bg-card);
+    backdrop-filter:blur(20px);
+    border-radius:var(--radius);
+    border:1px solid var(--border);
+    cursor:pointer;
+    transition:.3s;
+    user-select:none;
+  }
+  .category-header:hover{border-color:var(--primary)}
+  .category-header .left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .category-header .left .badge{
+    font-size:.68rem;
+    background:var(--primary);
+    color:#fff;
+    padding:2px 10px;
+    border-radius:20px;
+    font-weight:600;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .category-header .chevron{
+    transition:transform .3s;
+    font-size:.85rem;
+    color:var(--text-secondary);
+  }
+  .category-header.open .chevron{transform:rotate(180deg)}
+
+  .category-body{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    padding-top:10px;
+    overflow:hidden;
+    transition:max-height .35s ease,opacity .3s ease;
+    max-height:0;
+    opacity:0;
+  }
+  .category-body.open{
+    max-height:6000px;
+    opacity:1;
+  }
+
+  /* prompt card */
+  .prompt-card{
+    background:var(--bg-card);
+    backdrop-filter:blur(20px);
+    border-radius:16px;
+    padding:14px;
+    border:1px solid var(--border);
+    transition:.3s;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  .prompt-card:hover{border-color:rgba(225,29,72,.3)}
+  .prompt-card .text{
+    font-size:.8rem;
+    line-height:1.5;
+    color:var(--text);
+    margin-bottom:12px;
+    flex:1;
+    word-break:break-word;
+  }
+  .prompt-card .text b{color:var(--primary)}
+  .prompt-card .actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    justify-content:flex-end;
+  }
+  .prompt-card .actions button{
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-size:.85rem;
+    transition:.3s;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    padding:4px 8px;
+    border-radius:8px;
+    font-family:'Inter',sans-serif;
+    color:var(--text-secondary);
+  }
+  .prompt-card .actions button:hover{color:var(--primary);background:rgba(225,29,72,.08)}
+  .prompt-card .actions .copy-btn{
+    font-size:.72rem;
+    font-weight:500;
+  }
+  .prompt-card .actions .fav-btn{
+    font-size:1rem;
+    padding:4px 6px;
+  }
+  .prompt-card .actions .fav-btn.faved{color:var(--primary)}
+
+  /* copy all */
+  .copy-all-wrap{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+  }
+  .copy-all-wrap button{
+    flex:1;
+    padding:10px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--bg-card);
+    backdrop-filter:blur(20px);
+    color:var(--text);
+    font-size:.78rem;
+    font-weight:500;
+    cursor:pointer;
+    transition:.3s;
+    font-family:'Inter',sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+  }
+  .copy-all-wrap button:hover{
+    border-color:var(--primary);
+    background:rgba(225,29,72,.08);
+  }
+  .copy-all-wrap .export-btn{color:var(--green)}
+  .copy-all-wrap .export-btn:hover{border-color:var(--green);background:rgba(16,185,129,.08)}
+
+  /* toast */
+  .toast-container{
+    position:fixed;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:9999;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    align-items:center;
+    pointer-events:none;
+  }
+  .toast{
+    padding:10px 20px;
+    border-radius:12px;
+    background:var(--bg-card);
+    backdrop-filter:blur(24px);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-size:.8rem;
+    font-weight:500;
+    animation:toastIn .35s ease forwards;
+    pointer-events:auto;
+    box-shadow:0 8px 32px rgba(0,0,0,.3);
+  }
+  .toast.out{animation:toastOut .3s ease forwards}
+  .toast.success{border-color:var(--green)}
+  .toast.error{border-color:var(--primary)}
+  @keyframes toastIn{
+    from{opacity:0;transform:translateY(20px) scale(.9)}
+    to{opacity:1;transform:translateY(0) scale(1)}
+  }
+  @keyframes toastOut{
+    from{opacity:1;transform:translateY(0) scale(1)}
+    to{opacity:0;transform:translateY(20px) scale(.9)}
+  }
+
+  /* empty state */
+  .empty{
+    text-align:center;
+    padding:40px 16px;
+    color:var(--text-secondary);
+    font-size:.88rem;
+  }
+  .empty .big{font-size:2.5rem;margin-bottom:8px}
+
+  /* footer watermark */
+  footer{
+    text-align:center;
+    padding:20px 16px 16px;
+    font-size:.72rem;
+    color:var(--text-secondary);
+    font-family:'JetBrains Mono',monospace;
+    opacity:.6;
+    letter-spacing:.02em;
+    border-top:1px solid var(--border);
+    margin-top:auto;
+  }
+
+  @media(max-width:420px){
+    .category-body{grid-template-columns:1fr}
+    header h1{font-size:1.4rem}
+    .container{padding:12px}
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>✦ Prompt Palace</h1>
+    <p>Hub de Prompts para IA</p>
+  </header>
+
+  <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="prompts">📋 Prompts</button>
+    <button class="tab" data-tab="favorites">❤️ Favoritos</button>
+    <button class="tab" data-tab="search">🔍 Buscar</button>
+  </div>
+
+  <div class="stats-bar" id="statsBar"></div>
+
+  <!-- Tab: Prompts -->
+  <div id="tabPrompts" class="tab-content"></div>
+
+  <!-- Tab: Favorites -->
+  <div id="tabFavorites" class="tab-content" style="display:none">
+    <div class="empty" id="emptyFav"><div class="big">💔</div>Nenhum favorito ainda</div>
+    <div id="favList"></div>
+  </div>
+
+  <!-- Tab: Search -->
+  <div id="tabSearch" class="tab-content" style="display:none">
+    <div class="search-wrap">
+      <span class="icon">🔎</span>
+      <input type="text" id="searchInput" placeholder="Buscar prompts…" autocomplete="off">
+    </div>
+    <div id="searchResults"></div>
+  </div>
+</div>
+
+<footer>Dev Aleksandro Alves</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  const DATA = [
+    {
+      name:"Midjourney",icon:"🎨",
+      prompts:[
+        "Um retrato cinematográfico de [tema] com iluminação dramática, profundidade de campo rasa, film grain, tons frios, proporção 16:9",
+        "Paisagem surreal com [elementos] flutuando no céu, atmosfera onírica, cores pastel, iluminação etérea, estilo digital painting —ar 16:9",
+        "Arte conceitual cyberpunk com [tema] em uma megalópole futurista, chuva ácida, néons, detalhes mecânicos, alta definição, photography",
+        "Personagem estilo anime com [características], lineart limpo, paleta vibrante, olhos expressivos, cabelo esvoaçante, celshading, close-up",
+        "Animal fantástico luminescente [descrição], bioluminescência, floresta noturna mística, partículas flutuantes, macro detalhes, hyperrealistic",
+        "Arquitetura futurista [conceito], formas orgânicas, vidro e metal, perspectiva grandiosa, céu crepuscular, volumetric lighting, render 8k",
+        "Natureza morta estilo van gogh com [objetos], pinceladas marcantes, cores expressivas, textura thick impasto, fundo rodopiante, óleo sobre tela"
+      ]
+    },
+    {
+      name:"DALL-E",icon:"🖼️",
+      prompts:[
+        "Ilustração digital de [tema] com estilo de arte vetorial, cores planas e contrastantes, composição central, detalhes geométricos, fundo abstrato",
+        "Cartaz de filme retro para [tema] nos anos 80, tipografia neon, moldura VHS, gradientes cromáticos, grão de filme, borda desgastada",
+        "Comida em estilo pop art com [ingredientes], cores hiper-saturadas, contornos pretos grossos, pontos de half-tone, quadrinhos, brilho especular",
+        "Cena de rua em aquarela de [local], pinceladas soltas, manchas de tinta, paleta pastel, luz natural difusa, atmosfera serena, hand-painted —ar 3:2",
+        "Interior de casa futurista [descrição], design minimalista, móveis orgânicos, iluminação indireta, materiais sustentáveis, biophilic, wide angle lens"
+      ]
+    },
+    {
+      name:"ChatGPT",icon:"💬",
+      prompts:[
+        "Explique [tema] como se eu tivesse 10 anos de idade, usando analogias simples e exemplos do dia a dia. Seja didático e divertido.",
+        "Crie um plano de estudos para aprender [tema] em 30 dias. Divida em semanas, com metas diárias de 30min, materiais recomendados e exercícios práticos.",
+        "Escreva um e-mail profissional para [destinatário] sobre [assunto]. Tom cortês e objetivo, com assunto sugestivo e chamada para ação clara.",
+        "Analise os prós e contras de [decisão/tema]. Liste em tópicos com breve explicação de cada ponto e no final dê uma recomendação baseada nos fatos.",
+        "Traduza e adapte o texto a seguir para [público/idioma], preservando o tom e as nuances culturais. Texto: [cole aqui]",
+        "Faça um resumo do seguinte texto em 3 parágrafos: mantenha as ideias principais, elimine redundâncias e use linguagem clara e direta. Texto: [cole aqui]",
+        "Gere 5 ideias criativas para [tema/projeto]. Para cada ideia, dê um título chamativo e uma breve descrição de como executá-la."
+      ]
+    },
+    {
+      name:"Stable Diffusion",icon:"⚡",
+      prompts:[
+        "Epic fantasy landscape with [elements], dramatic sky, volumetric fog, towering mountains, glowing flora, detailed foreground, cinematic lighting, 8k",
+        "Steampunk cityscape with [features], brass and copper architecture, airships, gear mechanisms, warm amber lighting, intricate details, concept art",
+        "Portrait of a warrior [description], battle scars, intense eyes, leather armor, dramatic chiaroscuro, gritty texture, hyperdetailed, shot on IMAX",
+        "Macro photography of [subject], extreme close-up, dew drops, intricate textures, soft bokeh background, natural lighting, sharp focus, National Geographic style",
+        "Abstract geometric art featuring [shapes/colors], symmetry, fractal patterns, glowing lines, dark background, minimalistic, 3D render, octane render"
+      ]
+    },
+    {
+      name:"Gemini",icon:"♊",
+      prompts:[
+        "Análise de dados: analise a seguinte base de dados [cole os dados] e extraia insights relevantes, tendências identificáveis e sugestões acionáveis baseadas nos números.",
+        "Interpretação de imagem: descreva em detalhes o que está presente nesta imagem [descrição ou URL], identifique objetos, pessoas, emoções, contexto e possíveis significados ocultos.",
+        "Raciocínio lógico: resolva o problema a seguir passo a passo, explicando cada etapa do seu raciocínio de forma clara e estruturada: [problema]"
+      ]
+    },
+    {
+      name:"Copilot",icon:"🤖",
+      prompts:[
+        "Revisão de código: revise o trecho de código abaixo em [linguagem] e aponte possíveis bugs, más práticas, problemas de performance e sugestões de melhoria. Código: [cole aqui]",
+        "Geração de testes: gere testes unitários para a função abaixo em [linguagem]. Inclua casos normais, extremos e de borda. Use o framework [jest/pytest/etc]. Código: [cole aqui]",
+        "Documentação técnica: gere documentação técnica para o seguinte código/funcionalidade em [linguagem]. Inclua descrição, parâmetros, retorno, exemplos de uso e observações. Código: [cole aqui]"
+      ]
+    }
+  ];
+
+  // state
+  let favorites = JSON.parse(localStorage.getItem('promptPalaceFavs')||'[]');
+  let theme = localStorage.getItem('promptPalaceTheme')||'dark';
+
+  // dom refs
+  const $ = s=>document.querySelector(s);
+  const $$ = s=>document.querySelectorAll(s);
+  const tabPrompts = $('#tabPrompts');
+  const tabFavs = $('#favList');
+  const tabSearch = $('#searchResults');
+  const emptyFav = $('#emptyFav');
+  const searchInput = $('#searchInput');
+  const statsBar = $('#statsBar');
+  const toastContainer = $('#toastContainer');
+  const themeBtn = $('#themeToggle');
+
+  // ---- helpers ----
+  function sanitize(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+  function toast(msg,type='success'){
+    const el=document.createElement('div');
+    el.className='toast'+(type?' '+type:'');
+    el.textContent=msg;
+    toastContainer.appendChild(el);
+    setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),350)},2200);
+  }
+
+  function toggleFav(text){
+    const idx=favorites.indexOf(text);
+    if(idx>-1){favorites.splice(idx,1);toast('Removido dos favoritos','error')}
+    else{favorites.push(text);toast('Adicionado aos favoritos','success')}
+    localStorage.setItem('promptPalaceFavs',JSON.stringify(favorites));
+    renderPrompts();renderFavorites();renderStats();renderSearch();
+  }
+
+  async function copyText(text,msg='Copiado!'){
+    try{await navigator.clipboard.writeText(text);toast(msg,'success')}
+    catch{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast(msg,'success')}
+  }
+
+  // ---- renderers ----
+  function renderStats(){
+    const total=DATA.reduce((a,c)=>a+c.prompts.length,0);
+    const favCount=favorites.length;
+    statsBar.innerHTML=`
+      <div class="stat"><div class="num primary">${total}</div><div class="label">Total</div></div>
+      <div class="stat"><div class="num green">${favCount}</div><div class="label">Favoritos</div></div>
+      ${DATA.map(c=>`<div class="stat"><div class="num">${c.prompts.length}</div><div class="label">${c.name}</div></div>`).join('')}
+    `;
+  }
+
+  function renderPrompts(filter=''){
+    tabPrompts.innerHTML=DATA.map(cat=>{
+      const items=cat.prompts.map((p,i)=>{
+        const isFav=favorites.includes(p);
+        const hl=filter?p.replace(new RegExp(filter.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<b>${m}</b>`):sanitize(p);
+        return `<div class="prompt-card">
+          <div class="text">${filter?hl:sanitize(p)}</div>
+          <div class="actions">
+            <button class="copy-btn" data-text="${sanitize(p)}">📋 Copiar</button>
+            <button class="fav-btn${isFav?' faved':''}" data-text="${sanitize(p)}">${isFav?'❤️':'🤍'}</button>
+          </div>
+        </div>`;
+      }).join('');
+      return `<div class="category">
+        <div class="category-header open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          <div class="left">
+            <span>${cat.icon}</span>
+            <strong>${cat.name}</strong>
+            <span class="badge">${cat.prompts.length}</span>
+          </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="category-body open">
+          ${items}
+        </div>
+        <div class="copy-all-wrap">
+          <button class="copy-all-btn" data-cat="${sanitize(cat.name)}">📋 Copiar todos</button>
+          <button class="export-cat-btn" data-cat="${sanitize(cat.name)}">⬇ Exportar TXT</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderFavorites(){
+    const items=favorites;
+    if(!items.length){emptyFav.style.display='block';tabFavs.innerHTML='';return}
+    emptyFav.style.display='none';
+    tabFavs.innerHTML=items.map(p=>`<div class="prompt-card">
+      <div class="text">${sanitize(p)}</div>
+      <div class="actions">
+        <button class="copy-btn" data-text="${sanitize(p)}">📋 Copiar</button>
+        <button class="fav-btn faved" data-text="${sanitize(p)}">❤️</button>
+      </div>
+    </div>`).join('');
+  }
+
+  function renderSearch(){
+    const q=searchInput.value.trim().toLowerCase();
+    if(!q){tabSearch.innerHTML='<div class="empty"><div class="big">🔍</div>Digite para buscar prompts</div>';return}
+    const results=[];
+    DATA.forEach(cat=>{
+      cat.prompts.forEach(p=>{
+        if(p.toLowerCase().includes(q)||cat.name.toLowerCase().includes(q)){
+          const idx=p.toLowerCase().indexOf(q);
+          const hl=idx>=0?p.slice(0,idx)+'<b>'+p.slice(idx,idx+q.length)+'</b>'+p.slice(idx+q.length):sanitize(p);
+          results.push({cat:cat.name,icon:cat.icon,text:p,hl});
+        }
+      });
+    });
+    if(!results.length){tabSearch.innerHTML='<div class="empty"><div class="big">😕</div>Nenhum resultado encontrado</div>';return}
+    tabSearch.innerHTML=results.map(r=>{
+      const isFav=favorites.includes(r.text);
+      return `<div class="prompt-card">
+        <div class="text"><small style="color:var(--text-secondary)">${r.icon} ${r.cat}</small><br>${r.hl}</div>
+        <div class="actions">
+          <button class="copy-btn" data-text="${sanitize(r.text)}">📋 Copiar</button>
+          <button class="fav-btn${isFav?' faved':''}" data-text="${sanitize(r.text)}">${isFav?'❤️':'🤍'}</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ---- event delegation ----
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('button');
+    if(!btn)return;
+
+    // copy single
+    if(btn.classList.contains('copy-btn')){
+      const txt=btn.dataset.text;
+      if(txt)copyText(txt,'Prompt copiado!');
+    }
+
+    // fav toggle
+    if(btn.classList.contains('fav-btn')){
+      const txt=btn.dataset.text;
+      if(txt)toggleFav(txt);
+    }
+
+    // copy all
+    if(btn.classList.contains('copy-all-btn')){
+      const catName=btn.dataset.cat;
+      const cat=DATA.find(c=>c.name===catName);
+      if(cat){
+        const all=cat.prompts.map((p,i)=>`${i+1}. ${p}`).join('\n\n');
+        copyText(all,`${catName}: todos copiados!`);
+      }
+    }
+
+    // export category
+    if(btn.classList.contains('export-cat-btn')){
+      const catName=btn.dataset.cat;
+      const cat=DATA.find(c=>c.name===catName);
+      if(cat){
+        const all=cat.prompts.map((p,i)=>`${i+1}. ${p}`).join('\n\n');
+        downloadTxt(all,`prompts-${catName.toLowerCase().replace(/\s/g,'-')}.txt`);
+      }
+    }
+  });
+
+  // search input
+  searchInput.addEventListener('input',renderSearch);
+
+  // tabs
+  $$('.tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      $$('.tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      ['tabPrompts','tabFavorites','tabSearch'].forEach(id=>document.getElementById(id).style.display='none');
+      const map={prompts:'tabPrompts',favorites:'tabFavorites',search:'tabSearch'};
+      document.getElementById(map[tab.dataset.tab]).style.display='block';
+      if(tab.dataset.tab==='search')searchInput.focus();
+    });
+  });
+
+  // theme
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme',t);
+    themeBtn.textContent=t==='dark'?'🌙':'☀️';
+    localStorage.setItem('promptPalaceTheme',t);
+  }
+  themeBtn.addEventListener('click',()=>{
+    const cur=document.documentElement.getAttribute('data-theme');
+    applyTheme(cur==='dark'?'light':'dark');
+  });
+  applyTheme(theme);
+
+  // download txt
+  function downloadTxt(content,name){
+    const blob=new Blob([content],{type:'text/plain;charset=utf-8'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    toast('Arquivo exportado!','success');
+  }
+
+  // init
+  renderStats();
+  renderPrompts();
+  renderFavorites();
+</script>
+
+</body>
+</html>
