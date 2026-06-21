@@ -1,184 +1,679 @@
 <!DOCTYPE html>
-<html lang="pt">
-
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Variações de Frases</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #1e1e1e;
-            color: #f5f5f5;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Variações de Frases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --radius:20px;
+  --transition:0.35s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"]{
+  --bg:#0a0a1a;
+  --bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);
+  --card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;
+  --text-muted:#8b8ba0;
+  --primary:#a78bfa;
+  --primary-dim:rgba(167,139,250,0.12);
+  --primary-glow:rgba(167,139,250,0.25);
+  --accent:#818cf8;
+  --green:#10b981;
+  --green-dim:rgba(16,185,129,0.12);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,0.12);
+  --yellow:#f59e0b;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);
+  --tag-bg:rgba(255,255,255,0.05);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;
+  --bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);
+  --card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;
+  --text-muted:#6b7280;
+  --primary:#7c3aed;
+  --primary-dim:rgba(124,58,237,0.08);
+  --primary-glow:rgba(124,58,237,0.15);
+  --accent:#6366f1;
+  --green:#059669;
+  --green-dim:rgba(5,150,105,0.08);
+  --red:#dc2626;
+  --red-dim:rgba(220,38,38,0.08);
+  --yellow:#d97706;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);
+  --tag-bg:rgba(0,0,0,0.04);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg-grad);
+  color:var(--text);
+  min-height:100vh;
+  padding:20px;
+  transition:background var(--transition),color var(--transition);
+}
+.app{max-width:520px;margin:0 auto;padding-bottom:40px}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 30px;
-        }
+/* ── Header ── */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{
+  width:44px;height:44px;
+  background:var(--primary-dim);
+  border:1.5px solid var(--primary);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+}
+.header-title{font-size:1.1rem;font-weight:800;letter-spacing:-0.01em}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.theme-btn{
+  width:40px;height:40px;border-radius:12px;
+  border:1.5px solid var(--card-border);
+  background:var(--card);color:var(--text);
+  font-size:1.1rem;cursor:pointer;
+  transition:all var(--transition);
+  display:flex;align-items:center;justify-content:center;
+}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
 
-        h1 {
-            color: #b197fc;
-            text-align: center;
-            margin-bottom: 40px;
-        }
+/* ── Card ── */
+.card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius);
+  padding:24px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  margin-bottom:16px;
+}
 
-        .input-group {
-            margin-bottom: 20px;
-        }
+/* ── Templates ── */
+.templates-label{
+  font-size:0.7rem;font-weight:600;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;
+}
+.templates-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.template-btn{
+  padding:6px 12px;border-radius:20px;
+  border:1.5px solid var(--card-border);
+  background:var(--tag-bg);color:var(--text-muted);
+  font-family:var(--font);font-size:0.72rem;font-weight:600;
+  cursor:pointer;transition:all var(--transition);
+  display:flex;align-items:center;gap:5px;
+}
+.template-btn:hover{border-color:var(--primary);color:var(--text);transform:translateY(-1px)}
+.template-btn .tpl-icon{font-size:0.85rem}
 
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
+/* ── Form ── */
+.formula-preview{
+  padding:14px;border-radius:14px;
+  background:var(--primary-dim);
+  border:1px solid rgba(167,139,250,0.15);
+  margin-bottom:16px;
+  font-size:0.82rem;font-weight:500;color:var(--text);
+  line-height:1.6;
+  display:none;
+}
+.formula-preview.show{display:block}
+.formula-preview .hl{color:var(--primary);font-weight:700}
+.formula-preview .hl2{color:var(--green);font-weight:700}
 
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            margin: 5px 0;
-            box-sizing: border-box;
-            border: 1px solid #b197fc;
-            background-color: #2a2a2a;
-            color: #f5f5f5;
-        }
+.input-group{margin-bottom:14px}
+.input-label{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:6px;
+}
+.input-label span{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.input-label .badge{
+  font-size:0.65rem;font-weight:700;
+  padding:2px 8px;border-radius:8px;
+  background:var(--primary-dim);color:var(--primary);
+}
+.input-wrap{position:relative}
+.input-wrap textarea,
+.input-wrap input[type="text"]{
+  width:100%;padding:12px 14px;
+  border-radius:12px;
+  border:1.5px solid var(--card-border);
+  background:rgba(255,255,255,0.03);
+  color:var(--text);font-family:var(--font);
+  font-size:0.9rem;font-weight:500;
+  outline:none;transition:all var(--transition);
+  resize:vertical;
+}
+.input-wrap textarea{min-height:80px;line-height:1.5}
+.input-wrap input[type="text"]{min-height:44px}
+.input-wrap textarea::placeholder,
+.input-wrap input::placeholder{color:var(--text-muted);font-weight:400}
+.input-wrap textarea:focus,
+.input-wrap input[type="text"]:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px var(--primary-dim);
+}
 
-        #variations {
-            list-style-type: none;
-            padding: 0;
-        }
+/* ── Options Row ── */
+.options-row{
+  display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;
+}
+.option-chip{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:12px;
+  border:1.5px solid var(--card-border);
+  background:var(--tag-bg);color:var(--text-muted);
+  font-size:0.78rem;font-weight:600;
+  cursor:pointer;transition:all var(--transition);
+  user-select:none;
+}
+.option-chip:hover{border-color:var(--primary);color:var(--text)}
+.option-chip.active{
+  border-color:var(--primary);background:var(--primary-dim);color:var(--primary);
+}
+.option-chip input{display:none}
+.option-chip .check{
+  width:18px;height:18px;border-radius:6px;
+  border:1.5px solid var(--card-border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;transition:all var(--transition);
+}
+.option-chip.active .check{
+  border-color:var(--primary);background:var(--primary);color:#fff;
+}
 
-        #variations li {
-            margin-bottom: 10px;
-            background-color: #2a2a2a;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #b197fc;
-        }
+/* ── Buttons ── */
+.btn-row{display:flex;gap:8px}
+.btn{
+  flex:1;padding:14px;border-radius:14px;border:none;
+  font-family:var(--font);font-size:0.9rem;font-weight:700;
+  cursor:pointer;transition:all var(--transition);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{
+  background:var(--card);border:1.5px solid var(--card-border);color:var(--text);
+}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
 
-        .copy-button {
-            padding: 5px 10px;
-            cursor: pointer;
-            background-color: #b197fc;
-            color: black;
-            border: none;
-        }
+/* ── Counter ── */
+.counter-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-radius:14px;
+  background:var(--primary-dim);
+  border:1px solid rgba(167,139,250,0.15);
+  margin-bottom:16px;
+  display:none;
+}
+.counter-bar.show{display:flex}
+.counter-text{font-size:0.82rem;font-weight:600;color:var(--text)}
+.counter-num{font-size:1.4rem;font-weight:800;color:var(--primary)}
+.counter-actions{display:flex;gap:6px}
+.counter-btn{
+  padding:8px 14px;border-radius:10px;
+  border:1.5px solid var(--card-border);
+  background:var(--card);color:var(--text);
+  font-family:var(--font);font-size:0.72rem;font-weight:600;
+  cursor:pointer;transition:all var(--transition);
+}
+.counter-btn:hover{border-color:var(--primary);color:var(--primary)}
+.counter-btn.copied{border-color:var(--green);color:var(--green);background:var(--green-dim)}
 
-        input[type="submit"] {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #b197fc;
-            color: black;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
+/* ── Results ── */
+.results-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.results-title{font-size:0.8rem;font-weight:700;color:var(--text-muted)}
+.results-list{list-style:none;padding:0}
+.results-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;border-radius:12px;
+  border:1px solid var(--card-border);
+  margin-bottom:6px;
+  transition:all var(--transition);
+  animation:slideUp 0.25s ease;
+}
+.results-item:hover{border-color:var(--primary);background:var(--primary-dim)}
+.results-item .idx{
+  font-size:0.7rem;font-weight:700;color:var(--text-muted);
+  min-width:28px;
+}
+.results-item .text{
+  flex:1;font-size:0.82rem;font-weight:500;color:var(--text);
+  line-height:1.4;padding:0 10px;
+  word-break:break-word;
+}
+.results-item .copy-btn{
+  padding:6px 12px;border-radius:8px;border:none;
+  background:var(--primary-dim);color:var(--primary);
+  font-family:var(--font);font-size:0.7rem;font-weight:600;
+  cursor:pointer;transition:all var(--transition);
+  white-space:nowrap;
+}
+.results-item .copy-btn:hover{background:var(--primary);color:#fff}
+.results-item .copy-btn.copied{background:var(--green-dim);color:var(--green)}
+.results-empty{
+  text-align:center;padding:32px 16px;
+  font-size:0.85rem;color:var(--text-muted);
+}
 
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #b197fc;
-        }
+/* ── Footer ── */
+.footer{
+  text-align:center;margin-top:32px;padding-top:16px;
+  border-top:1px solid var(--card-border);
+}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
 
-    </style>
+/* ── Animations ── */
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+  padding:12px 24px;border-radius:12px;
+  background:var(--primary);color:#fff;
+  font-family:var(--font);font-size:0.85rem;font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;
+  transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:500px){
+  body{padding:12px}
+  .card{padding:18px}
+  .btn-row{flex-direction:column}
+  .options-row{gap:6px}
+}
+</style>
 </head>
-
 <body>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">🎲</div>
+      <div>
+        <div class="header-title">Gerador de Variações</div>
+        <div class="header-sub">Frases combinadas para prompts, SEO e mais</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
 
-    <div class="container">
-        <h1>Gerador de Variações de Frases</h1>
-        <form onsubmit="generateVariations(event)">
-            <div class="input-group">
-                <label for="words">Palavras com variações (separadas por vírgula):</label>
-                <input type="text" id="words" name="words">
-            </div>
-
-            <!-- Primeiro campo de variável adicional -->
-            <div class="input-group">
-                <label for="additionalVariables">Variáveis adicionais (separadas por vírgula):</label>
-                <input type="text" id="additionalVariables" name="additionalVariables">
-            </div>
-
-            <div class="input-group">
-                <label for="restOfSentence">Restante da frase:</label>
-                <input type="text" id="restOfSentence" name="restOfSentence">
-            </div>
-
-            <div class="input-group">
-                <label><input type="checkbox" id="addPrefix"> Adicionar prefixo "/imagine prompt:"</label>
-            </div>
-            <div class="input-group">
-                <label><input type="checkbox" id="variablesAtEnd"> Colocar variáveis no fim da frase</label>
-            </div>
-            <input type="submit" value="Gerar Variações">
-        </form>
-
-        <h3>Variações:</h3>
-        <ul id="variations">
-        </ul>
-
-        <div class="footer">
-            Criado por Aleksandro Alves Da Rocha Junior
-        </div>
+  <!-- Templates -->
+  <div class="card">
+    <div class="templates-label">Templates prontos</div>
+    <div class="templates-grid">
+      <button class="template-btn" onclick="loadTemplate('midjourney')">
+        <span class="tpl-icon">🎨</span> Midjourney
+      </button>
+      <button class="template-btn" onclick="loadTemplate('dalle')">
+        <span class="tpl-icon">🤖</span> DALL-E
+      </button>
+      <button class="template-btn" onclick="loadTemplate('seo')">
+        <span class="tpl-icon">🔍</span> SEO Title
+      </button>
+      <button class="template-btn" onclick="loadTemplate('caption')">
+        <span class="tpl-icon">📸</span> Caption
+      </button>
+      <button class="template-btn" onclick="loadTemplate('email')">
+        <span class="tpl-icon">📧</span> Assunto Email
+      </button>
+      <button class="template-btn" onclick="loadTemplate('blank')">
+        <span class="tpl-icon">✨</span> Em branco
+      </button>
     </div>
 
-    <script>
-        function generateVariations(event) {
-            event.preventDefault();
+    <!-- Formula Preview -->
+    <div class="formula-preview" id="formulaPreview">
+      <span class="hl">[Palavra]</span> + <span class="hl2">[Variável]</span> + <span class="hl">[Frase]</span>
+    </div>
 
-            const wordsInput = document.getElementById('words').value;
-            const additionalVariablesInput = document.getElementById('additionalVariables').value;
-            const restOfSentenceInput = document.getElementById('restOfSentence').value;
-            const addPrefixCheckbox = document.getElementById('addPrefix');
-            const variablesAtEndCheckbox = document.getElementById('variablesAtEnd');
-            const variationsList = document.getElementById('variations');
+    <!-- Inputs -->
+    <div class="input-group">
+      <div class="input-label">
+        <span>Palavras-chave (separadas por vírgula)</span>
+        <span class="badge" id="wordsCount">0</span>
+      </div>
+      <div class="input-wrap">
+        <textarea id="words" placeholder="Ex: gato, cachorro, pássaro, cavalo" oninput="updatePreview();updateCount()"></textarea>
+      </div>
+    </div>
 
-            const words = wordsInput.split(',');
-            const additionalVariables = additionalVariablesInput.split(',');
+    <div class="input-group">
+      <div class="input-label">
+        <span>Variáveis (separadas por vírgula)</span>
+        <span class="badge" id="varsCount">0</span>
+      </div>
+      <div class="input-wrap">
+        <textarea id="vars" placeholder="Ex: sentado, correndo, dormindo, comendo" oninput="updatePreview();updateCount()"></textarea>
+      </div>
+    </div>
 
-            let variationsHtml = '';
+    <div class="input-group">
+      <div class="input-label"><span>Frase / sufixo</span></div>
+      <div class="input-wrap">
+        <input type="text" id="rest" placeholder="Ex: em um campo de flores, iluminado pelo sol" oninput="updatePreview()">
+      </div>
+    </div>
 
-            for (let word of words) {
-                for (let additionalVariable of additionalVariables) {
-                    let variation = '';
+    <!-- Options -->
+    <div class="options-row">
+      <label class="option-chip" id="optPrefix" onclick="toggleOption(this)">
+        <span class="check">✓</span>
+        <span>/imagine prompt:</span>
+      </label>
+      <label class="option-chip" id="optEnd" onclick="toggleOption(this)">
+        <span class="check">✓</span>
+        <span>Variáveis no fim</span>
+      </label>
+      <label class="option-chip" id="optNumber" onclick="toggleOption(this)">
+        <span class="check">✓</span>
+        <span>Numerar</span>
+      </label>
+    </div>
 
-                    if (variablesAtEndCheckbox.checked) {
-                        variation = `${word.trim()} ${additionalVariable.trim()} ${restOfSentenceInput.trim()}`;
-                    } else {
-                        variation = `${word.trim()} ${additionalVariable.trim()} ${restOfSentenceInput.trim()}`;
-                    }
+    <!-- Generate -->
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generate()">
+        <span>⚡</span> Gerar Variações
+      </button>
+      <button class="btn btn-secondary" onclick="clearAll()">
+        <span>🗑️</span> Limpar
+      </button>
+    </div>
+  </div>
 
-                    if (addPrefixCheckbox.checked) {
-                        variation = `/imagine prompt: ${variation}`;
-                    }
+  <!-- Counter Bar -->
+  <div class="counter-bar" id="counterBar">
+    <div>
+      <div class="counter-text">Variações geradas</div>
+      <div class="counter-num" id="counterNum">0</div>
+    </div>
+    <div class="counter-actions">
+      <button class="counter-btn" id="copyAllBtn" onclick="copyAll()">📋 Copiar todas</button>
+      <button class="counter-btn" onclick="exportTxt()">💾 Exportar .txt</button>
+    </div>
+  </div>
 
-                    variationsHtml += `<li>
-                        <span>${variation}</span>
-                        <button class="copy-button" onclick="copyToClipboard('${variation}')">Copiar</button>
-                    </li>`;
-                }
-            }
+  <!-- Results -->
+  <div class="card" id="resultsCard" style="display:none">
+    <div class="results-header">
+      <span class="results-title">Variações geradas</span>
+    </div>
+    <ul class="results-list" id="resultsList"></ul>
+  </div>
 
-            variationsList.innerHTML = variationsHtml;
-        }
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
 
-        function copyToClipboard(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-        }
-    </script>
+<div class="toast" id="toast"></div>
 
+<script>
+let generatedVariations = [];
+let activeOptions = { prefix: false, end: false, number: false };
+
+/* ── Theme ── */
+function toggleTheme(){
+  const html = document.documentElement;
+  const btn = document.querySelector('.theme-btn');
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  btn.textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('gvTheme', isDark ? 'light' : 'dark');
+}
+(function(){
+  const saved = localStorage.getItem('gvTheme');
+  if(saved){
+    document.documentElement.setAttribute('data-theme', saved);
+    document.querySelector('.theme-btn').textContent = saved === 'dark' ? '🌙' : '☀️';
+  }
+})();
+
+/* ── Options ── */
+function toggleOption(el){
+  el.classList.toggle('active');
+  const id = el.id;
+  if(id === 'optPrefix') activeOptions.prefix = el.classList.contains('active');
+  if(id === 'optEnd') activeOptions.end = el.classList.contains('active');
+  if(id === 'optNumber') activeOptions.number = el.classList.contains('active');
+  updatePreview();
+}
+
+/* ── Templates ── */
+function loadTemplate(type){
+  const t = {
+    midjourney: {
+      words: 'retrato, paisagem, arte digital, ilustração, foto',
+      vars: 'minimalista, realista, aquarela, futurista, cyberpunk',
+      rest: 'altos detalhes, 8k, iluminação cinematográfica',
+      prefix: true, end: false, number: false
+    },
+    dalle: {
+      words: 'foguete, robô, castelo, floresta, cidade',
+      vars: 'noturno, futurista, mágico, abandonado, colorido',
+      rest: 'estilo fotorrealista, alta resolução',
+      prefix: true, end: false, number: false
+    },
+    seo: {
+      words: 'como, dicas, guia, tutorial, melhores',
+      vars: 'cozinhar, programar, fotografar, investir, viajar',
+      rest: 'em 2026, passo a passo, para iniciantes',
+      prefix: false, end: true, number: true
+    },
+    caption: {
+      words: 'dia incrível, momento especial, vivendo a vida',
+      vars: '☀️, 🌴, 🎉, ✨, 🌊',
+      rest: 'sem filtro #life #goodvibes',
+      prefix: false, end: true, number: false
+    },
+    email: {
+      words: 'Não perca, Descubra, Aprenda, Domine, Transforme',
+      words: 'Não perca, Descubra, Aprenda, Domine, Transforme',
+      vars: 'seu negócio, sua carreira, sua vida, seu futuro',
+      rest: 'nesta semana!',
+      prefix: false, end: false, number: false
+    },
+    blank: { words: '', vars: '', rest: '', prefix: false, end: false, number: false }
+  }[type];
+
+  document.getElementById('words').value = t.words;
+  document.getElementById('vars').value = t.vars;
+  document.getElementById('rest').value = t.rest;
+
+  document.getElementById('optPrefix').classList.toggle('active', t.prefix);
+  document.getElementById('optEnd').classList.toggle('active', t.end);
+  document.getElementById('optNumber').classList.toggle('active', t.number);
+  activeOptions = { prefix: t.prefix, end: t.end, number: t.number };
+
+  updatePreview();
+  updateCount();
+  if(type !== 'blank') showToast('Template "' + type + '" carregado!');
+}
+
+/* ── Preview ── */
+function updatePreview(){
+  const words = document.getElementById('words').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const vars = document.getElementById('vars').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const rest = document.getElementById('rest').value.trim();
+  const preview = document.getElementById('formulaPreview');
+
+  if(words.length === 0 && vars.length === 0){
+    preview.classList.remove('show');
+    return;
+  }
+
+  let formula = '';
+  if(activeOptions.prefix) formula += '<span class="hl">/imagine prompt:</span> ';
+  if(activeOptions.end){
+    if(words.length) formula += '<span class="hl">[palavra]</span> ';
+    if(rest) formula += '<span class="hl">' + escHtml(rest.substring(0,20)) + (rest.length>20?'...':'') + '</span> ';
+    if(vars.length) formula += '<span class="hl2">[variável]</span>';
+  } else {
+    if(words.length) formula += '<span class="hl">[palavra]</span> ';
+    if(vars.length) formula += '<span class="hl2">[variável]</span> ';
+    if(rest) formula += '<span class="hl">' + escHtml(rest.substring(0,20)) + (rest.length>20?'...':'') + '</span>';
+  }
+
+  const total = words.length * (vars.length || 1);
+  formula += ' <span style="opacity:0.5">(' + total + ' combinações)</span>';
+
+  preview.innerHTML = formula;
+  preview.classList.add('show');
+}
+
+function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ── Count ── */
+function updateCount(){
+  const words = document.getElementById('words').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const vars = document.getElementById('vars').value.split(',').map(s=>s.trim()).filter(Boolean);
+  document.getElementById('wordsCount').textContent = words.length;
+  document.getElementById('varsCount').textContent = vars.length;
+}
+
+/* ── Generate ── */
+function generate(){
+  const words = document.getElementById('words').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const vars = document.getElementById('vars').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const rest = document.getElementById('rest').value.trim();
+
+  if(words.length === 0){
+    showToast('Adicione pelo menos uma palavra-chave!');
+    return;
+  }
+
+  generatedVariations = [];
+  const varList = vars.length ? vars : [''];
+
+  for(const word of words){
+    for(const v of varList){
+      let parts = [];
+      if(activeOptions.prefix) parts.push('/imagine prompt:');
+
+      if(activeOptions.end){
+        parts.push(word);
+        if(rest) parts.push(rest);
+        if(v) parts.push(v);
+      } else {
+        parts.push(word);
+        if(v) parts.push(v);
+        if(rest) parts.push(rest);
+      }
+
+      let line = parts.join(' ').replace(/\s+/g,' ').trim();
+      generatedVariations.push(line);
+    }
+  }
+
+  renderResults();
+}
+
+function renderResults(){
+  const list = document.getElementById('resultsList');
+  const card = document.getElementById('resultsCard');
+  const counter = document.getElementById('counterBar');
+
+  if(generatedVariations.length === 0){
+    card.style.display = 'none';
+    counter.classList.remove('show');
+    return;
+  }
+
+  counter.classList.add('show');
+  document.getElementById('counterNum').textContent = generatedVariations.length;
+  card.style.display = 'block';
+
+  list.innerHTML = generatedVariations.map((v, i) => {
+    const display = activeOptions.number ? `<strong>${i+1}.</strong> ${escHtml(v)}` : escHtml(v);
+    return `
+      <li class="results-item" style="animation-delay:${i*0.03}s">
+        <span class="text">${display}</span>
+        <button class="copy-btn" onclick="copyOne(this, '${escAttr(v)}')">Copiar</button>
+      </li>
+    `;
+  }).join('');
+}
+
+function escAttr(s){ return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
+
+/* ── Copy ── */
+function copyOne(btn, text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = '✅';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+function copyAll(){
+  const text = generatedVariations.join('\n');
+  const btn = document.getElementById('copyAllBtn');
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = '✅ Copiado!';
+    btn.classList.add('copied');
+    showToast(`${generatedVariations.length} variações copiadas!`);
+    setTimeout(()=>{ btn.textContent = '📋 Copiar todas'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function exportTxt(){
+  const text = generatedVariations.join('\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'variacoes-' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Arquivo .txt baixado!');
+}
+
+/* ── Clear ── */
+function clearAll(){
+  document.getElementById('words').value = '';
+  document.getElementById('vars').value = '';
+  document.getElementById('rest').value = '';
+  generatedVariations = [];
+  document.getElementById('resultsCard').style.display = 'none';
+  document.getElementById('counterBar').classList.remove('show');
+  document.getElementById('formulaPreview').classList.remove('show');
+  updateCount();
+}
+
+/* ── Toast ── */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+/* ── Keyboard ── */
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey && e.target.tagName !== 'TEXTAREA'){
+    e.preventDefault();
+    generate();
+  }
+  if(e.key === 'Escape') clearAll();
+});
+
+/* ── Init ── */
+updateCount();
+</script>
 </body>
-
 </html>
-
