@@ -1,101 +1,381 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buscador de Processos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; --bg: #0f172a; --surface: #1e293b; --primary: #3b82f6; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { min-height: 100vh; background: var(--bg); color: var(--text); padding: 24px; }
-    .container { max-width: 700px; margin: 0 auto; }
-    .header { text-align: center; margin-bottom: 32px; }
-    .header h1 { font-size: 2.2rem; margin-bottom: 8px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header p { color: var(--text-muted); }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
-    .input-group { display: flex; gap: 12px; margin-bottom: 16px; }
-    input[type="text"] { flex: 1; padding: 14px 18px; font-size: 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); outline: none; }
-    input:focus { border-color: var(--primary); }
-    button { padding: 14px 24px; font-size: 1rem; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
-    .type-selector { display: flex; gap: 12px; margin-bottom: 16px; }
-    .type-btn { flex: 1; padding: 12px; border: 2px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); cursor: pointer; text-align: center; font-weight: 600; }
-    .type-btn.active { border-color: var(--primary); background: rgba(59,130,246,0.1); }
-    .results { margin-top: 20px; }
-    .result-item { padding: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; }
-    .result-item h4 { margin-bottom: 8px; color: var(--primary); }
-    .result-item a { color: var(--text); text-decoration: none; display: block; padding: 8px 12px; background: var(--surface); border-radius: 8px; margin-bottom: 6px; font-size: 0.9rem; transition: background 0.2s; }
-    .result-item a:hover { background: var(--border); }
-    .result-item .desc { color: var(--text-muted); font-size: 0.8rem; margin-top: 4px; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--primary:#e11d48;--blue:#3b82f6;--radius:20px;--font:Inter,system-ui,sans-serif;--mono:'JetBrains Mono',monospace}
+    [data-theme=dark]{--bg:#0b0f19;--surface:rgba(30,41,59,0.6);--surface-solid:#1e293b;--text:#f1f5f9;--text-muted:#94a3b8;--border:rgba(51,65,85,0.5);--card-bg:rgba(30,41,59,0.35);--card-border:rgba(51,65,85,0.4);--shadow:0 8px 32px rgba(0,0,0,.4);--hover-bg:rgba(51,65,85,0.4);--input-bg:#0f172a;--tab-inactive:rgba(148,163,184,0.15)}
+    [data-theme=light]{--bg:#f1f5f9;--surface:rgba(255,255,255,0.7);--surface-solid:#fff;--text:#0f172a;--text-muted:#64748b;--border:rgba(203,213,225,0.6);--card-bg:rgba(255,255,255,0.5);--card-border:rgba(203,213,225,0.5);--shadow:0 8px 32px rgba(0,0,0,.08);--hover-bg:rgba(203,213,225,0.3);--input-bg:#fff;--tab-inactive:rgba(100,116,139,0.12);--primary:#be123c}
+    html{font-size:16px}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;transition:background .3s,color .3s;line-height:1.5;-webkit-font-smoothing:antialiased}
+    .container{max-width:640px;width:100%;margin:0 auto;padding:20px 16px;flex:1}
+    .header{text-align:center;padding:24px 0 20px}
+    .header h1{font-size:1.75rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,var(--primary),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+    .header p{font-size:.875rem;color:var(--text-muted)}
+    .theme-toggle{position:fixed;top:16px;right:16px;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--card-bg);backdrop-filter:blur(12px);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.15rem;transition:.25s;z-index:100}
+    .theme-toggle:hover{background:var(--hover-bg);transform:scale(1.08)}
+    .tabs{display:flex;gap:6px;margin-bottom:20px;background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:var(--radius);padding:6px;border:1px solid var(--card-border)}
+    .tab-btn{flex:1;padding:10px 8px;border:none;border-radius:14px;background:transparent;color:var(--text-muted);font-size:.8rem;font-weight:600;cursor:pointer;transition:.25s;font-family:var(--font);letter-spacing:.01em}
+    .tab-btn:hover{color:var(--text);background:var(--tab-inactive)}
+    .tab-btn.active{background:var(--primary);color:#fff;box-shadow:0 2px 12px rgba(225,29,72,.35)}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+    .card{background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);transition:background .3s,border .3s}
+    .card-title{font-size:.9rem;font-weight:700;margin-bottom:14px;color:var(--text)}
+    .toggle-group{display:flex;gap:8px;margin-bottom:16px}
+    .toggle-btn{flex:1;padding:11px;border:2px solid var(--border);border-radius:12px;background:transparent;color:var(--text-muted);font-weight:700;font-size:.85rem;cursor:pointer;transition:.25s;font-family:var(--font);text-align:center}
+    .toggle-btn.active{border-color:var(--primary);color:var(--primary);background:color-mix(in srgb,var(--primary) 10%,transparent)}
+    .toggle-btn:hover:not(.active){border-color:var(--text-muted);color:var(--text)}
+    .input-row{display:flex;gap:10px;margin-bottom:12px}
+    .input-row input{flex:1;padding:12px 16px;font-size:.9rem;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;color:var(--text);outline:none;font-family:var(--mono);font-size:.85rem;transition:border .2s}
+    .input-row input:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 20%,transparent)}
+    .input-row input::placeholder{color:var(--text-muted);font-family:var(--font);font-size:.8rem}
+    .input-row input.error{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.2)}
+    .uf-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    .uf-row label{font-size:.8rem;font-weight:600;color:var(--text-muted);white-space:nowrap}
+    .uf-row input{width:64px;padding:10px 12px;font-size:.85rem;background:var(--input-bg);border:1px solid var(--border);border-radius:10px;color:var(--text);outline:none;font-family:var(--mono);text-transform:uppercase;text-align:center;transition:border .2s}
+    .uf-row input:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 20%,transparent)}
+    .site-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .site-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:16px 10px;border:none;border-radius:14px;background:var(--card-bg);backdrop-filter:blur(12px);border:1px solid var(--card-border);color:var(--text);cursor:pointer;transition:.25s;font-family:var(--font);text-decoration:none}
+    .site-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.2);border-color:var(--primary)}
+    .site-btn .icon{font-size:1.5rem}
+    .site-btn .label{font-size:.75rem;font-weight:600;text-align:center}
+    .site-btn .sub{font-size:.6rem;color:var(--text-muted)}
+    .site-btn:active{transform:translateY(0)}
+    .history-list{list-style:none;padding:0}
+    .history-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:12px;background:var(--card-bg);border:1px solid var(--card-border);margin-bottom:8px;transition:.2s}
+    .history-item:hover{background:var(--hover-bg)}
+    .history-item .doc{font-family:var(--mono);font-size:.8rem;font-weight:500}
+    .history-item .meta{font-size:.7rem;color:var(--text-muted)}
+    .history-item .del-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:4px;border-radius:6px;transition:.2s;line-height:1}
+    .history-item .del-btn:hover{color:#ef4444;background:rgba(239,68,68,.1)}
+    .history-empty{padding:32px 16px;text-align:center;color:var(--text-muted);font-size:.85rem}
+    .history-actions{display:flex;gap:10px;margin-top:14px}
+    .history-actions button{flex:1;padding:10px;border-radius:12px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);font-weight:600;font-size:.8rem;cursor:pointer;transition:.25s;font-family:var(--font)}
+    .history-actions button:hover{background:var(--hover-bg)}
+    .history-actions .danger{color:#ef4444;border-color:rgba(239,68,68,.3)}
+    .history-actions .danger:hover{background:rgba(239,68,68,.1)}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface-solid);color:var(--text);padding:12px 24px;border-radius:12px;font-size:.85rem;font-weight:500;box-shadow:0 4px 24px rgba(0,0,0,.3);border:1px solid var(--card-border);opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1);z-index:1000;pointer-events:none;max-width:calc(100% - 32px);text-align:center;font-family:var(--font)}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+    .toast.success{border-color:var(--primary)}
+    .toast.error{border-color:#ef4444}
+    .links-list{list-style:none;padding:0}
+    .links-list li{margin-bottom:8px}
+    .links-list a{display:block;padding:12px 16px;border-radius:12px;background:var(--card-bg);border:1px solid var(--card-border);color:var(--text);text-decoration:none;font-size:.85rem;font-weight:500;transition:.25s}
+    .links-list a:hover{background:var(--hover-bg);border-color:var(--blue);padding-left:20px}
+    .links-list a span{display:block;font-size:.7rem;color:var(--text-muted);font-weight:400;margin-top:2px}
+    footer{text-align:center;padding:24px 16px;font-size:.75rem;color:var(--text-muted);border-top:1px solid var(--border);margin-top:24px;font-family:var(--font)}
+    footer a{color:var(--primary);text-decoration:none;font-weight:600}
+    footer a:hover{text-decoration:underline}
+    @media(max-width:560px){.container{padding:16px 12px}.header h1{font-size:1.35rem}.site-grid{grid-template-columns:1fr}.card{padding:16px}.tabs{gap:4px;padding:4px}.tab-btn{font-size:.72rem;padding:8px 4px}.theme-toggle{top:12px;right:12px;width:36px;height:36px;font-size:1rem}.input-row{flex-direction:column;gap:8px}.input-row input{padding:12px 14px}.uf-row{flex-wrap:wrap}.toast{font-size:.8rem;padding:10px 18px;bottom:16px}}
   </style>
 </head>
 <body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema" id="themeBtn">🌙</button>
+
   <div class="container">
     <div class="header">
-      <h1>Buscador de Processos</h1>
+      <h1>⚖️ Buscador de Processos</h1>
       <p>Consulte processos judiciais por CPF ou CNPJ</p>
     </div>
 
-    <div class="card">
-      <div class="type-selector">
-        <button class="type-btn active" onclick="selectType(this, 'cpf')">CPF</button>
-        <button class="type-btn" onclick="selectType(this, 'cnpj')">CNPJ</button>
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="consultar" onclick="switchTab('consultar')">🔍 Consultar</button>
+      <button class="tab-btn" data-tab="historico" onclick="switchTab('historico')">📋 Histórico</button>
+      <button class="tab-btn" data-tab="links" onclick="switchTab('links')">🔗 Links úteis</button>
+    </div>
+
+    <!-- TAB CONSULTAR -->
+    <div class="tab-content active" id="tab-consultar">
+      <div class="card">
+        <div class="toggle-group">
+          <button class="toggle-btn active" onclick="selectType(this,'cpf')">CPF</button>
+          <button class="toggle-btn" onclick="selectType(this,'cnpj')">CNPJ</button>
+        </div>
+        <div class="input-row">
+          <input type="text" id="docInput" placeholder="000.000.000-00" autocomplete="off" inputmode="numeric">
+        </div>
+        <div class="uf-row">
+          <label for="ufInput">UF</label>
+          <input type="text" id="ufInput" placeholder="SP" maxlength="2" autocomplete="off">
+        </div>
+        <div class="site-grid">
+          <button class="site-btn" onclick="searchSite('jusbrasil')">
+            <span class="icon">⚖️</span>
+            <span class="label">JusBrasil</span>
+            <span class="sub">jusbrasil.com.br</span>
+          </button>
+          <button class="site-btn" onclick="searchSite('escavador')">
+            <span class="icon">📚</span>
+            <span class="label">Escavador</span>
+            <span class="sub">escavador.com</span>
+          </button>
+          <button class="site-btn" onclick="searchSite('tj')">
+            <span class="icon">🏛️</span>
+            <span class="label">TJ do estado</span>
+            <span class="sub">tj{UF}.jus.br</span>
+          </button>
+          <button class="site-btn" onclick="searchSite('dje')">
+            <span class="icon">📜</span>
+            <span class="label">DJE</span>
+            <span class="sub">dje.tj{UF}.jus.br</span>
+          </button>
+        </div>
       </div>
-      <div class="input-group">
-        <input type="text" id="docInput" placeholder="Digite o CPF ou CNPJ..." autofocus>
-        <button class="btn-primary" onclick="generateLinks()">Buscar</button>
+
+      <div class="card" style="padding:16px 20px">
+        <p style="font-size:.75rem;color:var(--text-muted);text-align:center">
+          Preencha o CPF ou CNPJ, informe a UF (para TJ/DJE) e clique no site desejado.
+          Os links abrem em nova aba.
+        </p>
       </div>
     </div>
 
-    <div class="results" id="results"></div>
+    <!-- TAB HISTÓRICO -->
+    <div class="tab-content" id="tab-historico">
+      <div class="card">
+        <div class="card-title">📋 Consultas recentes</div>
+        <ul class="history-list" id="historyList">
+          <li class="history-empty">Nenhuma consulta realizada ainda.</li>
+        </ul>
+        <div class="history-actions">
+          <button onclick="exportHistory()">📥 Exportar</button>
+          <button class="danger" onclick="clearHistory()">🗑️ Limpar histórico</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB LINKS ÚTEIS -->
+    <div class="tab-content" id="tab-links">
+      <div class="card">
+        <div class="card-title">🔗 Links úteis</div>
+        <ul class="links-list">
+          <li><a href="https://www.cnj.jus.br/" target="_blank">CNJ - Conselho Nacional de Justiça<span>Portal oficial do CNJ</span></a></li>
+          <li><a href="https://pje.cnj.jus.br/" target="_blank">PJe - Processo Judicial Eletrônico<span>Consulta processual nacional</span></a></li>
+          <li><a href="https://www.jusbrasil.com.br/" target="_blank">JusBrasil<span>Base de jurisprudência e processos</span></a></li>
+          <li><a href="https://www.escavador.com/" target="_blank">Escavador<span>Buscador de processos e publicações</span></a></li>
+          <li><a href="https://www.tse.jus.br/" target="_blank">TSE - Tribunal Superior Eleitoral<span>Consulta processual eleitoral</span></a></li>
+          <li><a href="https://www.stj.jus.br/" target="_blank">STJ - Superior Tribunal de Justiça<span>Consulta de processos no STJ</span></a></li>
+          <li><a href="https://www.stf.jus.br/" target="_blank">STF - Supremo Tribunal Federal<span>Consulta de processos no STF</span></a></li>
+          <li><a href="https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/cnpjreva_solicitacao.asp" target="_blank">Receita Federal - CNPJ<span>Consulta cadastro CNPJ</span></a></li>
+        </ul>
+      </div>
+    </div>
   </div>
 
-  <script>
-    let docType = 'cpf';
+  <footer>
+    Dev <a href="https://github.com/aleksandroalves" target="_blank">Aleksandro Alves</a>
+  </footer>
 
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const docInput = document.getElementById('docInput');
+    const ufInput = document.getElementById('ufInput');
+    const historyList = document.getElementById('historyList');
+    const toastEl = document.getElementById('toast');
+    let docType = 'cpf';
+    let toastTimer = null;
+
+    // ---- Theme ----
+    function getTheme() { return document.documentElement.getAttribute('data-theme') }
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('buscador-theme', t);
+      document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
+    }
+    function toggleTheme() { setTheme(getTheme() === 'dark' ? 'light' : 'dark') }
+    (function initTheme() {
+      const saved = localStorage.getItem('buscador-theme');
+      if (saved) setTheme(saved);
+      else setTheme('dark');
+    })()
+
+    // ---- Type toggle ----
     function selectType(el, type) {
-      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
       docType = type;
-      document.getElementById('docInput').placeholder = type === 'cpf' ? '000.000.000-00' : '00.000.000/0000-00';
+      docInput.placeholder = type === 'cpf' ? '000.000.000-00' : '00.000.000/0000-00';
+      docInput.value = '';
+      docInput.focus();
     }
 
-    function formatDoc(doc) {
-      return doc.replace(/\D/g, '');
+    // ---- Format & Validate ----
+    function strip(s) { return s.replace(/\D/g, '') }
+
+    function formatCPF(v) {
+      const d = strip(v).slice(0, 11);
+      if (d.length <= 3) return d;
+      if (d.length <= 6) return d.slice(0, 3) + '.' + d.slice(3);
+      if (d.length <= 9) return d.slice(0, 3) + '.' + d.slice(3, 6) + '.' + d.slice(6);
+      return d.slice(0, 3) + '.' + d.slice(3, 6) + '.' + d.slice(6, 9) + '-' + d.slice(9, 11);
     }
 
-    function generateLinks() {
-      const raw = document.getElementById('docInput').value.trim();
-      if (!raw) return;
-      
-      const doc = formatDoc(raw);
-      const results = document.getElementById('results');
-
-      const sites = docType === 'cpf' ? [
-        { name: 'JusBrasil', url: `https://www.jusbrasil.com.br/busca?q=${doc}`, desc: 'Consulta gratuita de processos' },
-        { name: 'Escavador', url: `https://www.escavador.com/busca?q=${doc}`, desc: 'Busca processos e publicações' },
-        { name: 'CNJ - Consulta Processual', url: 'https://www.cnj.jus.br/corregedoria/justica_aberta/', desc: 'Portal nacional de justiça aberta' },
-        { name: 'Tribunal de Justiça (Google)', url: `https://www.google.com/search?q="${doc}"+"processo"+site:jusbrasil.com.br`, desc: 'Busca geral no Google' },
-      ] : [
-        { name: 'JusBrasil', url: `https://www.jusbrasil.com.br/busca?q=${doc}`, desc: 'Consulta gratuita de processos' },
-        { name: 'Escavador', url: `https://www.escavador.com/busca?q=${doc}`, desc: 'Busca processos e publicações' },
-        { name: 'Receita Federal', url: `https://solucoes.receita.fazenda.gov.br/servicos/cnpjreva/cnpjreva_solicitacao.asp`, desc: 'Dados cadastrais do CNPJ' },
-        { name: 'Consulta CNPJ (Google)', url: `https://www.google.com/search?q="${doc}"+"processo"`, desc: 'Busca geral no Google' },
-      ];
-
-      results.innerHTML = sites.map(s => `
-        <div class="result-item">
-          <h4>${s.name}</h4>
-          <a href="${s.url}" target="_blank">${s.url.substring(0, 60)}...</a>
-          <p class="desc">${s.desc}</p>
-        </div>
-      `).join('');
+    function formatCNPJ(v) {
+      const d = strip(v).slice(0, 14);
+      if (d.length <= 2) return d;
+      if (d.length <= 5) return d.slice(0, 2) + '.' + d.slice(2);
+      if (d.length <= 8) return d.slice(0, 2) + '.' + d.slice(2, 5) + '.' + d.slice(5);
+      if (d.length <= 12) return d.slice(0, 2) + '.' + d.slice(2, 5) + '.' + d.slice(5, 8) + '/' + d.slice(8);
+      return d.slice(0, 2) + '.' + d.slice(2, 5) + '.' + d.slice(5, 8) + '/' + d.slice(8, 12) + '-' + d.slice(12, 14);
     }
 
-    document.getElementById('docInput').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') generateLinks();
+    docInput.addEventListener('input', function() {
+      const raw = this.value;
+      const f = docType === 'cpf' ? formatCPF(raw) : formatCNPJ(raw);
+      if (f !== raw) this.value = f;
+      this.classList.remove('error');
     });
+
+    docInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const s = strip(this.value);
+        if ((docType === 'cpf' && s.length === 11) || (docType === 'cnpj' && s.length === 14)) {
+          searchSite('jusbrasil');
+        } else {
+          showToast('Preencha o ' + docType.toUpperCase() + ' com ' + (docType === 'cpf' ? '11' : '14') + ' dígitos', 'error');
+          this.classList.add('error');
+        }
+      }
+    });
+
+    ufInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^a-zA-Z]/g, '').slice(0, 2).toUpperCase();
+    });
+
+    // ---- Validate ----
+    function validateDoc() {
+      const s = strip(docInput.value);
+      if (docType === 'cpf' && s.length !== 11) {
+        showToast('CPF deve ter 11 dígitos', 'error');
+        docInput.classList.add('error');
+        return null;
+      }
+      if (docType === 'cnpj' && s.length !== 14) {
+        showToast('CNPJ deve ter 14 dígitos', 'error');
+        docInput.classList.add('error');
+        return null;
+      }
+      if (s.length === 0) {
+        showToast('Digite o ' + docType.toUpperCase(), 'error');
+        docInput.classList.add('error');
+        return null;
+      }
+      return s;
+    }
+
+    // ---- Search ----
+    function searchSite(site) {
+      const doc = validateDoc();
+      if (!doc) return;
+
+      const uf = ufInput.value.trim().toUpperCase() || 'XX';
+      let url = '';
+
+      switch (site) {
+        case 'jusbrasil':
+          url = 'https://www.jusbrasil.com.br/busca?q=' + encodeURIComponent(doc);
+          break;
+        case 'escavador':
+          url = 'https://www.escavador.com/busca?q=' + encodeURIComponent(doc);
+          break;
+        case 'tj':
+          url = 'https://www.tj' + uf.toLowerCase() + '.jus.br/';
+          break;
+        case 'dje':
+          url = 'https://dje.tj' + uf.toLowerCase() + '.jus.br/';
+          break;
+      }
+
+      window.open(url, '_blank', 'noopener');
+      addHistory(docType.toUpperCase(), doc, site);
+      showToast('Abrindo ' + site.toUpperCase() + '…', 'success');
+    }
+
+    // ---- History ----
+    function getHistory() {
+      try { return JSON.parse(localStorage.getItem('buscador-history')) || [] } catch { return [] }
+    }
+
+    function setHistory(h) {
+      localStorage.setItem('buscador-history', JSON.stringify(h));
+      renderHistory();
+    }
+
+    function addHistory(type, doc, site) {
+      const h = getHistory();
+      h.unshift({ type, doc, site, date: new Date().toISOString() });
+      if (h.length > 100) h.length = 100;
+      setHistory(h);
+    }
+
+    function renderHistory() {
+      const h = getHistory();
+      if (h.length === 0) {
+        historyList.innerHTML = '<li class="history-empty">Nenhuma consulta realizada ainda.</li>';
+        return;
+      }
+      historyList.innerHTML = h.map((item, i) => {
+        const date = new Date(item.date);
+        const dateStr = date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+        const siteLabel = { jusbrasil: 'JusBrasil', escavador: 'Escavador', tj: 'TJ/' + (item.uf || 'UF'), dje: 'DJE/' + (item.uf || 'UF') };
+        return '<li class="history-item"><div><div class="doc">' + item.type + ': ' + item.doc + '</div><div class="meta">' + dateStr + ' · ' + (siteLabel[item.site] || item.site) + '</div></div><button class="del-btn" onclick="removeHistory(' + i + ')" title="Remover">✕</button></li>';
+      }).join('');
+    }
+
+    function removeHistory(index) {
+      const h = getHistory();
+      h.splice(index, 1);
+      setHistory(h);
+    }
+
+    function clearHistory() {
+      if (getHistory().length === 0) { showToast('Histórico já está vazio', 'error'); return }
+      if (!confirm('Limpar todo o histórico?')) return;
+      setHistory([]);
+      showToast('Histórico limpo', 'success');
+    }
+
+    function exportHistory() {
+      const h = getHistory();
+      if (h.length === 0) { showToast('Nenhum item para exportar', 'error'); return }
+      const text = h.map(i => i.type + ': ' + i.doc + ' (' + new Date(i.date).toLocaleString('pt-BR') + ')').join('\n');
+      const blob = new Blob([text], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'historico-consultas-' + new Date().toISOString().slice(0, 10) + '.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('Histórico exportado', 'success');
+    }
+
+    // ---- Tabs ----
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.toggle('active', t.id === 'tab-' + name));
+      if (name === 'historico') renderHistory();
+    }
+
+    // ---- Toast ----
+    function showToast(msg, type) {
+      toastEl.textContent = msg;
+      toastEl.className = 'toast ' + (type || '');
+      clearTimeout(toastTimer);
+      requestAnimationFrame(() => {
+        toastEl.classList.add('show');
+        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+      });
+    }
+
+    // ---- Init ----
+    renderHistory();
   </script>
 </body>
 </html>

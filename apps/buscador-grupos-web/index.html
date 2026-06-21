@@ -1,140 +1,783 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buscador de Grupos</title>
-  <style>
-    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; --bg: #0f172a; --surface: #1e293b; --primary: #25d366; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { min-height: 100vh; background: var(--bg); color: var(--text); padding: 24px; }
-    .container { max-width: 700px; margin: 0 auto; }
-    .header { text-align: center; margin-bottom: 32px; }
-    .header h1 { font-size: 2.2rem; margin-bottom: 8px; background: linear-gradient(135deg, #25d366, #128c7e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header p { color: var(--text-muted); }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
-    .input-group { display: flex; gap: 12px; margin-bottom: 16px; }
-    input[type="text"] { flex: 1; padding: 14px 18px; font-size: 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); outline: none; }
-    input:focus { border-color: var(--primary); }
-    button { padding: 14px 24px; font-size: 1rem; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
-    .platforms { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-    .platform { padding: 16px; border: 2px solid var(--border); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg); }
-    .platform:hover, .platform.active { border-color: var(--primary); background: rgba(37,211,102,0.05); }
-    .platform .icon { font-size: 1.8rem; margin-bottom: 8px; }
-    .platform .name { font-size: 0.9rem; font-weight: 600; }
-    .results { margin-top: 20px; }
-    .result-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; }
-    .result-item a { color: var(--primary); text-decoration: none; font-size: 0.9rem; word-break: break-all; }
-    .result-item a:hover { text-decoration: underline; }
-    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-    .badge.whatsapp { background: rgba(37,211,102,0.15); color: #25d366; }
-    .badge.telegram { background: rgba(0,136,204,0.15); color: #0088cc; }
-    .badge.discord { background: rgba(88,101,242,0.15); color: #5865f2; }
-    .badge.reddit { background: rgba(255,69,0,0.15); color: #ff4500; }
-    .badge.facebook { background: rgba(24,119,242,0.15); color: #1877f2; }
-    .copy-btn { padding: 6px 12px; font-size: 0.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--text); cursor: pointer; }
-    .copy-btn:hover { background: var(--border); }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>Buscador de Grupos</h1>
-      <p>Encontre links de grupos no WhatsApp, Telegram, Discord, Reddit e Facebook</p>
-    </div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Buscador de Grupos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --primary: #e11d48;
+  --primary-hover: #be123c;
+  --green: #10b981;
+  --wa: #25D366;
+  --tg: #0088cc;
+  --discord: #5865f2;
+  --reddit: #ff4500;
+  --fb: #1877f2;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --transition: 0.25s ease;
+}
+[data-theme="dark"] {
+  --bg: #0a0f1e;
+  --surface: rgba(30, 41, 59, 0.7);
+  --surface-solid: #1e293b;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: rgba(51, 65, 85, 0.5);
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --input-bg: rgba(15, 23, 42, 0.8);
+  --hover-bg: rgba(255,255,255,0.05);
+  --tab-inactive: rgba(255,255,255,0.06);
+  --card-bg: rgba(30, 41, 59, 0.35);
+  --overlay: rgba(0,0,0,0.6);
+}
+[data-theme="light"] {
+  --bg: #f1f5f9;
+  --surface: rgba(255, 255, 255, 0.7);
+  --surface-solid: #ffffff;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: rgba(203, 213, 225, 0.6);
+  --shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --input-bg: rgba(255, 255, 255, 0.8);
+  --hover-bg: rgba(0,0,0,0.03);
+  --tab-inactive: rgba(0,0,0,0.04);
+  --card-bg: rgba(255, 255, 255, 0.35);
+  --overlay: rgba(0,0,0,0.2);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 20px 16px 80px;
+  transition: background var(--transition), color var(--transition);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 10%, rgba(225,29,72,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 400px at 80% 90%, rgba(16,185,129,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.container { max-width: 640px; margin: 0 auto; position: relative; z-index: 1; }
 
+/* HEADER */
+.header { text-align: center; margin-bottom: 28px; padding-top: 12px; }
+.header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--primary), #f43f5e, var(--green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+.header p { color: var(--text-muted); font-size: 0.92rem; }
+
+/* CARD */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+  transition: background var(--transition), border var(--transition), box-shadow var(--transition);
+}
+
+/* THEME TOGGLE */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--text);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  box-shadow: var(--shadow);
+}
+.theme-toggle:hover { transform: scale(1.08); border-color: var(--primary); }
+
+/* TABS */
+.tabs { display: flex; gap: 6px; margin-bottom: 20px; background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px; box-shadow: var(--shadow); }
+.tab {
+  flex: 1;
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font);
+  position: relative;
+}
+.tab:hover { color: var(--text); background: var(--hover-bg); }
+.tab.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(225,29,72,0.3);
+}
+.tab .tab-icon { display: block; font-size: 1.2rem; margin-bottom: 2px; }
+.tab .tab-label { font-size: 0.72rem; opacity: 0.85; }
+
+/* PLATFORM GRID */
+.platforms { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-bottom: 18px; }
+.platform {
+  padding: 14px 8px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  background: var(--input-bg);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+.platform:hover { border-color: var(--text-muted); transform: translateY(-2px); }
+.platform.active {
+  border-color: var(--primary);
+  background: rgba(225,29,72,0.08);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.platform .p-icon { font-size: 1.6rem; display: block; margin-bottom: 4px; }
+.platform .p-name { font-size: 0.78rem; font-weight: 600; display: block; }
+.platform .p-badge { display: inline-block; font-size: 0.6rem; padding: 1px 8px; border-radius: 20px; margin-top: 4px; font-weight: 600; }
+
+/* INPUT GROUP */
+.input-group { display: flex; gap: 10px; }
+.input-group input[type="text"] {
+  flex: 1;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  font-family: var(--font);
+  background: var(--input-bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  outline: none;
+  transition: border var(--transition), box-shadow var(--transition);
+  backdrop-filter: blur(8px);
+}
+.input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(225,29,72,0.15); }
+.input-group input::placeholder { color: var(--text-muted); }
+
+/* BUTTONS */
+.btn {
+  padding: 14px 22px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: var(--font);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(225,29,72,0.3); }
+.btn-primary:active { transform: translateY(0); }
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(225,29,72,0.06); }
+.btn-sm { padding: 8px 14px; font-size: 0.8rem; border-radius: var(--radius-xs); }
+.btn-xs { padding: 5px 10px; font-size: 0.72rem; border-radius: 6px; }
+.btn-danger { background: #dc2626; color: #fff; }
+.btn-danger:hover { background: #b91c1c; }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { background: #059669; }
+
+/* RESULT ITEM */
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  transition: all var(--transition);
+}
+.result-item:hover { border-color: var(--text-muted); }
+.result-item:last-child { margin-bottom: 0; }
+.result-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.88rem;
+  word-break: break-all;
+  font-weight: 500;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.result-link:hover { text-decoration: underline; }
+.result-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.result-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.badge-whatsapp { background: rgba(37,211,102,0.15); color: var(--wa); }
+.badge-telegram { background: rgba(0,136,204,0.15); color: var(--tg); }
+.badge-discord { background: rgba(88,101,242,0.15); color: var(--discord); }
+.badge-reddit { background: rgba(255,69,0,0.15); color: var(--reddit); }
+.badge-facebook { background: rgba(24,119,242,0.15); color: var(--fb); }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+.stat-card {
+  text-align: center;
+  padding: 18px 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+}
+.stat-card:hover { border-color: var(--text-muted); transform: translateY(-2px); }
+.stat-icon { font-size: 1.6rem; display: block; margin-bottom: 4px; }
+.stat-count { font-size: 1.6rem; font-weight: 800; font-family: var(--mono); }
+.stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.stat-total { 
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(225,29,72,0.1), rgba(16,185,129,0.1));
+  border: 1px solid var(--border);
+  padding: 20px;
+}
+.stat-total .stat-count { font-size: 2rem; }
+
+/* TOAST */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 500;
+  font-family: var(--font);
+  color: #fff;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  pointer-events: auto;
+  animation: toastIn 0.3s ease forwards;
+  max-width: 90vw;
+  text-align: center;
+}
+.toast-success { border-color: var(--green); }
+.toast-error { border-color: #dc2626; }
+.toast-info { border-color: var(--primary); }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(10px) scale(0.95); }
+}
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 36px 16px; color: var(--text-muted); }
+.empty-state .empty-icon { font-size: 3rem; display: block; margin-bottom: 12px; opacity: 0.5; }
+.empty-state p { font-size: 0.92rem; }
+
+/* SEARCH RESULT SECTION */
+.search-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.saved-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; text-align: center; }
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 24px 0 12px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  margin-top: 28px;
+}
+.footer a { color: var(--primary); text-decoration: none; font-weight: 500; }
+.footer a:hover { text-decoration: underline; }
+.footer .dev { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.03em; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 18px 0; }
+
+/* SEARCH URL DISPLAY */
+.search-url {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  word-break: break-all;
+  padding: 8px 12px;
+  background: var(--input-bg);
+  border-radius: var(--radius-xs);
+  margin-top: 8px;
+  border: 1px solid var(--border);
+}
+
+/* RESPONSIVE */
+@media (max-width: 560px) {
+  body { padding: 12px 12px 70px; }
+  .header h1 { font-size: 1.6rem; }
+  .card { padding: 18px; border-radius: 16px; }
+  .platforms { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; }
+  .platform { padding: 12px 6px; }
+  .platform .p-icon { font-size: 1.3rem; }
+  .platform .p-name { font-size: 0.7rem; }
+  .input-group { flex-direction: column; }
+  .input-group input { width: 100%; padding: 12px 16px; }
+  .btn { justify-content: center; padding: 12px 18px; }
+  .tabs { padding: 4px; gap: 4px; }
+  .tab { padding: 10px 4px; font-size: 0.78rem; }
+  .tab .tab-icon { font-size: 1rem; }
+  .result-item { flex-direction: column; align-items: stretch; gap: 8px; padding: 12px; }
+  .result-actions { justify-content: flex-end; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat-card { padding: 14px 8px; }
+  .stat-count { font-size: 1.3rem; }
+  .theme-toggle { top: 10px; right: 10px; width: 38px; height: 38px; font-size: 1.1rem; }
+  .search-actions { flex-direction: column; }
+  .toast { font-size: 0.82rem; padding: 10px 18px; }
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
+
+<div class="container" id="app">
+
+  <div class="header">
+    <h1>Buscador de Grupos</h1>
+    <p>Links de grupos no WhatsApp, Telegram, Discord, Reddit &amp; Facebook</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="search" role="tab" aria-selected="true">
+      <span class="tab-icon">🔍</span>
+      <span class="tab-label">Pesquisar</span>
+    </button>
+    <button class="tab" data-tab="saved" role="tab" aria-selected="false">
+      <span class="tab-icon">🔖</span>
+      <span class="tab-label">Salvos</span>
+    </button>
+    <button class="tab" data-tab="stats" role="tab" aria-selected="false">
+      <span class="tab-icon">📊</span>
+      <span class="tab-label">Estatísticas</span>
+    </button>
+  </div>
+
+  <!-- TAB SEARCH -->
+  <div id="tabSearch" class="tab-content">
     <div class="card">
-      <div class="platforms">
-        <div class="platform active" data-platform="whatsapp" onclick="selectPlatform(this)">
-          <div class="icon">💬</div>
-          <div class="name">WhatsApp</div>
+      <div class="platforms" id="platformGrid">
+        <div class="platform active" data-platform="whatsapp">
+          <span class="p-icon">💬</span>
+          <span class="p-name">WhatsApp</span>
+          <span class="p-badge badge-whatsapp">WA</span>
         </div>
-        <div class="platform" data-platform="telegram" onclick="selectPlatform(this)">
-          <div class="icon">✈️</div>
-          <div class="name">Telegram</div>
+        <div class="platform" data-platform="telegram">
+          <span class="p-icon">✈️</span>
+          <span class="p-name">Telegram</span>
+          <span class="p-badge badge-telegram">TG</span>
         </div>
-        <div class="platform" data-platform="discord" onclick="selectPlatform(this)">
-          <div class="icon">🎮</div>
-          <div class="name">Discord</div>
+        <div class="platform" data-platform="discord">
+          <span class="p-icon">🎮</span>
+          <span class="p-name">Discord</span>
+          <span class="p-badge badge-discord">DC</span>
         </div>
-        <div class="platform" data-platform="reddit" onclick="selectPlatform(this)">
-          <div class="icon">🟠</div>
-          <div class="name">Reddit</div>
+        <div class="platform" data-platform="reddit">
+          <span class="p-icon">🟠</span>
+          <span class="p-name">Reddit</span>
+          <span class="p-badge badge-reddit">RD</span>
         </div>
-        <div class="platform" data-platform="facebook" onclick="selectPlatform(this)">
-          <div class="icon">👥</div>
-          <div class="name">Facebook</div>
+        <div class="platform" data-platform="facebook">
+          <span class="p-icon">👥</span>
+          <span class="p-name">Facebook</span>
+          <span class="p-badge badge-facebook">FB</span>
         </div>
       </div>
 
       <div class="input-group">
-        <input type="text" id="searchInput" placeholder="Ex: futebol, tecnologia, estudos..." autofocus>
-        <button class="btn-primary" onclick="generateLinks()">Buscar</button>
+        <input type="text" id="searchInput" placeholder="futebol, tecnologia, estudos..." autofocus>
+        <button class="btn btn-primary" id="searchBtn">Pesquisar</button>
       </div>
     </div>
 
-    <div class="results" id="results"></div>
+    <div id="searchResults"></div>
   </div>
 
-  <script>
-    let selectedPlatform = 'whatsapp';
+  <!-- TAB SAVED -->
+  <div id="tabSaved" class="tab-content" style="display:none">
+    <div class="card" style="padding:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+        <h3 style="font-size:1.1rem;font-weight:700">🔖 Links Salvos</h3>
+        <button class="btn btn-sm btn-danger" id="clearAllBtn">Limpar tudo</button>
+      </div>
+      <div id="savedList"></div>
+    </div>
+  </div>
 
-    function selectPlatform(el) {
-      document.querySelectorAll('.platform').forEach(p => p.classList.remove('active'));
-      el.classList.add('active');
-      selectedPlatform = el.dataset.platform;
+  <!-- TAB STATS -->
+  <div id="tabStats" class="tab-content" style="display:none">
+    <div class="card">
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:16px">📊 Estatísticas</h3>
+      <div class="stats-grid" id="statsGrid"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="dev">Dev Aleksandro Alves</span>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  const CONFIG = {
+    platforms: {
+      whatsapp: { domain: 'chat.whatsapp.com', label: 'WhatsApp', icon: '💬', badge: 'badge-whatsapp', color: '#25D366' },
+      telegram: { domain: 't.me', label: 'Telegram', icon: '✈️', badge: 'badge-telegram', color: '#0088cc' },
+      discord: { domain: 'discord.gg', label: 'Discord', icon: '🎮', badge: 'badge-discord', color: '#5865f2' },
+      reddit: { domain: 'reddit.com/r/', label: 'Reddit', icon: '🟠', badge: 'badge-reddit', color: '#ff4500' },
+      facebook: { domain: 'facebook.com/groups/', label: 'Facebook', icon: '👥', badge: 'badge-facebook', color: '#1877f2' }
+    },
+    STORAGE_KEY: 'bg_links',
+    THEME_KEY: 'bg_theme'
+  };
+
+  // ---- STATE ----
+  let state = {
+    platform: 'whatsapp',
+    savedLinks: JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY) || '{}')
+  };
+
+  // ---- DOM REFS ----
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+
+  const searchInput = $('#searchInput');
+  const searchResults = $('#searchResults');
+  const savedList = $('#savedList');
+  const statsGrid = $('#statsGrid');
+  const toastContainer = $('#toastContainer');
+  const themeToggle = $('#themeToggle');
+
+  // ---- THEME ----
+  function getTheme() { return localStorage.getItem(CONFIG.THEME_KEY) || 'dark'; }
+  function setTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.body.setAttribute('data-theme', t);
+    themeToggle.textContent = t === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem(CONFIG.THEME_KEY, t);
+  }
+  setTheme(getTheme());
+  themeToggle.addEventListener('click', () => setTheme(getTheme() === 'dark' ? 'light' : 'dark'));
+
+  // ---- TOAST ----
+  function toast(msg, type = 'info') {
+    const el = document.createElement('div');
+    el.className = `toast toast-${type}`;
+    el.textContent = msg;
+    toastContainer.appendChild(el);
+    setTimeout(() => { el.style.animation = 'toastOut 0.25s ease forwards'; setTimeout(() => el.remove(), 250); }, 2200);
+  }
+
+  // ---- STORAGE ----
+  function saveLinks() {
+    localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state.savedLinks));
+  }
+  function getSavedForPlatform(platform) {
+    return state.savedLinks[platform] || [];
+  }
+  function addLink(platform, url) {
+    if (!state.savedLinks[platform]) state.savedLinks[platform] = [];
+    if (state.savedLinks[platform].some(l => l.url === url)) return false;
+    state.savedLinks[platform].push({ url, date: Date.now() });
+    saveLinks();
+    return true;
+  }
+  function removeLink(platform, url) {
+    if (!state.savedLinks[platform]) return;
+    state.savedLinks[platform] = state.savedLinks[platform].filter(l => l.url !== url);
+    if (state.savedLinks[platform].length === 0) delete state.savedLinks[platform];
+    saveLinks();
+  }
+  function clearAll() {
+    state.savedLinks = {};
+    saveLinks();
+    toast('Histórico limpo!', 'info');
+    renderAll();
+  }
+  function totalSaved() {
+    return Object.values(state.savedLinks).reduce((a, b) => a + b.length, 0);
+  }
+
+  // ---- COPY ----
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => toast('Link copiado!', 'success')).catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
     }
+  }
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); toast('Link copiado!', 'success'); } catch { toast('Erro ao copiar', 'error'); }
+    document.body.removeChild(ta);
+  }
 
-    function generateLinks() {
-      const term = document.getElementById('searchInput').value.trim();
-      const results = document.getElementById('results');
-      
-      const platforms = {
-        whatsapp: { domain: 'chat.whatsapp.com', label: 'WhatsApp', badge: 'whatsapp', icon: '💬' },
-        telegram: { domain: 't.me', label: 'Telegram', badge: 'telegram', icon: '✈️' },
-        discord: { domain: 'discord.gg', label: 'Discord', badge: 'discord', icon: '🎮' },
-        reddit: { domain: 'reddit.com/r/', label: 'Reddit', badge: 'reddit', icon: '🟠' },
-        facebook: { domain: 'facebook.com/groups/', label: 'Facebook', badge: 'facebook', icon: '👥' }
-      };
+  // ---- RENDER: SEARCH ----
+  function generateSearch() {
+    const term = searchInput.value.trim();
+    const p = CONFIG.platforms[state.platform];
+    const domain = p.domain;
+    const query = term ? `${term} site:${domain}` : `site:${domain}`;
+    const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(term ? `${term} "${domain}"` : `"${domain}"`)}`;
 
-      const p = platforms[selectedPlatform];
-      const searchQuery = term ? `${term} "${p.domain}"` : `"${p.domain}"`;
-      const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
-      const siteUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}&num=50`;
-
-      results.innerHTML = `
-        <div class="card">
-          <h3 style="margin-bottom: 16px;">${p.icon} Links gerados para ${p.label}</h3>
-          <div class="result-item">
-            <div>
-              <a href="${googleUrl}" target="_blank">Busca no Google</a>
-              <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">${searchQuery}</p>
-            </div>
-            <button class="copy-btn" onclick="copyUrl('${googleUrl}')">Copiar</button>
-          </div>
-          <div class="result-item">
-            <div>
-              <a href="${siteUrl}" target="_blank">Busca (50 resultados)</a>
-              <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">Busca avançada com mais resultados</p>
-            </div>
-            <button class="copy-btn" onclick="copyUrl('${siteUrl}')">Copiar</button>
-          </div>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 16px;">
-            💡 Abra os links e procure por convites de grupos nos resultados do Google.
-          </p>
+    let html = `<div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <span style="font-size:1.8rem">${p.icon}</span>
+        <div>
+          <h3 style="font-size:1.1rem;font-weight:700">Buscar no ${p.label}</h3>
+          <span class="badge ${p.badge}">${p.label}</span>
         </div>
-      `;
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="window.open('${googleUrl}','_blank')">
+          🔍 Pesquisar no Google
+        </button>
+        <button class="btn btn-outline" onclick="window.open('${searchUrl}','_blank')">
+          📋 Busca exata
+        </button>
+      </div>
+      <div class="search-url">${query}</div>
+      <div class="saved-hint">💡 Abra os resultados do Google e cole aqui os links de grupos que encontrar.</div>
+    </div>`;
+
+    // Saved links section for this platform
+    const saved = getSavedForPlatform(state.platform);
+    if (saved.length > 0) {
+      html += `<div class="card">
+        <h4 style="font-size:0.95rem;font-weight:600;margin-bottom:12px">📌 Salvos em ${p.label}</h4>`;
+      saved.forEach((item, i) => {
+        html += renderSavedItem(state.platform, item.url, i);
+      });
+      html += `</div>`;
     }
 
-    function copyUrl(url) {
-      navigator.clipboard.writeText(url);
-    }
+    searchResults.innerHTML = html;
+  }
 
-    document.getElementById('searchInput').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') generateLinks();
+  // ---- RENDER: SAVED ITEM ----
+  function renderSavedItem(platform, url, idx) {
+    const p = CONFIG.platforms[platform];
+    if (!p) return '';
+    return `<div class="result-item">
+      <div style="flex:1;min-width:0">
+        <a class="result-link" href="${url}" target="_blank" rel="noopener">${url}</a>
+        <div class="result-meta">
+          <span class="badge ${p.badge}" style="margin-right:6px">${p.label}</span>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button class="btn btn-sm btn-outline btn-xs" onclick="window.BG.copyLink('${platform}','${url.replace(/'/g, "\\'")}')">📋</button>
+        <button class="btn btn-sm btn-danger btn-xs" onclick="window.BG.deleteLink('${platform}','${url.replace(/'/g, "\\'")}')">✕</button>
+      </div>
+    </div>`;
+  }
+
+  // ---- RENDER: SAVED TAB ----
+  function renderSaved() {
+    const all = state.savedLinks;
+    const keys = Object.keys(all);
+    if (keys.length === 0) {
+      savedList.innerHTML = `<div class="empty-state"><span class="empty-icon">📭</span><p>Nenhum link salvo ainda.</p><p style="font-size:0.82rem;margin-top:6px">Pesquise por grupos e salve os links que encontrar.</p></div>`;
+      return;
+    }
+    let html = '';
+    keys.forEach(platform => {
+      const p = CONFIG.platforms[platform];
+      if (!p || all[platform].length === 0) return;
+      html += `<h4 style="font-size:0.9rem;font-weight:600;margin:12px 0 8px;display:flex;align-items:center;gap:6px">
+        ${p.icon} ${p.label} <span class="badge ${p.badge}">${all[platform].length}</span>
+      </h4>`;
+      all[platform].forEach((item, i) => {
+        html += renderSavedItem(platform, item.url, i);
+      });
     });
-  </script>
+    savedList.innerHTML = html;
+  }
+
+  // ---- RENDER: STATS ----
+  function renderStats() {
+    let html = '';
+    let total = 0;
+    Object.keys(CONFIG.platforms).forEach(key => {
+      const p = CONFIG.platforms[key];
+      const count = getSavedForPlatform(key).length;
+      total += count;
+      html += `<div class="stat-card">
+        <span class="stat-icon">${p.icon}</span>
+        <div class="stat-count">${count}</div>
+        <div class="stat-label">${p.label}</div>
+      </div>`;
+    });
+    html += `<div class="stat-card stat-total">
+      <span class="stat-icon">📦</span>
+      <div class="stat-count">${total}</div>
+      <div class="stat-label">Total de links</div>
+    </div>`;
+    statsGrid.innerHTML = html;
+  }
+
+  // ---- RENDER ALL ----
+  function renderAll() {
+    generateSearch();
+    renderSaved();
+    renderStats();
+  }
+
+  // ---- PLATFORM SELECT ----
+  function selectPlatform(el) {
+    $$('.platform').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    state.platform = el.dataset.platform;
+    generateSearch();
+  }
+
+  // ---- SAVE LINK ----
+  function saveCurrentLink(platform, url) {
+    const added = addLink(platform, url);
+    if (added) {
+      toast('Link salvo!', 'success');
+    } else {
+      toast('Este link já está salvo.', 'info');
+    }
+    renderAll();
+  }
+
+  // ---- EXPOSED API ----
+  window.BG = {
+    copyLink(platform, url) {
+      copyText(url);
+    },
+    deleteLink(platform, url) {
+      removeLink(platform, url);
+      toast('Link removido.', 'info');
+      renderAll();
+    },
+    saveLink(platform, url) {
+      saveCurrentLink(platform, url);
+    }
+  };
+
+  // ---- EVENT BINDING ----
+  // Platform selection
+  $('#platformGrid').addEventListener('click', e => {
+    const plat = e.target.closest('.platform');
+    if (plat) selectPlatform(plat);
+  });
+
+  // Search button + enter
+  function doSearch() {
+    generateSearch();
+  }
+  $('#searchBtn').addEventListener('click', doSearch);
+  searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+  // Tabs
+  $$('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      $$('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      $$('.tab-content').forEach(tc => tc.style.display = 'none');
+      const target = document.getElementById('tab' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1));
+      if (target) target.style.display = 'block';
+      if (tab.dataset.tab === 'saved') renderSaved();
+      if (tab.dataset.tab === 'stats') renderStats();
+    });
+  });
+
+  // Clear all
+  $('#clearAllBtn').addEventListener('click', () => {
+    if (totalSaved() === 0) { toast('Nada para limpar.', 'info'); return; }
+    if (confirm('Tem certeza? Todos os links salvos serão removidos.')) clearAll();
+  });
+
+  // ---- INIT ----
+  renderAll();
+
+})();
+</script>
 </body>
 </html>

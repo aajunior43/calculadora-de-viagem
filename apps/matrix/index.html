@@ -3,68 +3,568 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plano de Fundo Matrix</title>
+    <title>Matrix Rain</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #e11d48;
+            --primary-hover: #be123c;
+            --bg: #0a0a0f;
+            --surface: rgba(255,255,255,0.06);
+            --surface-hover: rgba(255,255,255,0.10);
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: rgba(255,255,255,0.08);
+            --shadow: 0 8px 32px rgba(0,0,0,0.5);
+            --radius: 20px;
+            --font: 'Inter', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+        [data-theme="light"] {
+            --primary: #be123c;
+            --primary-hover: #e11d48;
+            --bg: #f1f5f9;
+            --surface: rgba(0,0,0,0.05);
+            --surface-hover: rgba(0,0,0,0.08);
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --border: rgba(0,0,0,0.08);
+            --shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+        html, body {
             height: 100%;
             overflow: hidden;
-            background-color: #000;
+            font-family: var(--font);
+            background: #000;
+            color: var(--text);
         }
-        #canvas {
+        canvas {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
+            z-index: 0;
+        }
+
+        .ui-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+        }
+        .ui-layer > * { pointer-events: auto; }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 12px 16px;
+        }
+        .top-bar button {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: background 0.2s, transform 0.15s;
+        }
+        .top-bar button:hover { background: var(--surface-hover); transform: scale(1.05); }
+        .top-bar button:active { transform: scale(0.95); }
+
+        .panel-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 0 16px 16px;
+        }
+
+        .panel {
+            width: 100%;
+            max-width: 480px;
+            background: var(--surface);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: height 0.35s cubic-bezier(.4,0,.2,1);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+        .tabs button {
+            flex: 1;
+            padding: 14px 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s, background 0.2s;
+            letter-spacing: 0.3px;
+            position: relative;
+        }
+        .tabs button::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 20%; right: 20%;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.25s;
+        }
+        .tabs button.active { color: var(--text); }
+        .tabs button.active::after { transform: scaleX(1); }
+        .tabs button:hover:not(.active) { color: var(--text); background: var(--surface-hover); }
+
+        .tab-content { padding: 20px; display: none; }
+        .tab-content.active { display: block; }
+
+        .tab-content h2 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            letter-spacing: 0.3px;
+        }
+
+        .control-group {
+            margin-bottom: 18px;
+        }
+        .control-group:last-child { margin-bottom: 0; }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .control-label span:last-child {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--text);
+            min-width: 32px;
+            text-align: right;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border);
+            outline: none;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid var(--bg);
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+        input[type="range"]::-moz-range-thumb {
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid var(--bg);
+            cursor: pointer;
+        }
+
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        input[type="color"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 44px; height: 44px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            background: transparent;
+            padding: 2px;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
+        input[type="color"]::-moz-color-swatch { border: none; border-radius: 8px; }
+        .color-hex {
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .info-content {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .info-content strong { color: var(--text); }
+        .info-content .footer-text {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .info-content .footer-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .info-content .footer-text a:hover { text-decoration: underline; }
+
+        .fullscreen-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+        }
+        .fullscreen-content p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.6;
+        }
+        .btn-primary {
+            padding: 12px 32px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: var(--font);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: 0.3px;
+        }
+        .btn-primary:hover { background: var(--primary-hover); transform: scale(1.02); }
+        .btn-primary:active { transform: scale(0.98); }
+
+        .toast-container {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .toast {
+            padding: 10px 20px;
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            font-family: var(--font);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(12px) scale(0.95);
+            transition: opacity 0.3s, transform 0.3s;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        @media (max-width: 560px) {
+            .top-bar { padding: 8px 12px; gap: 6px; }
+            .top-bar button { width: 36px; height: 36px; font-size: 16px; }
+            .panel-wrapper { padding: 0 8px 8px; }
+            .panel { max-width: 100%; }
+            .tab-content { padding: 16px; }
+            .tabs button { font-size: 12px; padding: 12px 4px; }
+            .toast-container { bottom: 80px; }
         }
     </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
 
+    <div class="ui-layer">
+        <div class="top-bar">
+            <button id="themeToggle" title="Alternar tema" aria-label="Alternar tema">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <button id="pauseBtn" title="Pausar/Continuar" aria-label="Pausar ou continuar animação">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+            <button id="fullscreenBtn" title="Tela cheia" aria-label="Alternar tela cheia">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+        </div>
+
+        <div class="panel-wrapper">
+            <div class="panel" id="panel">
+                <div class="tabs" id="tabs">
+                    <button class="active" data-tab="fullscreen">Tela cheia</button>
+                    <button data-tab="settings">Configurações</button>
+                    <button data-tab="info">Info</button>
+                </div>
+
+                <div class="tab-content active" id="tab-fullscreen">
+                    <div class="fullscreen-content">
+                        <p>Mergulhe na Matrix em tela cheia para uma experiência imersiva.</p>
+                        <button class="btn-primary" id="enterFullscreen">Entrar em tela cheia</button>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-settings">
+                    <h2>Configurações da Matrix</h2>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <label for="speed">Velocidade</label>
+                            <span id="speedVal">5</span>
+                        </div>
+                        <input type="range" id="speed" min="1" max="10" value="5" step="1">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <label for="color">Cor</label>
+                        </div>
+                        <div class="color-row">
+                            <input type="color" id="color" value="#00ff41">
+                            <span class="color-hex" id="colorHex">#00ff41</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <label for="fontSize">Tamanho dos caracteres</label>
+                            <span id="fontSizeVal">18</span>
+                        </div>
+                        <input type="range" id="fontSize" min="10" max="30" value="18" step="1">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <label for="opacity">Brilho do rastro</label>
+                            <span id="opacityVal">0.05</span>
+                        </div>
+                        <input type="range" id="opacity" min="1" max="20" value="5" step="1">
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-info">
+                    <div class="info-content">
+                        <p><strong>Matrix Rain</strong> — uma experiência visual interativa inspirada no clássico efeito da chuva digital do filme Matrix.</p>
+                        <p style="margin-top:12px;">Use os controles para ajustar velocidade, cor, tamanho e brilho dos caracteres. Alterne entre os temas escuro e claro para a interface.</p>
+                        <div class="footer-text">
+                            Dev <a href="https://github.com/aleksandroalves" target="_blank" rel="noopener">Aleksandro Alves</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
     <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+        (function() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const columns = Math.floor(canvas.width / 20);
-        const drops = [];
-
-        for (let i = 0; i < columns; i++) {
-            drops[i] = Math.floor(Math.random() * canvas.height);
-        }
-
-        function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#0f0';
-            ctx.font = '15px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = String.fromCharCode(Math.floor(Math.random() * 128));
-                ctx.fillText(text, i * 20, drops[i] * 20);
-
-                if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
+            let W, H;
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
             }
-        }
+            resize();
+            window.addEventListener('resize', resize);
 
-        function animate() {
-            draw();
-            requestAnimationFrame(animate);
-        }
+            const KATAKANA = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ';
+            const CHARS = KATAKANA + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-        animate();
+            let paused = false;
+            let speed = 5;
+            let color = '#00ff41';
+            let fontSize = 18;
+            let trailOpacity = 0.05;
 
-        window.addEventListener('resize', function() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+            let columns, drops;
+            let animId = null;
+
+            function initDrops() {
+                columns = Math.floor(W / fontSize);
+                drops = [];
+                for (let i = 0; i < columns; i++) {
+                    drops[i] = Math.floor(Math.random() * -H / fontSize);
+                }
+            }
+            initDrops();
+
+            function draw() {
+                ctx.fillStyle = `rgba(0,0,0,${trailOpacity})`;
+                ctx.fillRect(0, 0, W, H);
+
+                ctx.fillStyle = color;
+                ctx.font = `bold ${fontSize}px 'JetBrains Mono', monospace`;
+
+                for (let i = 0; i < drops.length; i++) {
+                    const char = CHARS[Math.floor(Math.random() * CHARS.length)];
+                    const x = i * fontSize;
+                    const y = drops[i] * fontSize;
+                    ctx.fillText(char, x, y);
+
+                    if (y > H && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            function animate() {
+                if (!paused) {
+                    for (let s = 0; s < speed; s++) {
+                        draw();
+                    }
+                }
+                animId = requestAnimationFrame(animate);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                resize();
+                initDrops();
+            });
+
+            const panel = document.getElementById('panel');
+            const tabs = document.querySelectorAll('#tabs button');
+            const contents = {
+                fullscreen: document.getElementById('tab-fullscreen'),
+                settings: document.getElementById('tab-settings'),
+                info: document.getElementById('tab-info')
+            };
+
+            tabs.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabs.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    Object.values(contents).forEach(c => c.classList.remove('active'));
+                    const target = contents[btn.dataset.tab];
+                    if (target) target.classList.add('active');
+                });
+            });
+
+            const speedInput = document.getElementById('speed');
+            const speedVal = document.getElementById('speedVal');
+            speedInput.addEventListener('input', () => {
+                speed = parseInt(speedInput.value);
+                speedVal.textContent = speed;
+            });
+
+            const colorInput = document.getElementById('color');
+            const colorHex = document.getElementById('colorHex');
+            colorInput.addEventListener('input', () => {
+                color = colorInput.value;
+                colorHex.textContent = color;
+            });
+
+            const fontSizeInput = document.getElementById('fontSize');
+            const fontSizeVal = document.getElementById('fontSizeVal');
+            fontSizeInput.addEventListener('input', () => {
+                fontSize = parseInt(fontSizeInput.value);
+                fontSizeVal.textContent = fontSize;
+                initDrops();
+            });
+
+            const opacityInput = document.getElementById('opacity');
+            const opacityVal = document.getElementById('opacityVal');
+            opacityInput.addEventListener('input', () => {
+                trailOpacity = parseInt(opacityInput.value) / 100;
+                opacityVal.textContent = trailOpacity.toFixed(2);
+            });
+
+            const pauseBtn = document.getElementById('pauseBtn');
+            pauseBtn.addEventListener('click', () => {
+                paused = !paused;
+                pauseBtn.innerHTML = paused
+                    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>'
+                    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+                showToast(paused ? 'Pausado' : 'Continuando');
+            });
+
+            const themeToggle = document.getElementById('themeToggle');
+            let dark = true;
+            themeToggle.addEventListener('click', () => {
+                dark = !dark;
+                document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+                themeToggle.innerHTML = dark
+                    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+                    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+                showToast(dark ? 'Tema escuro' : 'Tema claro');
+            });
+
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                } else {
+                    document.exitFullscreen().catch(() => {});
+                }
+            }
+
+            document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+            document.getElementById('enterFullscreen').addEventListener('click', toggleFullscreen);
+
+            document.addEventListener('fullscreenchange', () => {
+                showToast(document.fullscreenElement ? 'Tela cheia ativada' : 'Tela cheia desativada');
+            });
+
+            function showToast(msg) {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = msg;
+                container.appendChild(toast);
+                requestAnimationFrame(() => {
+                    toast.classList.add('show');
+                });
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+            }
+        })();
     </script>
 </body>
 </html>
