@@ -1,142 +1,445 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <title>Extrator de Texto PDF Ultra</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto Mono', monospace;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #0f0c29, #302b63, #24243e, #41295a);
-            color: #00ffcc;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .header {
-            width: 100%;
-            padding: 20px 0;
-            background-color: #393e46;
-            color: #00adb5;
-            text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-        .container {
-            background-color: #222831;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            margin-top: 100px;
-            width: 90%;
-            max-width: 600px;
-        }
-        h1 {
-            color: #00adb5;
-            margin: 20px 0;
-        }
-        input[type="file"], input[type="number"], textarea, button {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            background: #393e46;
-            border: 1px solid #00adb5;
-            color: #eeeeee;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #00adb5;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #00ffcc;
-        }
-        textarea {
-            height: 200px;
-            resize: vertical;
-        }
-        #pageCount {
-            color: #eeeeee;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extrator de Texto PDF</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--font:'Inter',system-ui,-apple-system,sans-serif;--radius:20px;--transition:0.35s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{
+  --bg:#0a0a1a;--bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);--card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;--text-muted:#8b8ba0;
+  --primary:#ef4444;--primary-dim:rgba(239,68,68,0.12);--primary-glow:rgba(239,68,68,0.25);
+  --accent:#f87171;--green:#10b981;--blue:#3b82f6;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--tag-bg:rgba(255,255,255,0.05);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);--card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;--text-muted:#6b7280;
+  --primary:#dc2626;--primary-dim:rgba(220,38,38,0.08);--primary-glow:rgba(220,38,38,0.15);
+  --accent:#ef4444;--green:#059669;--blue:#2563eb;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);--tag-bg:rgba(0,0,0,0.04);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-grad);color:var(--text);min-height:100vh;padding:20px;transition:background var(--transition),color var(--transition)}
+.app{max-width:520px;margin:0 auto;padding-bottom:40px}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:var(--primary-dim);border:1.5px solid var(--primary);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.header-title{font-size:1.1rem;font-weight:800}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.theme-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
+
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:16px}
+
+/* Drop zone */
+.drop-zone{
+  border:2px dashed var(--card-border);border-radius:16px;
+  padding:32px 16px;text-align:center;cursor:pointer;
+  transition:all var(--transition);margin-bottom:16px;
+}
+.drop-zone:hover,.drop-zone.dragover{
+  border-color:var(--primary);background:var(--primary-dim);
+}
+.drop-icon{font-size:2.5rem;margin-bottom:8px}
+.drop-text{font-size:0.9rem;font-weight:600;color:var(--text)}
+.drop-hint{font-size:0.72rem;color:var(--text-muted);margin-top:4px}
+.drop-zone input{display:none}
+
+/* File info */
+.file-info{
+  display:none;padding:14px;border-radius:14px;
+  background:var(--primary-dim);border:1px solid rgba(239,68,68,0.15);
+  margin-bottom:16px;
+}
+.file-info.show{display:block}
+.file-name{font-size:0.85rem;font-weight:700;color:var(--text);word-break:break-all}
+.file-meta{display:flex;gap:16px;margin-top:6px;font-size:0.72rem;color:var(--text-muted);font-weight:500}
+
+/* Range */
+.input-group{margin-bottom:14px}
+.input-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.input-label span{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.range-row{display:flex;align-items:center;gap:10px}
+.range-row input[type="number"]{width:70px;padding:8px;border-radius:10px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--font);font-size:0.9rem;font-weight:600;text-align:center;outline:none}
+.range-row input[type="number"]:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+.range-sep{color:var(--text-muted);font-weight:600}
+
+/* Stats */
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;display:none}
+.stats-bar.show{display:grid}
+.stat{padding:12px;border-radius:12px;text-align:center;background:var(--tag-bg);border:1px solid var(--card-border)}
+.stat-num{font-size:1.2rem;font-weight:800;color:var(--primary)}
+.stat-label{font-size:0.6rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-top:2px}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:16px;background:rgba(255,255,255,0.03);border-radius:14px;padding:4px}
+.tab{flex:1;padding:10px 6px;border-radius:11px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:0.75rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.active{background:var(--primary-dim);color:var(--primary);box-shadow:0 2px 8px var(--primary-glow)}
+
+/* Text output */
+.text-output{
+  width:100%;min-height:200px;max-height:400px;
+  padding:14px;border-radius:12px;
+  border:1.5px solid var(--card-border);
+  background:rgba(255,255,255,0.03);
+  color:var(--text);font-family:'Courier New',monospace;
+  font-size:0.82rem;line-height:1.6;
+  resize:vertical;outline:none;
+  overflow-y:auto;
+}
+.text-output:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+
+/* Search */
+.search-bar{display:none;gap:8px;margin-bottom:12px}
+.search-bar.show{display:flex}
+.search-bar input{flex:1;padding:10px 14px;border-radius:10px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--font);font-size:0.85rem;font-weight:500;outline:none}
+.search-bar input:focus{border-color:var(--primary)}
+.search-count{font-size:0.75rem;color:var(--text-muted);font-weight:600;display:flex;align-items:center;min-width:60px;justify-content:center}
+
+/* Buttons */
+.btn{width:100%;padding:14px;border-radius:14px;border:none;font-family:var(--font);font-size:0.9rem;font-weight:700;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{background:var(--card);border:1.5px solid var(--card-border);color:var(--text);margin-top:8px}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-green{background:linear-gradient(135deg,var(--green),#059669);color:#fff;margin-top:8px}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,0.3)}
+.btn-row{display:flex;gap:8px}
+.btn-row .btn{flex:1}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
+
+/* Progress */
+.progress{display:none;height:4px;border-radius:2px;background:var(--card-border);margin-bottom:16px;overflow:hidden}
+.progress.show{display:block}
+.progress-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width 0.3s ease}
+
+/* Page list */
+.page-list{max-height:150px;overflow-y:auto;margin-bottom:12px;display:none}
+.page-list.show{display:block}
+.page-chip{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 10px;margin:3px;border-radius:8px;
+  border:1px solid var(--card-border);background:var(--tag-bg);
+  font-size:0.7rem;font-weight:600;color:var(--text-muted);
+  cursor:pointer;transition:all var(--transition);
+}
+.page-chip:hover{border-color:var(--primary);color:var(--text)}
+.page-chip.active{border-color:var(--primary);background:var(--primary-dim);color:var(--primary)}
+
+.footer{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid var(--card-border)}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;border-radius:12px;background:var(--primary);color:#fff;font-family:var(--font);font-size:0.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:500px){body{padding:12px}.card{padding:18px}.stats-bar{grid-template-columns:1fr 1fr 1fr}}
+</style>
 </head>
 <body>
-    <div class="header">
-        <h1>Extrator de Texto PDF Ultra</h1>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">📄</div>
+      <div>
+        <div class="header-title">Extrator de PDF</div>
+        <div class="header-sub">Texto de qualquer documento</div>
+      </div>
     </div>
-    <div class="container">
-        <input type="file" id="fileInput" accept="application/pdf" />
-        <div id="pageCount">Número de páginas: 0</div>
-        <input type="number" id="pageNumber" value="1" min="1" />
-        <button onclick="extractTextFromPage()">Extrair Texto da Página</button>
-        <button onclick="extractAllText()">Extrair Todo o Texto</button>
-        <textarea id="textContent" readonly></textarea>
-        <button onclick="copyExtractedText()">Copiar Texto</button>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
+
+  <div class="card">
+    <!-- Drop zone -->
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <div class="drop-icon">📁</div>
+      <div class="drop-text">Arraste um PDF aqui</div>
+      <div class="drop-hint">ou clique para selecionar</div>
+      <input type="file" id="fileInput" accept="application/pdf">
     </div>
-    <script>
-        let pdfDoc = null;
 
-        document.getElementById('fileInput').addEventListener('change', async function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const fileReader = new FileReader();
-                fileReader.onload = async function() {
-                    try {
-                        const typedArray = new Uint8Array(this.result);
-                        pdfDoc = await pdfjsLib.getDocument({data: typedArray}).promise;
-                        document.getElementById('pageCount').textContent = `Número de páginas: ${pdfDoc.numPages}`;
-                    } catch (error) {
-                        console.error('Error loading the PDF: ', error);
-                        alert('Erro ao carregar o PDF.');
-                    }
-                };
-                fileReader.readAsArrayBuffer(file);
-            }
-        });
+    <!-- File info -->
+    <div class="file-info" id="fileInfo">
+      <div class="file-name" id="fileName">—</div>
+      <div class="file-meta">
+        <span id="filePages">0 páginas</span>
+        <span id="fileSize">0 KB</span>
+      </div>
+    </div>
 
-        async function extractTextFromPage() {
-            const pageNumber = parseInt(document.getElementById('pageNumber').value, 10);
-            if (pdfDoc && pageNumber >= 1 && pageNumber <= pdfDoc.numPages) {
-                const page = await pdfDoc.getPage(pageNumber);
-                const textContent = await page.getTextContent();
-                document.getElementById('textContent').value = textContent.items.map(item => item.str).join('\n');
-            } else {
-                alert('PDF não carregado ou número de página inválido.');
-            }
-        }
+    <!-- Range -->
+    <div class="input-group" id="rangeGroup" style="display:none">
+      <div class="input-label"><span>Páginas para extrair</span></div>
+      <div class="range-row">
+        <input type="number" id="pageFrom" value="1" min="1">
+        <span class="range-sep">até</span>
+        <input type="number" id="pageTo" value="1" min="1">
+      </div>
+    </div>
 
-        async function extractAllText() {
-            if (pdfDoc) {
-                let fullText = '';
-                for (let num = 1; num <= pdfDoc.numPages; num++) {
-                    const page = await pdfDoc.getPage(num);
-                    const textContent = await page.getTextContent();
-                    fullText += textContent.items.map(item => item.str).join('\n') + '\n\n';
-                }
-                document.getElementById('textContent').value = fullText;
-            } else {
-                alert('PDF não carregado.');
-            }
-        }
+    <!-- Page chips -->
+    <div class="page-list" id="pageList"></div>
 
-        function copyExtractedText() {
-            const textArea = document.getElementById('textContent');
-            textArea.select();
-            document.execCommand('copy');
-            alert('Texto copiado para a área de transferência.');
-        }
-    </script>
+    <!-- Progress -->
+    <div class="progress" id="progress">
+      <div class="progress-bar" id="progressBar" style="width:0%"></div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row" id="btnGroup" style="display:none">
+      <button class="btn btn-primary" onclick="extractRange()" id="btnExtract">⚡ Extrair</button>
+      <button class="btn btn-green" onclick="extractAll()">📄 Todas</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat">
+      <div class="stat-num" id="statChars">0</div>
+      <div class="stat-label">Caracteres</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="statWords">0</div>
+      <div class="stat-label">Palavras</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="statLines">0</div>
+      <div class="stat-label">Linhas</div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-bar" id="searchBar">
+    <input type="text" id="searchInput" placeholder="Buscar no texto..." oninput="searchText()">
+    <div class="search-count" id="searchCount"></div>
+  </div>
+
+  <!-- Output -->
+  <div class="card" id="outputCard" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span style="font-size:0.8rem;font-weight:700;color:var(--text-muted)">Texto Extraído</span>
+      <div style="display:flex;gap:6px">
+        <button class="page-chip" onclick="copyText()" id="copyBtn">📋 Copiar</button>
+        <button class="page-chip" onclick="downloadTxt()">💾 .txt</button>
+      </div>
+    </div>
+    <textarea class="text-output" id="textOutput" readonly></textarea>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+let pdfDoc=null;
+let fullText='';
+let fileName='';
+
+/* Theme */
+function toggleTheme(){const h=document.documentElement,b=document.querySelector('.theme-btn');const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');b.textContent=d?'☀️':'🌙';localStorage.setItem('pdfTheme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('pdfTheme');if(s){document.documentElement.setAttribute('data-theme',s);document.querySelector('.theme-btn').textContent=s==='dark'?'🌙':'☀️';}})();
+
+/* Drop zone */
+const dropZone=document.getElementById('dropZone');
+const fileInput=document.getElementById('fileInput');
+dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('dragover');});
+dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop',e=>{
+  e.preventDefault();dropZone.classList.remove('dragover');
+  const file=e.dataTransfer.files[0];
+  if(file&&file.type==='application/pdf')loadPDF(file);
+  else showToast('Selecione um arquivo PDF!');
+});
+fileInput.addEventListener('change',e=>{
+  const file=e.target.files[0];
+  if(file)loadPDF(file);
+});
+
+/* Load PDF */
+async function loadPDF(file){
+  showProgress(0);
+  fileName=file.name;
+  document.getElementById('fileName').textContent=file.name;
+  document.getElementById('fileSize').textContent=formatSize(file.size);
+  document.getElementById('fileInfo').classList.add('show');
+
+  try{
+    const buffer=await file.arrayBuffer();
+    const typedArray=new Uint8Array(buffer);
+    pdfDoc=await pdfjsLib.getDocument({data:typedArray}).promise;
+
+    document.getElementById('filePages').textContent=pdfDoc.numPages+' páginas';
+    document.getElementById('pageTo').value=pdfDoc.numPages;
+
+    // Page chips
+    const pageList=document.getElementById('pageList');
+    let chips='';
+    for(let i=1;i<=pdfDoc.numPages;i++){
+      chips+=`<span class="page-chip" onclick="selectPage(this,${i})" data-page="${i}">P${i}</span>`;
+    }
+    pageList.innerHTML=chips;
+    pageList.classList.add('show');
+    document.getElementById('rangeGroup').style.display='block';
+    document.getElementById('btnGroup').style.display='flex';
+    document.getElementById('outputCard').style.display='none';
+    document.getElementById('statsBar').classList.remove('show');
+    document.getElementById('searchBar').classList.remove('show');
+
+    showProgress(100);
+    showToast(`${file.name} carregado! ${pdfDoc.numPages} páginas`);
+  }catch(err){
+    console.error(err);
+    showToast('Erro ao carregar PDF!');
+    showProgress(0);
+  }
+}
+
+function selectPage(el,page){
+  el.classList.toggle('active');
+  const active=[...document.querySelectorAll('.page-chip.active')].map(c=>parseInt(c.dataset.page));
+  if(active.length>0){
+    document.getElementById('pageFrom').value=Math.min(...active);
+    document.getElementById('pageTo').value=Math.max(...active);
+  }
+}
+
+/* Extract range */
+async function extractRange(){
+  if(!pdfDoc){showToast('Carregue um PDF primeiro!');return;}
+  const from=parseInt(document.getElementById('pageFrom').value);
+  const to=parseInt(document.getElementById('pageTo').value);
+
+  if(from<1||to>pdfDoc.numPages||from>to){
+    showProgress(0);
+    showToast('Intervalo inválido!');return;
+  }
+
+  showProgress(0);
+  let text='';
+  const total=to-from+1;
+
+  for(let i=from;i<=to;i++){
+    try{
+      const page=await pdfDoc.getPage(i);
+      const content=await page.getTextContent();
+      text+=content.items.map(item=>item.str).join(' ')+'\n\n';
+    }catch(e){text+=`[Erro na página ${i}]\n\n`;}
+    showProgress(Math.round(((i-from+1)/total)*100));
+  }
+
+  fullText=text.trim();
+  showResult(fullText);
+}
+
+/* Extract all */
+async function extractAll(){
+  if(!pdfDoc){showToast('Carregue um PDF primeiro!');return;}
+  showProgress(0);
+  let text='';
+
+  for(let i=1;i<=pdfDoc.numPages;i++){
+    try{
+      const page=await pdfDoc.getPage(i);
+      const content=await page.getTextContent();
+      text+=content.items.map(item=>item.str).join(' ')+'\n\n';
+    }catch(e){text+=`[Erro na página ${i}]\n\n`;}
+    showProgress(Math.round((i/pdfDoc.numPages)*100));
+  }
+
+  fullText=text.trim();
+  showResult(fullText);
+}
+
+/* Show result */
+function showResult(text){
+  document.getElementById('textOutput').value=text;
+  document.getElementById('outputCard').style.display='block';
+  document.getElementById('outputCard').style.animation='none';
+  requestAnimationFrame(()=>{document.getElementById('outputCard').style.animation='slideUp 0.3s ease';});
+  document.getElementById('searchBar').classList.add('show');
+
+  // Stats
+  const chars=text.length;
+  const words=text.trim()?text.trim().split(/\s+/).length:0;
+  const lines=text.split('\n').length;
+  document.getElementById('statChars').textContent=chars.toLocaleString('pt-BR');
+  document.getElementById('statWords').textContent=words.toLocaleString('pt-BR');
+  document.getElementById('statLines').textContent=lines.toLocaleString('pt-BR');
+  document.getElementById('statsBar').classList.add('show');
+
+  showToast('Texto extraído com sucesso!');
+}
+
+/* Search */
+function searchText(){
+  const q=document.getElementById('searchInput').value;
+  const text=document.getElementById('textOutput').value;
+  if(!q){document.getElementById('searchCount').textContent='';return;}
+  const matches=text.toLowerCase().split(q.toLowerCase()).length-1;
+  document.getElementById('searchCount').textContent=matches+' ocorrência'+(matches!==1?'s':'');
+}
+
+/* Copy */
+function copyText(){
+  const text=document.getElementById('textOutput').value;
+  if(!text){showToast('Nenhum texto para copiar!');return;}
+  navigator.clipboard.writeText(text).then(()=>{
+    const b=document.getElementById('copyBtn');b.textContent='✅ Copiado!';
+    showToast('Texto copiado!');setTimeout(()=>{b.textContent='📋 Copiar';},2000);
+  });
+}
+
+/* Download */
+function downloadTxt(){
+  const text=document.getElementById('textOutput').value;
+  if(!text){showToast('Nenhum texto para baixar!');return;}
+  const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;
+  a.download=(fileName.replace('.pdf','')||'extracao')+'-texto.txt';
+  a.click();URL.revokeObjectURL(url);
+  showToast('Arquivo .txt baixado!');
+}
+
+/* Helpers */
+function formatSize(bytes){
+  if(bytes<1024)return bytes+' B';
+  if(bytes<1048576)return (bytes/1024).toFixed(1)+' KB';
+  return (bytes/1048576).toFixed(1)+' MB';
+}
+
+function showProgress(pct){
+  const p=document.getElementById('progress');
+  const b=document.getElementById('progressBar');
+  if(pct>0&&pct<100){
+    p.classList.add('show');b.style.width=pct+'%';
+  }else if(pct>=100){
+    b.style.width='100%';
+    setTimeout(()=>{p.classList.remove('show');b.style.width='0%';},600);
+  }else{
+    p.classList.remove('show');b.style.width='0%';
+  }
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){fileInput.value='';}
+});
+</script>
 </body>
 </html>
