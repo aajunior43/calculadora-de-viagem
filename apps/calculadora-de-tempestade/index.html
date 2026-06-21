@@ -1,528 +1,1438 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Calcule a distância de uma tempestade pelo intervalo entre relâmpago e trovão.">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#080c18">
   <title>Calculadora de Tempestade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root {
+    /* ══════════════════════════════════════════════
+       THEME
+    ══════════════════════════════════════════════ */
+    :root, [data-theme="dark"] {
       color-scheme: dark;
-      font-family: Inter, system-ui, sans-serif;
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --primary: #facc15;
-      --primary-hover: #eab308;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #334155;
-      --success: #22c55e;
-      --error: #ef4444;
-      --radius: 16px;
+      --bg: #080c18;
+      --bg-grad-1: #0d1225;
+      --bg-grad-2: #0a0f1e;
+      --surface: rgba(16, 23, 40, 0.75);
+      --surface-solid: #121a2e;
+      --surface-hover: #1a2540;
+      --surface-border: rgba(99, 140, 255, 0.06);
+      --primary: #fbbf24;
+      --primary-soft: #f59e0b;
+      --primary-dim: rgba(251, 191, 36, 0.1);
+      --primary-glow: rgba(251, 191, 36, 0.25);
+      --text: #eef2ff;
+      --text-soft: #c7d2fe;
+      --text-muted: #8892b0;
+      --text-dim: #5a6380;
+      --border: rgba(99, 140, 255, 0.08);
+      --border-solid: #1e293b;
+      --blue: #638cff;
+      --blue-dim: rgba(99, 140, 255, 0.1);
+      --green: #34d399;
+      --green-dim: rgba(52, 211, 153, 0.1);
+      --yellow: #fbbf24;
+      --yellow-dim: rgba(251, 191, 36, 0.1);
+      --orange: #fb923c;
+      --orange-dim: rgba(251, 146, 60, 0.1);
+      --red: #f87171;
+      --red-dim: rgba(248, 113, 113, 0.1);
+      --radius: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --radius-xs: 8px;
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px var(--border);
+      --shadow-glow: 0 0 40px rgba(99, 140, 255, 0.05);
+      --transition: cubic-bezier(0.22, 1, 0.36, 1);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #f0f3fa;
+      --bg-grad-1: #e8ecf6;
+      --bg-grad-2: #f5f7fc;
+      --surface: rgba(255, 255, 255, 0.85);
+      --surface-solid: #ffffff;
+      --surface-hover: #f8f9fd;
+      --surface-border: rgba(0, 0, 0, 0.04);
+      --primary: #d97706;
+      --primary-soft: #b45309;
+      --primary-dim: rgba(217, 119, 6, 0.08);
+      --primary-glow: rgba(217, 119, 6, 0.15);
+      --text: #0f172a;
+      --text-soft: #334155;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --border: rgba(0, 0, 0, 0.06);
+      --border-solid: #e2e8f0;
+      --blue: #3b82f6;
+      --blue-dim: rgba(59, 130, 246, 0.08);
+      --green: #16a34a;
+      --green-dim: rgba(22, 163, 74, 0.08);
+      --yellow: #d97706;
+      --yellow-dim: rgba(217, 119, 6, 0.08);
+      --orange: #ea580c;
+      --orange-dim: rgba(234, 88, 12, 0.08);
+      --red: #dc2626;
+      --red-dim: rgba(220, 38, 38, 0.08);
+      --shadow-card: 0 2px 12px rgba(0,0,0,0.06), 0 0 0 1px var(--border);
+      --shadow-glow: 0 0 40px rgba(99, 140, 255, 0.03);
+    }
+
+    /* ══════════════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       background: var(--bg);
       background-image:
-        radial-gradient(circle at 20% 0%, rgba(250,204,21,0.08), transparent 30rem),
-        radial-gradient(circle at 80% 100%, rgba(59,130,246,0.06), transparent 30rem);
+        radial-gradient(ellipse 800px 500px at 10% -10%, var(--blue-dim), transparent),
+        radial-gradient(ellipse 600px 600px at 90% 110%, var(--primary-dim), transparent);
       color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px;
+      padding: 20px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background 0.5s var(--transition);
     }
-    .container {
+
+    /* ══════════════════════════════════════════════
+       LIGHTNING BACKGROUND
+    ══════════════════════════════════════════════ */
+    .storm-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .storm-bg .bolt {
+      position: absolute;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, var(--primary), transparent);
+      opacity: 0;
+      filter: blur(0.5px);
+    }
+    .storm-bg .bolt:nth-child(1) {
+      height: 120px; left: 12%; top: -120px;
+      animation: boltFall 4.5s ease-in 0.5s infinite;
+    }
+    .storm-bg .bolt:nth-child(2) {
+      height: 80px; left: 78%; top: -80px;
+      animation: boltFall 5s ease-in 2.2s infinite;
+    }
+    .storm-bg .bolt:nth-child(3) {
+      height: 100px; left: 45%; top: -100px;
+      animation: boltFall 6s ease-in 3.8s infinite;
+    }
+    .storm-bg .bolt:nth-child(4) {
+      height: 60px; left: 88%; top: -60px;
+      animation: boltFall 5.5s ease-in 1.4s infinite;
+    }
+    .storm-bg .bolt:nth-child(5) {
+      height: 90px; left: 25%; top: -90px;
+      animation: boltFall 7s ease-in 4.5s infinite;
+    }
+    @keyframes boltFall {
+      0% { opacity: 0; transform: translateY(-100%); }
+      2% { opacity: 0.6; }
+      4% { opacity: 0; }
+      6% { opacity: 0.3; }
+      8% { opacity: 0; }
+      100% { opacity: 0; transform: translateY(110vh); }
+    }
+
+    /* Flash overlay */
+    .storm-bg .flash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(251,191,36,0.04), transparent 70%);
+      opacity: 0;
+      animation: flash 8s ease-in-out infinite;
+    }
+    @keyframes flash {
+      0%, 100% { opacity: 0; }
+      1% { opacity: 1; }
+      3% { opacity: 0; }
+      4% { opacity: 0.6; }
+      5% { opacity: 0; }
+    }
+
+    /* ══════════════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════════════ */
+    .wrapper {
       width: 100%;
-      max-width: 480px;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
     }
+
+    /* ══════════════════════════════════════════════
+       THEME TOGGLE
+    ══════════════════════════════════════════════ */
+    .theme-toggle {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 100;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      color: var(--text);
+      font-size: 1rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.35s var(--transition);
+      box-shadow: var(--shadow-card);
+    }
+    .theme-toggle:hover {
+      transform: scale(1.08) rotate(15deg);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+    .theme-toggle:active { transform: scale(0.92); }
+
+    /* ══════════════════════════════════════════════
+       MAIN CARD
+    ══════════════════════════════════════════════ */
     .card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      backdrop-filter: blur(24px) saturate(1.4);
+      border: 1px solid var(--surface-border);
       border-radius: var(--radius);
-      padding: 32px;
+      padding: 32px 24px 24px;
       text-align: center;
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+      animation: cardEnter 0.7s var(--transition);
     }
-    .icon-large {
-      font-size: 4rem;
-      margin-bottom: 16px;
-      animation: pulse 2s ease-in-out infinite;
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(24px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    h1 {
+
+    /* ── Header ── */
+    .header { margin-bottom: 24px; }
+
+    .icon-wrap {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-dim), var(--blue-dim));
+      border: 1px solid var(--primary-glow);
+      display: grid;
+      place-items: center;
       font-size: 1.8rem;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #facc15, #f97316);
+      position: relative;
+    }
+    .icon-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid var(--primary-dim);
+      animation: iconRipple 3s ease-in-out infinite;
+    }
+    @keyframes iconRipple {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.15); opacity: 0; }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, var(--primary) 20%, var(--orange) 80%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .subtitle {
       color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 28px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      line-height: 1.5;
     }
-    .input-group {
-      position: relative;
-      margin-bottom: 16px;
+
+    /* ══════════════════════════════════════════════
+       INPUT AREA
+    ══════════════════════════════════════════════ */
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
     }
-    input[type="number"] {
-      width: 100%;
-      padding: 16px 20px;
-      font-size: 1.2rem;
+
+    .input-field {
+      flex: 1;
+      height: 50px;
+      padding: 0 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: inherit;
       text-align: center;
-      background: var(--bg);
-      border: 2px solid var(--border);
-      border-radius: 12px;
+      background: var(--bg-grad-1);
+      border: 1.5px solid var(--border-solid);
+      border-radius: var(--radius-sm);
       color: var(--text);
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.3s var(--transition);
       -moz-appearance: textfield;
     }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    input:focus { border-color: var(--primary); }
-    input.error { border-color: var(--error); }
+    .input-field::placeholder { color: var(--text-dim); font-weight: 500; }
+    .input-field:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-dim), 0 0 20px rgba(99, 140, 255, 0.08);
+    }
+    .input-field.error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px var(--red-dim);
+      animation: inputShake 0.4s var(--transition);
+    }
+    @keyframes inputShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(2px); }
+    }
+
     .error-msg {
-      color: var(--error);
-      font-size: 0.85rem;
-      margin-top: 8px;
-      display: none;
-    }
-    .error-msg.show { display: block; }
-    .btn-group {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    button {
-      flex: 1;
-      padding: 14px 20px;
-      font-size: 1rem;
+      color: var(--red);
+      font-size: 0.78rem;
       font-weight: 600;
+      min-height: 20px;
+      margin-bottom: 8px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: all 0.25s var(--transition);
+    }
+    .error-msg.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Calc Button ── */
+    .btn-calc {
+      width: 100%;
+      height: 50px;
       border: none;
-      border-radius: 12px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--primary), var(--orange));
+      color: #1a0800;
+      font-size: 0.95rem;
+      font-weight: 800;
+      font-family: inherit;
+      letter-spacing: -0.01em;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s var(--transition);
+      position: relative;
+      overflow: hidden;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: #0f172a;
+    .btn-calc::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    .btn-primary:hover:not(:disabled) {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
+    .btn-calc:hover::before { opacity: 1; }
+    .btn-calc:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px var(--primary-glow);
     }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-timer {
-      background: var(--bg);
-      border: 2px solid var(--border);
-      color: var(--text);
-      flex: 0 0 auto;
-      width: 56px;
-      height: 56px;
-      padding: 0;
-      display: grid;
-      place-items: center;
-      font-size: 1.5rem;
+    .btn-calc:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+    .btn-calc:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .kbd {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
     }
-    .btn-timer:hover { border-color: var(--primary); }
-    .btn-timer.running {
-      background: rgba(239,68,68,0.15);
-      border-color: var(--error);
-      animation: blink 1s ease-in-out infinite;
+    .kbd span {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-    .timer-display {
-      font-size: 2.5rem;
+    .kbd kbd {
+      display: inline-block;
+      padding: 1px 5px;
+      border: 1px solid var(--border-solid);
+      border-radius: 4px;
+      background: var(--bg-grad-1);
+      font-family: inherit;
+      font-size: 0.65rem;
       font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--primary);
-      margin-bottom: 20px;
-      display: none;
+      color: var(--text-muted);
     }
-    .timer-display.show { display: block; }
+
+    /* ══════════════════════════════════════════════
+       RESULT
+    ══════════════════════════════════════════════ */
     .result {
       display: none;
-      background: rgba(34,197,94,0.1);
-      border: 1px solid rgba(34,197,94,0.3);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 20px;
-      animation: fadeIn 0.3s ease;
-    }
-    .result.show { display: block; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .result .distance {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--success);
-    }
-    .result .label {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-top: 4px;
-    }
-    .result .safety {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(34,197,94,0.2);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-    .result .safety strong { color: var(--text); }
-    .actions {
-      display: flex;
-      gap: 8px;
       margin-top: 16px;
     }
-    .actions button {
+    .result.show { display: block; animation: resultPop 0.5s var(--transition); }
+    @keyframes resultPop {
+      from { opacity: 0; transform: translateY(16px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .result-box {
+      border-radius: var(--radius-md);
+      padding: 24px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .result-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .result-box.danger { background: var(--red-dim); border: 1px solid rgba(248,113,113,0.15); }
+    .result-box.danger::before { background: linear-gradient(90deg, var(--red), transparent); }
+    .result-box.warning { background: var(--orange-dim); border: 1px solid rgba(251,146,60,0.15); }
+    .result-box.warning::before { background: linear-gradient(90deg, var(--orange), transparent); }
+    .result-box.moderate { background: var(--blue-dim); border: 1px solid rgba(99,140,255,0.15); }
+    .result-box.moderate::before { background: linear-gradient(90deg, var(--blue), transparent); }
+    .result-box.safe { background: var(--green-dim); border: 1px solid rgba(52,211,153,0.15); }
+    .result-box.safe::before { background: linear-gradient(90deg, var(--green), transparent); }
+
+    /* Gauge */
+    .gauge {
+      width: 160px;
+      height: 90px;
+      margin: 0 auto 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .gauge svg {
+      width: 160px;
+      height: 90px;
+    }
+    .gauge-track {
+      fill: none;
+      stroke: var(--border-solid);
+      stroke-width: 8;
+      stroke-linecap: round;
+      opacity: 0.2;
+    }
+    .gauge-fill {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 201;
+      stroke-dashoffset: 201;
+      transition: stroke-dashoffset 1s var(--transition), stroke 0.4s ease;
+      filter: drop-shadow(0 0 6px currentColor);
+    }
+    .gauge-label {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    .gauge-label .gauge-val {
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .danger .gauge-val { color: var(--red); }
+    .warning .gauge-val { color: var(--orange); }
+    .moderate .gauge-val { color: var(--blue); }
+    .safe .gauge-val { color: var(--green); }
+
+    .gauge-label .gauge-sub {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .result-risk {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.15);
+      border-radius: var(--radius-xs);
+    }
+    .result-risk .risk-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .danger .risk-dot { background: var(--red); box-shadow: 0 0 8px var(--red); }
+    .warning .risk-dot { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+    .moderate .risk-dot { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+    .safe .risk-dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+    .result-risk .risk-text {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-soft);
       flex: 1;
-      padding: 10px;
-      font-size: 0.85rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
     }
-    .actions button:hover { border-color: var(--primary); }
-    .history {
-      margin-top: 20px;
-      text-align: left;
+    .result-risk .risk-level {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 20px;
     }
-    .history h3 {
-      font-size: 0.9rem;
+    .danger .risk-level { color: var(--red); background: var(--red-dim); }
+    .warning .risk-level { color: var(--orange); background: var(--orange-dim); }
+    .moderate .risk-level { color: var(--blue); background: var(--blue-dim); }
+    .safe .risk-level { color: var(--green); background: var(--green-dim); }
+
+    .result-tip {
+      font-size: 0.78rem;
       color: var(--text-muted);
-      margin-bottom: 10px;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+    .result-tip strong { color: var(--text); font-weight: 700; }
+
+    .result-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .result-actions button {
+      flex: 1;
+      height: 38px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border-solid);
+      background: var(--bg-grad-1);
+      color: var(--text);
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.25s var(--transition);
+    }
+    .result-actions button:hover {
+      border-color: var(--primary);
+      background: var(--primary-dim);
+      transform: translateY(-1px);
+    }
+    .result-actions button:active { transform: scale(0.96); }
+
+    /* ══════════════════════════════════════════════
+       HISTORY
+    ══════════════════════════════════════════════ */
+    .history {
+      background: var(--surface);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+      animation: cardEnter 0.6s var(--transition) 0.08s both;
+    }
+    .history-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 10px;
     }
-    .history h3 button {
-      flex: none;
-      padding: 4px 10px;
+    .history-head h3 {
       font-size: 0.75rem;
-      background: transparent;
-      border: 1px solid var(--border);
+      font-weight: 800;
       color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
+    .btn-pill {
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border-solid);
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.68rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-pill:hover { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+
     .history-list {
-      max-height: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 160px;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-solid) transparent;
     }
+    .history-list::-webkit-scrollbar { width: 3px; }
+    .history-list::-webkit-scrollbar-thumb { background: var(--border-solid); border-radius: 2px; }
+
     .history-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
-      background: var(--bg);
-      border-radius: 8px;
-      margin-bottom: 6px;
-      font-size: 0.85rem;
+      padding: 9px 12px;
+      background: var(--bg-grad-1);
+      border-radius: var(--radius-xs);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
     }
-    .history-item .dist { color: var(--success); font-weight: 600; }
-    .history-item .time { color: var(--text-muted); }
+    .history-item:hover {
+      background: var(--surface-hover);
+      border-color: var(--border);
+    }
+    .history-item .hi-dist { font-weight: 800; }
+    .history-item .hi-dist.danger { color: var(--red); }
+    .history-item .hi-dist.warning { color: var(--orange); }
+    .history-item .hi-dist.moderate { color: var(--blue); }
+    .history-item .hi-dist.safe { color: var(--green); }
+    .history-item .hi-meta { color: var(--text-dim); font-size: 0.7rem; font-weight: 500; }
+
+    /* Empty state */
+    .history-empty {
+      text-align: center;
+      padding: 16px 0 8px;
+    }
+    .history-empty .empty-icon { font-size: 1.5rem; margin-bottom: 6px; opacity: 0.4; }
+    .history-empty p { font-size: 0.75rem; color: var(--text-dim); font-weight: 500; }
+
+    /* ══════════════════════════════════════════════
+       INFO
+    ══════════════════════════════════════════════ */
     .info {
-      margin-top: 20px;
-      padding: 16px;
       background: var(--surface);
-      border: 1px solid var(--border);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--surface-border);
       border-radius: var(--radius);
-      text-align: left;
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+      animation: cardEnter 0.6s var(--transition) 0.12s both;
     }
-    .info h3 {
-      font-size: 0.95rem;
-      margin-bottom: 10px;
+    .info-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .info-head span { font-size: 0.9rem; }
+    .info-head h3 {
+      font-size: 0.75rem;
+      font-weight: 800;
       color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
-    .info ul {
-      list-style: none;
-      font-size: 0.85rem;
+
+    .formula-card {
+      background: var(--bg-grad-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .formula-card .formula {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+    }
+    .formula-card .formula span { color: var(--primary); }
+    .formula-card .formula-desc {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .info-tips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .info-tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      padding: 9px;
+      background: var(--bg-grad-1);
+      border-radius: var(--radius-xs);
+    }
+    .info-tip .tip-icon { font-size: 0.85rem; flex-shrink: 0; margin-top: 1px; }
+    .info-tip .tip-text {
+      font-size: 0.72rem;
       color: var(--text-muted);
+      line-height: 1.4;
+      font-weight: 500;
     }
-    .info li {
-      padding: 6px 0;
-      padding-left: 20px;
-      position: relative;
+    .info-tip .tip-text strong { color: var(--text); font-weight: 700; }
+
+    /* ══════════════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      padding: 10px 22px;
+      background: var(--surface-solid);
+      border: 1px solid var(--border-solid);
+      border-radius: 30px;
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 700;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s var(--transition);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .info li::before {
-      content: '⚡';
-      position: absolute;
-      left: 0;
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
+
+    /* ── Card Footer / Watermark ── */
+    .card-footer {
+      text-align: center;
+      padding-top: 14px;
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .card-footer span {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+    }
+    .card-footer span:hover { opacity: 0.8; }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
     @media (max-width: 480px) {
-      .card { padding: 24px; }
-      h1 { font-size: 1.5rem; }
-      .result .distance { font-size: 1.6rem; }
-      .timer-display { font-size: 2rem; }
+      body { padding: 12px; align-items: flex-start; padding-top: 32px; }
+      .card { padding: 24px 18px 20px; }
+      h1 { font-size: 1.3rem; }
+      .gauge { width: 140px; height: 80px; }
+      .gauge svg { width: 140px; height: 80px; }
+      .gauge-label .gauge-val { font-size: 1.3rem; }
+      .info-tips { grid-template-columns: 1fr; }
+      .theme-toggle { top: 10px; right: 10px; width: 36px; height: 36px; font-size: 0.9rem; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- Lightning Background -->
+  <div class="storm-bg" aria-hidden="true">
+    <div class="bolt"></div>
+    <div class="bolt"></div>
+    <div class="bolt"></div>
+    <div class="bolt"></div>
+    <div class="bolt"></div>
+    <div class="flash"></div>
+  </div>
+
+  <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">🌙</button>
+
+  <div class="wrapper">
+    <!-- ═══ MAIN CARD ═══ -->
     <div class="card">
-      <div class="icon-large">⛈️</div>
-      <h1>Calculadora de Tempestade</h1>
-      <p class="subtitle">Calcule a distância pelo intervalo entre relâmpago e trovão</p>
+      <div class="header">
+        <div class="icon-wrap" aria-hidden="true">⛈️</div>
+        <h1>Calculadora de Tempestade</h1>
+        <p class="subtitle">Descubra a distância da tempestade em tempo real</p>
+      </div>
 
-      <div class="timer-display" id="timerDisplay">0.0s</div>
-
-      <div class="btn-group">
-        <button class="btn-timer" id="timerBtn" onclick="toggleTimer()" aria-label="Iniciar cronômetro" title="Cronômetro automático">
-          ▶
-        </button>
+      <!-- Input -->
+      <div class="input-row">
         <input
+          class="input-field"
           type="number"
           id="intervalo"
-          placeholder="Segundos"
+          placeholder="Digite os segundos"
           min="0"
           step="0.1"
           aria-label="Intervalo em segundos"
-          oninput="limparResultado()"
+          inputmode="decimal"
         >
       </div>
-      <div class="error-msg" id="errorMsg">Informe um valor válido</div>
+      <div class="error-msg" id="errorMsg" aria-live="polite"></div>
 
-      <button class="btn-primary" onclick="calcularDistancia()">Calcular Distância</button>
+      <button class="btn-calc" id="calcBtn">
+        Calcular Distância
+      </button>
 
-      <div class="result" id="resultado">
-        <div class="distance" id="distValue"></div>
-        <div class="label" id="distLabel"></div>
-        <div class="safety" id="safetyTip"></div>
-        <div class="actions">
-          <button onclick="compartilhar()">📤 Compartilhar</button>
-          <button onclick="copiar()">📋 Copiar</button>
+      <div class="kbd">
+        <span><kbd>Enter</kbd> calcular</span>
+      </div>
+
+      <!-- Result -->
+      <div class="result" id="resultado" role="status" aria-live="polite">
+        <div class="result-box" id="resultBox">
+          <!-- Gauge -->
+          <div class="gauge">
+            <svg viewBox="0 0 160 90">
+              <path class="gauge-track" d="M 15 80 A 65 65 0 0 1 145 80"/>
+              <path class="gauge-fill" id="gaugeFill" d="M 15 80 A 65 65 0 0 1 145 80"/>
+            </svg>
+            <div class="gauge-label">
+              <div class="gauge-val" id="distValue"></div>
+              <div class="gauge-sub">distância</div>
+            </div>
+          </div>
+
+          <!-- Risk indicator -->
+          <div class="result-risk">
+            <div class="risk-dot"></div>
+            <div class="risk-text" id="riskText"></div>
+            <div class="risk-level" id="riskLevel"></div>
+          </div>
+
+          <div class="result-tip" id="safetyTip"></div>
+
+          <div class="result-actions">
+            <button onclick="compartilhar()" aria-label="Compartilhar resultado">
+              📤 Compartilhar
+            </button>
+            <button onclick="copiar()" aria-label="Copiar resultado">
+              📋 Copiar
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="history" id="historySection" style="display:none;">
-        <h3>
-          Histórico
-          <button onclick="limparHistorico()">Limpar</button>
-        </h3>
-        <div class="history-list" id="historyList"></div>
+      <div class="card-footer">
+        <span>Dev Aleksandro Alves</span>
       </div>
     </div>
+    <div class="history" id="historySection" style="display:none;">
+      <div class="history-head">
+        <h3>📊 Histórico</h3>
+        <button class="btn-pill" onclick="limparHistorico()">Limpar</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
 
+    <!-- ═══ INFO ═══ -->
     <div class="info">
-      <h3>Como funciona?</h3>
-      <ul>
-        <li>A luz viaja mais rápido que o som</li>
-        <li>Conta os segundos entre ver o relâmpago e ouvir o trovão</li>
-        <li>Cada 3 segundos ≈ 1 km de distância</li>
-        <li>A fórmula é: distância = tempo × 0,343 km/s</li>
-      </ul>
+      <div class="info-head">
+        <span>💡</span>
+        <h3>Como funciona?</h3>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula">d = t × <span>0,343</span> km</div>
+        <div class="formula-desc">velocidade do som no ar ≈ 343 m/s</div>
+      </div>
+
+      <div class="info-tips">
+        <div class="info-tip">
+          <span class="tip-icon">⚡</span>
+          <span class="tip-text">A luz viaja mais rápido que o som</span>
+        </div>
+        <div class="info-tip">
+          <span class="tip-icon">⏱️</span>
+          <span class="tip-text">Conte os segundos entre ver e ouvir</span>
+        </div>
+        <div class="info-tip">
+          <span class="tip-icon">📐</span>
+          <span class="tip-text"><strong>3s ≈ 1 km</strong> de distância</span>
+        </div>
+        <div class="info-tip">
+          <span class="tip-icon">🛡️</span>
+          <span class="tip-text"><strong>&lt;1km</strong> = abrigo imediato</span>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
   <script>
-    let timerInterval = null;
-    let timerRunning = false;
-    let timerSeconds = 0;
+    /* ══════════════════════════════════════════════
+       STATE
+    ══════════════════════════════════════════════ */
+    let lastLevel = 'safe';
+    let lastDist = '';
+    let lastTempo = '';
 
-    const intervalo = document.getElementById('intervalo');
-    const timerBtn = document.getElementById('timerBtn');
-    const timerDisplay = document.getElementById('timerDisplay');
-    const errorMsg = document.getElementById('errorMsg');
+    /* ══════════════════════════════════════════════
+       DOM
+    ══════════════════════════════════════════════ */
+    const $ = id => document.getElementById(id);
+    const intervalo = $('intervalo');
+    const errorMsg = $('errorMsg');
+    const toast = $('toast');
 
-    function toggleTimer() {
-      if (timerRunning) {
-        pararTimer();
-      } else {
-        iniciarTimer();
-      }
+    /* ══════════════════════════════════════════════
+       THEME
+    ══════════════════════════════════════════════ */
+    const html = document.documentElement;
+    const themeBtn = $('themeToggle');
+    const saved = localStorage.getItem('stormTheme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    themeBtn.textContent = saved === 'dark' ? '🌙' : '☀️';
+
+    themeBtn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('stormTheme', next);
+      themeBtn.textContent = next === 'dark' ? '🌙' : '☀️';
+    });
+
+    /* ══════════════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════════════ */
+    let toastTimer;
+    function showToast(msg) {
+      clearTimeout(toastTimer);
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
     }
 
-    function iniciarTimer() {
-      timerRunning = true;
-      timerSeconds = 0;
-      timerBtn.textContent = '⏹';
-      timerBtn.classList.add('running');
-      timerBtn.setAttribute('aria-label', 'Parar cronômetro');
-      timerDisplay.classList.add('show');
-      timerDisplay.textContent = '0.0s';
-      limparResultado();
-
-      timerInterval = setInterval(() => {
-        timerSeconds += 0.1;
-        timerDisplay.textContent = timerSeconds.toFixed(1) + 's';
-      }, 100);
-    }
-
-    function pararTimer() {
-      timerRunning = false;
-      clearInterval(timerInterval);
-      timerBtn.textContent = '▶';
-      timerBtn.classList.remove('running');
-      timerBtn.setAttribute('aria-label', 'Iniciar cronômetro');
-      intervalo.value = timerSeconds.toFixed(1);
-      calcularDistancia();
-    }
-
-    function calcularDistancia() {
+    /* ══════════════════════════════════════════════
+       CALCULATE
+    ══════════════════════════════════════════════ */
+    function calcular() {
       const val = intervalo.value.trim();
-      if (val === '' || isNaN(val) || parseFloat(val) < 0) {
+      if (!val || isNaN(val) || parseFloat(val) < 0) {
+        errorMsg.textContent = '⚠ Informe um valor válido';
         errorMsg.classList.add('show');
         intervalo.classList.add('error');
+        intervalo.focus();
         return;
       }
 
       errorMsg.classList.remove('show');
       intervalo.classList.remove('error');
 
-      const segundos = parseFloat(val);
-      const distanciaKm = segundos * 0.343;
-      const distanciaM = distanciaKm * 1000;
+      const seg = parseFloat(val);
+      const km = seg * 0.343;
+      const m = km * 1000;
+      const distText = km < 1 ? `${m.toFixed(0)} m` : `${km.toFixed(2)} km`;
 
-      let distText, distLabel;
-      if (distanciaKm < 1) {
-        distText = `${distanciaM.toFixed(0)} m`;
-        distLabel = 'aproximadamente';
+      let level, label, tip, gaugePct;
+      if (km < 1) {
+        level = 'danger'; label = 'PERIGO'; gaugePct = 95;
+        tip = '<strong>Perigo iminente!</strong> Procure abrigo imediatamente em local fechado.';
+      } else if (km < 5) {
+        level = 'warning'; label = 'ALERTA'; gaugePct = 70;
+        tip = '<strong>Atenção!</strong> Evite áreas abertas, árvores isoladas e água.';
+      } else if (km < 15) {
+        level = 'moderate'; label = 'MODERADO'; gaugePct = 35;
+        tip = 'Tempestade distante, mas fique atento. Monitore o progresso.';
       } else {
-        distText = `${distanciaKm.toFixed(2)} km`;
-        distLabel = 'aproximadamente';
+        level = 'safe'; label = 'SEGURO'; gaugePct = 8;
+        tip = 'Tempestade longe da sua localização. Sem risco no momento.';
       }
 
-      let safety = '';
-      if (distanciaKm < 1) {
-        safety = '<strong>⚠️ Perigo!</strong> A tempestade está muito perto. Procure abrigo imediatamente.';
-      } else if (distanciaKm < 5) {
-        safety = '<strong>⚡ Atenção!</strong> A tempestade está se aproximando. Evite áreas abertas.';
-      } else if (distanciaKm < 15) {
-        safety = '<strong>🌤️ Moderado.</strong> A tempestade está distante, mas fique atento.';
-      } else {
-        safety = '<strong>✅ Seguro.</strong> A tempestade está longe da sua localização.';
-      }
+      const box = $('resultBox');
+      box.className = 'result-box ' + level;
+      $('distValue').textContent = distText;
+      $('riskText').textContent = `Risco ${label.toLowerCase()}`;
+      $('riskLevel').textContent = label;
+      $('safetyTip').innerHTML = tip;
 
-      document.getElementById('distValue').textContent = distText;
-      document.getElementById('distLabel').textContent = distLabel;
-      document.getElementById('safetyTip').innerHTML = safety;
+      // Animate gauge
+      const gaugeFill = $('gaugeFill');
+      const gaugeLen = 201;
+      gaugeFill.style.strokeDashoffset = gaugeLen;
+      gaugeFill.style.stroke = level === 'danger' ? 'var(--red)' :
+                                level === 'warning' ? 'var(--orange)' :
+                                level === 'moderate' ? 'var(--blue)' : 'var(--green)';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          gaugeFill.style.strokeDashoffset = gaugeLen * (1 - gaugePct / 100);
+        });
+      });
 
-      const result = document.getElementById('resultado');
+      const result = $('resultado');
       result.classList.remove('show');
       void result.offsetWidth;
       result.classList.add('show');
 
-      salvarHistorico(segundos, distText);
+      lastLevel = level;
+      lastDist = distText;
+      lastTempo = seg.toFixed(1);
+      saveHistory(seg, distText, level);
+
+      // Haptic
+      if (navigator.vibrate) {
+        if (level === 'danger') navigator.vibrate([100, 50, 100]);
+        else if (level === 'warning') navigator.vibrate([50]);
+      }
     }
 
-    function limparResultado() {
+    function clearResult() {
       errorMsg.classList.remove('show');
       intervalo.classList.remove('error');
-      document.getElementById('resultado').classList.remove('show');
+      $('resultado').classList.remove('show');
     }
 
+    /* ══════════════════════════════════════════════
+       SHARE / COPY
+    ══════════════════════════════════════════════ */
     function compartilhar() {
-      const distancia = document.getElementById('distValue').textContent;
+      const dist = $('distValue').textContent;
       const tempo = intervalo.value;
-      const safety = document.getElementById('safetyTip').textContent;
+      const tip = $('safetyTip').textContent;
 
-      const canvas = document.createElement('canvas');
-      canvas.width = 800;
-      canvas.height = 500;
-      const ctx = canvas.getContext('2d');
+      // ── Canvas ──
+      const W = 1080, H = 1920;
+      const c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const ctx = c.getContext('2d');
+      const cx = W / 2;
 
-      // Fundo gradiente
-      const grad = ctx.createLinearGradient(0, 0, 0, 500);
-      grad.addColorStop(0, '#0f172a');
-      grad.addColorStop(1, '#1e293b');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 800, 500);
+      // Colors by level
+      const colors = {
+        danger:   { main: '#f87171', bg1: '#1c0a0a', bg2: '#2d1010', glow: 'rgba(248,113,113,0.15)', accent: '#fca5a5' },
+        warning:  { main: '#fb923c', bg1: '#1a0e04', bg2: '#2d1a08', glow: 'rgba(251,146,60,0.15)',  accent: '#fdba74' },
+        moderate: { main: '#638cff', bg1: '#0a0e1a', bg2: '#101830', glow: 'rgba(99,140,255,0.12)',   accent: '#93b4ff' },
+        safe:     { main: '#34d399', bg1: '#041a0e', bg2: '#082618', glow: 'rgba(52,211,153,0.12)',   accent: '#6ee7b7' }
+      };
+      const co = colors[lastLevel] || colors.safe;
 
-      // Borda decorativa
-      ctx.strokeStyle = '#facc15';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(20, 20, 760, 460);
+      // ── Background ──
+      const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+      bgGrad.addColorStop(0, co.bg1);
+      bgGrad.addColorStop(0.5, '#0c1020');
+      bgGrad.addColorStop(1, co.bg2);
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
 
-      // Ícone de tempestade
-      ctx.font = '80px serif';
+      // ── Radial glow ──
+      const glow = ctx.createRadialGradient(cx, H * 0.35, 0, cx, H * 0.35, 500);
+      glow.addColorStop(0, co.glow);
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, W, H);
+
+      // ── Stars / particles ──
+      ctx.save();
+      for (let i = 0; i < 60; i++) {
+        const x = Math.random() * W;
+        const y = Math.random() * H;
+        const r = Math.random() * 1.5 + 0.3;
+        const alpha = Math.random() * 0.4 + 0.1;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // ── Decorative grid lines ──
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+      ctx.lineWidth = 1;
+      for (let y = 0; y < H; y += 60) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+      }
+      for (let x = 0; x < W; x += 60) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, H);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // ── Top accent line ──
+      const topLine = ctx.createLinearGradient(0, 0, W, 0);
+      topLine.addColorStop(0, 'transparent');
+      topLine.addColorStop(0.3, co.main);
+      topLine.addColorStop(0.7, co.main);
+      topLine.addColorStop(1, 'transparent');
+      ctx.strokeStyle = topLine;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, 4);
+      ctx.lineTo(W, 4);
+      ctx.stroke();
+
+      // ── Decorative circles ──
+      ctx.save();
+      ctx.strokeStyle = co.main;
+      ctx.globalAlpha = 0.06;
+      ctx.lineWidth = 1.5;
+      for (let i = 0; i < 5; i++) {
+        const r = 80 + i * 50;
+        ctx.beginPath();
+        ctx.arc(cx, 420, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // ── Lightning bolt icon ──
+      ctx.save();
+      ctx.font = '120px serif';
       ctx.textAlign = 'center';
-      ctx.fillText('⛈️', 400, 120);
+      ctx.textBaseline = 'middle';
+      ctx.fillText('⛈️', cx, 200);
+      ctx.restore();
 
-      // Título
-      ctx.font = 'bold 32px Inter, system-ui, sans-serif';
-      ctx.fillStyle = '#facc15';
-      ctx.fillText('Calculadora de Tempestade', 400, 180);
+      // ── App name ──
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '600 36px Inter, system-ui, sans-serif';
+      ctx.fillStyle = co.main;
+      ctx.fillText('CALCULADORA DE TEMPESTADE', cx, 320);
+      ctx.restore();
 
-      // Distância
-      ctx.font = 'bold 72px Inter, system-ui, sans-serif';
-      ctx.fillStyle = '#22c55e';
-      ctx.fillText(distancia, 400, 290);
+      // ── Divider ──
+      const divGrad = ctx.createLinearGradient(cx - 120, 0, cx + 120, 0);
+      divGrad.addColorStop(0, 'transparent');
+      divGrad.addColorStop(0.5, co.main);
+      divGrad.addColorStop(1, 'transparent');
+      ctx.strokeStyle = divGrad;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx - 120, 370);
+      ctx.lineTo(cx + 120, 370);
+      ctx.stroke();
 
-      // Label
-      ctx.font = '24px Inter, system-ui, sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText('distância aproximada', 400, 330);
+      // ── Gauge arc ──
+      const gaugeY = 580;
+      const gaugeR = 180;
+      ctx.save();
+      ctx.lineWidth = 14;
+      ctx.lineCap = 'round';
 
-      // Info
-      ctx.font = '20px Inter, system-ui, sans-serif';
-      ctx.fillStyle = '#f8fafc';
-      ctx.fillText(`Tempo: ${tempo}s | Fórmula: tempo × 0,343 km/s`, 400, 390);
+      // Track
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.beginPath();
+      ctx.arc(cx, gaugeY, gaugeR, Math.PI, 0);
+      ctx.stroke();
 
-      // Dica de segurança
-      ctx.font = '18px Inter, system-ui, sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText(safety.substring(0, 80), 400, 440);
+      // Fill
+      const gaugePct = lastLevel === 'danger' ? 0.95 : lastLevel === 'warning' ? 0.70 : lastLevel === 'moderate' ? 0.35 : 0.08;
+      const gaugeAngle = Math.PI + (Math.PI * gaugePct);
+      const gaugeGrad = ctx.createLinearGradient(cx - gaugeR, gaugeY, cx + gaugeR, gaugeY);
+      gaugeGrad.addColorStop(0, co.main);
+      gaugeGrad.addColorStop(1, co.accent);
+      ctx.strokeStyle = gaugeGrad;
+      ctx.shadowColor = co.main;
+      ctx.shadowBlur = 20;
+      ctx.beginPath();
+      ctx.arc(cx, gaugeY, gaugeR, Math.PI, gaugeAngle);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
 
-      // Download
-      const link = document.createElement('a');
-      link.download = `tempestade-${distancia.replace(/\s/g, '')}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      // Gauge endpoint dot
+      const dotX = cx + gaugeR * Math.cos(gaugeAngle);
+      const dotY = gaugeY + gaugeR * Math.sin(gaugeAngle);
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, 8, 0, Math.PI * 2);
+      ctx.fillStyle = co.accent;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      ctx.restore();
+
+      // ── Distance value ──
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '900 96px Inter, system-ui, sans-serif';
+      ctx.fillStyle = co.main;
+      ctx.shadowColor = co.main;
+      ctx.shadowBlur = 30;
+      ctx.fillText(dist, cx, gaugeY - 30);
+      ctx.shadowBlur = 0;
+      ctx.font = '600 28px Inter, system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.fillText('DISTÂNCIA APROXIMADA', cx, gaugeY + 50);
+      ctx.restore();
+
+      // ── Risk badge ──
+      const badgeY = 800;
+      const badgeLabels = { danger: 'PERIGO', warning: 'ALERTA', moderate: 'MODERADO', safe: 'SEGURO' };
+      const badgeText = badgeLabels[lastLevel] || 'SEGURO';
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Badge background
+      const badgeW = ctx.measureText(badgeText).width + 60;
+      const badgeH = 50;
+      ctx.fillStyle = co.glow;
+      ctx.beginPath();
+      ctx.roundRect(cx - badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 25);
+      ctx.fill();
+      ctx.strokeStyle = co.main;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Badge dot
+      ctx.beginPath();
+      ctx.arc(cx - badgeW / 2 + 24, badgeY, 6, 0, Math.PI * 2);
+      ctx.fillStyle = co.main;
+      ctx.fill();
+
+      // Badge text
+      ctx.font = '800 22px Inter, system-ui, sans-serif';
+      ctx.fillStyle = co.main;
+      ctx.fillText(badgeText, cx + 8, badgeY);
+      ctx.restore();
+
+      // ── Info cards ──
+      const cardY = 940;
+      const cardH = 100;
+      const cardGap = 16;
+      const cardW = (W - 120) / 2;
+
+      const cards = [
+        { icon: '⏱️', label: 'TEMPO', value: `${tempo}s` },
+        { icon: '📐', label: 'FÓRMULA', value: 't × 0,343' },
+        { icon: '💨', label: 'SOM', value: '343 m/s' },
+        { icon: '⚡', label: 'LUZ', value: '299.792 km/s' }
+      ];
+
+      cards.forEach((card, i) => {
+        const col = i % 2;
+        const row = Math.floor(i / 2);
+        const x = 60 + col * (cardW + cardGap);
+        const y = cardY + row * (cardH + cardGap);
+
+        // Card bg
+        ctx.fillStyle = 'rgba(255,255,255,0.03)';
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(x, y, cardW, cardH, 16);
+        ctx.fill();
+        ctx.stroke();
+
+        // Icon
+        ctx.font = '36px serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(card.icon, x + 20, y + cardH / 2);
+
+        // Label
+        ctx.font = '600 16px Inter, system-ui, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        ctx.fillText(card.label, x + 70, y + 32);
+
+        // Value
+        ctx.font = '800 28px Inter, system-ui, sans-serif';
+        ctx.fillStyle = '#e2e8f0';
+        ctx.fillText(card.value, x + 70, y + 66);
+      });
+
+      // ── Safety tip ──
+      const tipY = 1240;
+      ctx.save();
+      ctx.fillStyle = 'rgba(255,255,255,0.03)';
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(60, tipY, W - 120, 120, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      // Tip icon
+      ctx.font = '40px serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText('🛡️', 85, tipY + 18);
+
+      // Tip text
+      ctx.font = '600 22px Inter, system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.fillText('RECOMENDAÇÃO', 140, tipY + 22);
+
+      ctx.font = '500 20px Inter, system-ui, sans-serif';
+      ctx.fillStyle = '#cbd5e1';
+      const cleanTip = tip.replace(/<[^>]+>/g, '');
+      const words = cleanTip.split(' ');
+      let line = '';
+      let lineY = tipY + 60;
+      const maxW = W - 180;
+      for (const word of words) {
+        const test = line + (line ? ' ' : '') + word;
+        if (ctx.measureText(test).width > maxW && line) {
+          ctx.fillText(line, 140, lineY);
+          line = word;
+          lineY += 26;
+        } else {
+          line = test;
+        }
+      }
+      if (line) ctx.fillText(line, 140, lineY);
+      ctx.restore();
+
+      // ── Bottom bar ──
+      const barY = H - 160;
+      const barGrad = ctx.createLinearGradient(0, barY, 0, barY + 2);
+      barGrad.addColorStop(0, 'transparent');
+      barGrad.addColorStop(0.5, 'rgba(255,255,255,0.08)');
+      barGrad.addColorStop(1, 'transparent');
+      ctx.strokeStyle = barGrad;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(60, barY);
+      ctx.lineTo(W - 60, barY);
+      ctx.stroke();
+
+      // Branding
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '600 20px Inter, system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.2)';
+      ctx.fillText('Dev Aleksandro Alves', cx, barY + 45);
+      ctx.font = '500 16px Inter, system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.fillText('hub.srv1767486.hstgr.cloud', cx, barY + 75);
+      ctx.restore();
+
+      // ── Bottom accent line ──
+      const botLine = ctx.createLinearGradient(0, 0, W, 0);
+      botLine.addColorStop(0, 'transparent');
+      botLine.addColorStop(0.3, co.main);
+      botLine.addColorStop(0.7, co.main);
+      botLine.addColorStop(1, 'transparent');
+      ctx.strokeStyle = botLine;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, H - 4);
+      ctx.lineTo(W, H - 4);
+      ctx.stroke();
+
+      // ── Download ──
+      c.toBlob((blob) => {
+        const link = document.createElement('a');
+        link.download = `tempestade-${dist.replace(/\s/g, '')}.png`;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        showToast('✅ Imagem baixada!');
+      }, 'image/png', 1.0);
     }
 
     function copiar() {
-      const texto = `⛈️ Distância: ${document.getElementById('distValue').textContent} | Tempo: ${intervalo.value}s`;
-      navigator.clipboard.writeText(texto);
-      alert('Copiado!');
+      const texto = `⛈️ Distância: ${$('distValue').textContent} | Tempo: ${intervalo.value}s`;
+      navigator.clipboard.writeText(texto).then(() => showToast('✅ Copiado!'));
     }
 
-    function salvarHistorico(tempo, distancia) {
-      const historico = JSON.parse(localStorage.getItem('stormHistory') || '[]');
-      historico.unshift({ tempo, distancia, data: new Date().toLocaleString('pt-BR') });
-      if (historico.length > 10) historico.pop();
-      localStorage.setItem('stormHistory', JSON.stringify(historico));
-      carregarHistorico();
+    /* ══════════════════════════════════════════════
+       HISTORY
+    ══════════════════════════════════════════════ */
+    function saveHistory(tempo, distancia, level) {
+      const h = JSON.parse(localStorage.getItem('stormHistory') || '[]');
+      h.unshift({ tempo, distancia, level, data: new Date().toLocaleString('pt-BR') });
+      if (h.length > 10) h.pop();
+      localStorage.setItem('stormHistory', JSON.stringify(h));
+      loadHistory();
     }
 
-    function carregarHistorico() {
-      const historico = JSON.parse(localStorage.getItem('stormHistory') || '[]');
-      const section = document.getElementById('historySection');
-      const list = document.getElementById('historyList');
+    function loadHistory() {
+      const h = JSON.parse(localStorage.getItem('stormHistory') || '[]');
+      const section = $('historySection');
+      const list = $('historyList');
 
-      if (historico.length === 0) {
-        section.style.display = 'none';
+      if (!h.length) {
+        section.style.display = 'block';
+        list.innerHTML = `
+          <div class="history-empty">
+            <div class="empty-icon">🌤️</div>
+            <p>Nenhuma medição ainda</p>
+          </div>`;
         return;
       }
 
       section.style.display = 'block';
-      list.innerHTML = historico.map(h => `
+      list.innerHTML = h.map(i => `
         <div class="history-item">
-          <span class="dist">${h.distancia}</span>
-          <span class="time">${h.tempo}s • ${h.data}</span>
+          <span class="hi-dist ${i.level || 'safe'}">${i.distancia}</span>
+          <span class="hi-meta">${i.tempo}s · ${i.data}</span>
         </div>
       `).join('');
     }
 
     function limparHistorico() {
       localStorage.removeItem('stormHistory');
-      carregarHistorico();
+      loadHistory();
+      showToast('🗑️ Histórico limpo');
     }
 
-    intervalo.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') calcularDistancia();
+    /* ══════════════════════════════════════════════
+       KEYBOARD
+    ══════════════════════════════════════════════ */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.target === intervalo) calcular();
     });
 
-    carregarHistorico();
+    $('calcBtn').addEventListener('click', calcular);
+    intervalo.addEventListener('input', clearResult);
+
+    /* ══════════════════════════════════════════════
+       INIT
+    ══════════════════════════════════════════════ */
+    loadHistory();
   </script>
 </body>
 </html>
