@@ -1,209 +1,596 @@
 <!DOCTYPE html>
-
-<html lang="pt-br">
-
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Power Check - Calculadora de Capacidade de Tomada</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #000000, #141414);
-            color: #ffffff;
-            padding: 20px;
-        }
-        .container {
-            max-width: 480px;
-            width: 100%;
-        }
-        .calculator {
-            background-color: rgba(30, 30, 30, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            padding: 40px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        .calculator::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(229, 9, 20, 0.1),
-                rgba(229, 9, 20, 0.05),
-                rgba(229, 9, 20, 0)
-            );
-            transform: rotate(-45deg);
-            z-index: -1;
-        }
-        h1 {
-            text-align: center;
-            color: #e50914;
-            font-size: 32px;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        .input-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #b3b3b3;
-            font-size: 14px;
-            font-weight: 300;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            background-color: #333;
-            border: 1px solid #444;
-            border-radius: 4px;
-            color: #fff;
-            font-size: 16px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-        input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.5);
-            border-color: #e50914;
-        }
-        button {
-            width: 100%;
-            padding: 16px;
-            background-color: #e50914;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        button:hover {
-            background-color: #f40612;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(229, 9, 20, 0.3);
-        }
-        #result {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 4px;
-            text-align: center;
-            font-weight: 400;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-        .safe {
-            color: #2ecc71;
-            font-weight: 700;
-        }
-        .unsafe {
-            color: #e74c3c;
-            font-weight: 700;
-        }
-        .explanation {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        .explanation h2 {
-            color: #e50914;
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 24px;
-        }
-        .creator {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #999;
-        }
-        .icon {
-            font-size: 24px;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segurança Tomada - Power Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--font:'Inter',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;--radius:20px;--transition:0.35s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{
+  --bg:#0a0a1a;--bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);--card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;--text-muted:#8b8ba0;
+  --primary:#e11d48;--primary-dim:rgba(225,29,72,0.12);--primary-glow:rgba(225,29,72,0.25);
+  --accent:#fb7185;--green:#10b981;--blue:#3b82f6;--yellow:#f59e0b;--orange:#f97316;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--tag-bg:rgba(255,255,255,0.05);
+  --success-bg:rgba(16,185,129,0.1);--danger-bg:rgba(225,29,72,0.1);--warn-bg:rgba(245,158,11,0.1);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);--card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;--text-muted:#6b7280;
+  --primary:#be123c;--primary-dim:rgba(190,18,60,0.08);--primary-glow:rgba(190,18,60,0.15);
+  --accent:#e11d48;--green:#059669;--blue:#2563eb;--yellow:#d97706;--orange:#ea580c;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);--tag-bg:rgba(0,0,0,0.04);
+  --success-bg:rgba(5,150,105,0.08);--danger-bg:rgba(190,18,60,0.08);--warn-bg:rgba(217,119,6,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-grad);color:var(--text);min-height:100vh;padding:20px;transition:background var(--transition),color var(--transition)}
+.app{max-width:560px;margin:0 auto;padding-bottom:40px}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:var(--primary-dim);border:1.5px solid var(--primary);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.header-title{font-size:1.1rem;font-weight:800}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.theme-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
+
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:16px}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:14px;padding:4px}
+.tab{flex:1;padding:11px 6px;border-radius:11px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.active{background:var(--primary-dim);color:var(--primary);box-shadow:0 2px 8px var(--primary-glow)}
+
+/* Input */
+.input-group{margin-bottom:14px}
+.input-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.input-label span{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.input-wrap{position:relative}
+.input-wrap input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--font);font-size:0.9rem;font-weight:500;outline:none;transition:all var(--transition)}
+.input-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+.input-wrap input::placeholder{color:var(--text-muted);font-weight:400}
+.input-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:0.85rem;color:var(--text-muted);pointer-events:none}
+
+/* Presets */
+.presets-label{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.presets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px}
+.preset{padding:10px 6px;border-radius:10px;border:1.5px solid var(--card-border);background:var(--tag-bg);cursor:pointer;transition:all var(--transition);text-align:center}
+.preset:hover{border-color:var(--primary);transform:translateY(-1px)}
+.preset.active{border-color:var(--primary);background:var(--primary-dim)}
+.preset .p-icon{font-size:1.2rem;margin-bottom:2px}
+.preset .p-name{font-size:0.65rem;font-weight:600;color:var(--text)}
+.preset.active .p-name{color:var(--primary)}
+.preset .p-watts{font-size:0.6rem;color:var(--text-muted);font-family:var(--mono)}
+
+/* Gauge */
+.gauge-wrap{display:flex;justify-content:center;margin:16px 0}
+.gauge-svg{width:200px;height:120px}
+.gauge-label{font-family:var(--mono);font-size:1.8rem;font-weight:800;fill:var(--text)}
+.gauge-sub{font-size:0.7rem;fill:var(--text-muted);font-weight:600}
+
+/* Result cards */
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.result-card{padding:14px;border-radius:14px;border:1px solid var(--card-border);background:rgba(255,255,255,0.03);transition:all var(--transition)}
+.result-card:hover{border-color:var(--primary)}
+.rc-label{font-size:0.65rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}
+.rc-value{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--text)}
+.rc-value.green{color:var(--green)}
+.rc-value.red{color:var(--primary)}
+.rc-value.yellow{color:var(--yellow)}
+.rc-value.blue{color:var(--blue)}
+
+/* Status badge */
+.status-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;font-size:0.8rem;font-weight:700;margin-bottom:16px;width:100%;justify-content:center}
+.status-badge.safe{background:var(--success-bg);color:var(--green);border:1.5px solid rgba(16,185,129,0.3)}
+.status-badge.warn{background:var(--warn-bg);color:var(--yellow);border:1.5px solid rgba(245,158,11,0.3)}
+.status-badge.danger{background:var(--danger-bg);color:var(--primary);border:1.5px solid rgba(225,29,72,0.3)}
+
+/* Tips */
+.tip-card{padding:14px;border-radius:14px;border:1px solid var(--card-border);background:rgba(255,255,255,0.03);margin-bottom:10px}
+.tip-title{font-size:0.8rem;font-weight:700;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.tip-text{font-size:0.75rem;color:var(--text-muted);line-height:1.5}
+
+/* Device list */
+.device-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid var(--card-border);margin-bottom:6px;background:rgba(255,255,255,0.02)}
+.device-info{flex:1}
+.device-name{font-size:0.8rem;font-weight:600;color:var(--text)}
+.device-watts{font-size:0.7rem;color:var(--text-muted);font-family:var(--mono)}
+.device-remove{width:28px;height:28px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-muted);font-size:0.8rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.device-remove:hover{border-color:var(--primary);color:var(--primary);background:var(--danger-bg)}
+
+/* Buttons */
+.action-row{display:flex;gap:8px;margin-bottom:16px}
+.btn{flex:1;padding:14px;border-radius:14px;border:none;font-family:var(--font);font-size:0.85rem;font-weight:700;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{background:var(--card);border:1.5px solid var(--card-border);color:var(--text)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-green{background:linear-gradient(135deg,var(--green),#059669);color:#fff}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,0.3)}
+.btn.copied{border-color:var(--green);color:var(--green);background:var(--success-bg)}
+
+/* Wire table */
+.wire-table{width:100%;border-collapse:collapse;font-size:0.72rem}
+.wire-table th{padding:8px 6px;text-align:left;font-weight:700;color:var(--text-muted);border-bottom:1.5px solid var(--card-border);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em}
+.wire-table td{padding:8px 6px;border-bottom:1px solid var(--card-border);color:var(--text)}
+.wire-table tr.current td{background:var(--primary-dim);font-weight:700;color:var(--primary)}
+
+.footer{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid var(--card-border)}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;border-radius:12px;background:var(--primary);color:#fff;font-family:var(--font);font-size:0.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:500px){body{padding:12px}.card{padding:18px}.presets-grid{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="calculator">
-            <h1><span class="icon">⚡</span>Power Check</h1>
-            <div class="input-group">
-                <label for="power">Potência do aparelho (W)</label>
-                <input type="number" id="power" placeholder="Ex: 1100">
-            </div>
-            <div class="input-group">
-                <label for="voltage">Tensão da tomada (V)</label>
-                <input type="number" id="voltage" placeholder="Ex: 127">
-            </div>
-            <div class="input-group">
-                <label for="current">Corrente máxima da tomada (A)</label>
-                <input type="number" id="current" placeholder="Ex: 10">
-            </div>
-            <button onclick="calculate()">Verificar Compatibilidade</button>
-            <div id="result"></div>
-        </div>
-        
-        <div class="explanation">
-            <h2>Como usar o Power Check</h2>
-            <ol>
-                <li>Insira a potência do seu aparelho (encontrada na etiqueta ou manual).</li>
-                <li>Digite a tensão da sua tomada (geralmente 127V ou 220V).</li>
-                <li>Informe a corrente máxima da tomada (normalmente 10A ou 20A).</li>
-                <li>Clique em "Verificar Compatibilidade" para saber se é seguro usar o aparelho.</li>
-            </ol>
-            <p>O Power Check calcula se a corrente necessária para o seu aparelho é compatível com a capacidade da sua tomada, ajudando a prevenir sobrecargas e riscos elétricos.</p>
-        </div>
-        
-        <div class="creator">Criado por Aleksandro Alves</div>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">⚡</div>
+      <div>
+        <div class="header-title">Segurança Tomada</div>
+        <div class="header-sub">Verifique se é seguro ligar seu aparelho</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="setTab('single')" data-tab="single">🔌 Único</button>
+      <button class="tab" onclick="setTab('multi')" data-tab="multi">📦 Múltiplos</button>
+      <button class="tab" onclick="setTab('tips')" data-tab="tips">💡 Dicas</button>
     </div>
 
-    <script>
-        function calculate() {
-            const power = parseFloat(document.getElementById('power').value);
-            const voltage = parseFloat(document.getElementById('voltage').value);
-            const maxCurrent = parseFloat(document.getElementById('current').value);
+    <!-- Single Tab -->
+    <div id="tabSingle">
+      <div class="presets-label">Aparelhos comuns</div>
+      <div class="presets-grid" id="presetsGrid"></div>
 
-            if (isNaN(power) || isNaN(voltage) || isNaN(maxCurrent)) {
-                document.getElementById('result').innerHTML = 'Por favor, preencha todos os campos com valores numéricos.';
-                return;
-            }
+      <div class="input-group">
+        <div class="input-label"><span>Potência (W)</span></div>
+        <div class="input-wrap">
+          <input type="text" id="power" placeholder="Ex: 1100" oninput="formatNum(this);calcSingle()">
+          <span class="input-icon">W</span>
+        </div>
+      </div>
 
-            const current = power / voltage;
-            const isSafe = current <= maxCurrent;
+      <div class="input-group">
+        <div class="input-label"><span>Tensão da tomada (V)</span></div>
+        <div class="input-wrap">
+          <input type="text" id="voltage" placeholder="Ex: 127" value="127" oninput="formatNum(this);calcSingle()">
+          <span class="input-icon">V</span>
+        </div>
+      </div>
 
-            let resultText = `A corrente necessária é de <strong>${current.toFixed(2)} A</strong>.<br><br>`;
-            resultText += isSafe 
-                ? `<span class="safe">✅ É seguro ligar o aparelho nesta tomada.</span>` 
-                : `<span class="unsafe">⚠️ Não é seguro ligar o aparelho nesta tomada.</span>`;
+      <div class="input-group">
+        <div class="input-label"><span>Corrente máxima da tomada (A)</span></div>
+        <div class="input-wrap">
+          <input type="text" id="maxCurrent" placeholder="Ex: 10" value="10" oninput="formatNum(this);calcSingle()">
+          <span class="input-icon">A</span>
+        </div>
+      </div>
 
-            if (!isSafe) {
-                resultText += `<br><br>Recomendação: Use uma tomada com capacidade de pelo menos ${Math.ceil(current)} A.`;
-            }
+      <!-- Gauge -->
+      <div class="gauge-wrap" id="gaugeWrap" style="display:none">
+        <svg class="gauge-svg" viewBox="0 0 200 120">
+          <defs>
+            <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:var(--green)"/>
+              <stop offset="50%" style="stop-color:var(--yellow)"/>
+              <stop offset="100%" style="stop-color:var(--primary)"/>
+            </linearGradient>
+          </defs>
+          <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-linecap="round"/>
+          <path id="gaugeArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="0 251.2"/>
+          <text id="gaugeText" x="100" y="85" text-anchor="middle" class="gauge-label">0%</text>
+          <text x="100" y="105" text-anchor="middle" class="gauge-sub">capacidade usada</text>
+        </svg>
+      </div>
 
-            document.getElementById('result').innerHTML = resultText;
-        }
-    </script>
+      <!-- Status -->
+      <div id="statusBadge"></div>
+
+      <!-- Results -->
+      <div class="result-grid" id="resultGrid" style="display:none">
+        <div class="result-card">
+          <div class="rc-label">Corrente necessária</div>
+          <div class="rc-value" id="currentNeeded">0 A</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Capacidade da tomada</div>
+          <div class="rc-value blue" id="outletCapacity">0 A</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Margem de segurança</div>
+          <div class="rc-value" id="marginPct">0%</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Potência máxima tomada</div>
+          <div class="rc-value" id="maxPower">0 W</div>
+        </div>
+      </div>
+
+      <div id="wireRec" style="display:none"></div>
+
+      <div class="action-row" id="singleActions" style="display:none">
+        <button class="btn btn-primary" onclick="copySingle()">📋 Copiar resultado</button>
+      </div>
+    </div>
+
+    <!-- Multi Tab -->
+    <div id="tabMulti" style="display:none">
+      <div class="input-group">
+        <div class="input-label"><span>Nome do aparelho</span></div>
+        <div class="input-wrap"><input type="text" id="devName" placeholder="Ex: Ar condicionado"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Potência (W)</span></div>
+        <div class="input-wrap">
+          <input type="text" id="devWatts" placeholder="Ex: 1100" oninput="formatNum(this)">
+          <span class="input-icon">W</span>
+        </div>
+      </div>
+
+      <div class="presets-label">Ou selecione um preset</div>
+      <div class="presets-grid" id="presetsGridMulti"></div>
+
+      <div style="height:1px;background:var(--card-border);margin:12px 0"></div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Tensão da tomada (V)</span></div>
+        <div class="input-wrap">
+          <input type="text" id="multiVoltage" placeholder="127" value="127" oninput="formatNum(this)">
+          <span class="input-icon">V</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Corrente máxima da tomada (A)</span></div>
+        <div class="input-wrap">
+          <input type="text" id="multiMaxCurrent" placeholder="10" value="10" oninput="formatNum(this)">
+          <span class="input-icon">A</span>
+        </div>
+      </div>
+
+      <button class="btn btn-green" onclick="addDevice()" style="width:100%;margin-bottom:16px">➕ Adicionar aparelho</button>
+
+      <div id="deviceList"></div>
+
+      <div id="multiStatus"></div>
+      <div id="multiResult"></div>
+
+      <div class="action-row" id="multiActions" style="display:none">
+        <button class="btn btn-primary" onclick="copyMulti()">📋 Copiar resultado</button>
+        <button class="btn btn-secondary" onclick="clearMulti()">🗑️ Limpar</button>
+      </div>
+    </div>
+
+    <!-- Tips Tab -->
+    <div id="tabTips" style="display:none">
+      <div class="tip-card">
+        <div class="tip-title">⚡ Fórmula básica</div>
+        <div class="tip-text"><strong>Corrente (A) = Potência (W) ÷ Tensão (V)</strong><br>Se a corrente exceder a capacidade da tomada, há risco de sobrecarga e incêndio.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">🔌 Tipos de tomada</div>
+        <div class="tip-text"><strong>10A:</strong> Aparelhos pequenos (TV, ventilador, carregador)<br><strong>20A:</strong> Aparelhos grandes (chuveiro, ar condicionado, micro-ondas)<br><strong>20A/30A:</strong> Usinas e chuveiros de alta potência</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">🔴 Fios e calibres</div>
+        <div class="tip-text">
+          <strong>1.5mm²:</strong> Até 10A (curta distância)<br>
+          <strong>2.5mm²:</strong> Até 20A (uso geral)<br>
+          <strong>4.0mm²:</strong> Até 35A (chuveiro, AC)<br>
+          <strong>6.0mm²:</strong> Até 50A (usina)
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">⚠️ Cuidados importantes</div>
+        <div class="tip-text">
+          • Nunca use adaptador para aparelhos de alta potência<br>
+          • Não conecteMultiple tomadas em série<br>
+          • Verifique se o fio de ligação é adequado à corrente<br>
+          • Desligue o disjuntor em caso de smell de queimado<br>
+          • Consulte um eletricista para instalações fixas
+        </div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">📋 Tabela de referência</div>
+        <div class="tip-text">
+          <table class="wire-table">
+            <thead><tr><th>Potência</th><th>127V</th><th>220V</th><th>Fio</th></tr></thead>
+            <tbody>
+              <tr><td>100W</td><td>0.79A</td><td>0.45A</td><td>1.5mm²</td></tr>
+              <tr><td>500W</td><td>3.94A</td><td>2.27A</td><td>1.5mm²</td></tr>
+              <tr><td>1000W</td><td>7.87A</td><td>4.55A</td><td>2.5mm²</td></tr>
+              <tr><td>2000W</td><td>15.75A</td><td>9.09A</td><td>2.5mm²</td></tr>
+              <tr><td>3000W</td><td>23.62A</td><td>13.64A</td><td>4.0mm²</td></tr>
+              <tr><td>5000W</td><td>39.37A</td><td>22.73A</td><td>6.0mm²</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PRESETS=[
+  {icon:'💡',name:'Lâmpada LED',watts:15},
+  {icon:'📺',name:'Smart TV',watts:100},
+  {icon:'🌀',name:'Ventilador',watts:75},
+  {icon:'❄️',name:'Ar 9000 BTU',watts:900},
+  {icon:'❄️',name:'Ar 12000 BTU',watts:1250},
+  {icon:'❄️',name:'Ar 18000 BTU',watts:1800},
+  {icon:'🔥',name:'Chuveiro',watts:5500},
+  {icon:'🔥',name:'Chuveiro frio',watts:3500},
+  {icon:'🌀',name:'Micro-ondas',watts:1200},
+  {icon:'🧊',name:'Geladeira',watts:150},
+  {icon:'👕',name:'Máquina lavar',watts:500},
+  {icon:'💻',name:'Notebook',watts:65},
+  {icon:'🔌',name:'Secador cabelo',watts:1800},
+  {icon:'☕',name:'Chaleira',watts:1500},
+  {icon:'🖥️',name:'Desktop gamer',watts:500},
+];
+
+let devices=JSON.parse(localStorage.getItem('tomadaDevices')||'[]');
+
+/* Theme */
+function toggleTheme(){const h=document.documentElement,b=document.querySelector('.theme-btn');const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');b.textContent=d?'☀️':'🌙';localStorage.setItem('tomadaTheme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('tomadaTheme');if(s){document.documentElement.setAttribute('data-theme',s);document.querySelector('.theme-btn').textContent=s==='dark'?'🌙':'☀️';}})();
+
+/* Tabs */
+function setTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));
+  document.getElementById('tabSingle').style.display=t==='single'?'block':'none';
+  document.getElementById('tabMulti').style.display=t==='multi'?'block':'none';
+  document.getElementById('tabTips').style.display=t==='tips'?'block':'none';
+}
+
+/* Format number */
+function formatNum(input){
+  let v=input.value.replace(/\D/g,'');
+  input.value=v;
+}
+
+/* Parse number */
+function parseNum(str){return parseFloat(String(str).replace(/\D/g,''))||0;}
+
+/* Presets */
+function renderPresets(){
+  const g1=document.getElementById('presetsGrid');
+  const g2=document.getElementById('presetsGridMulti');
+  g1.innerHTML=PRESETS.map((p,i)=>`
+    <div class="preset" onclick="selectPreset(${i},'single')">
+      <div class="p-icon">${p.icon}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-watts">${p.watts}W</div>
+    </div>`).join('');
+  g2.innerHTML=PRESETS.map((p,i)=>`
+    <div class="preset" onclick="selectPreset(${i},'multi')">
+      <div class="p-icon">${p.icon}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-watts">${p.watts}W</div>
+    </div>`).join('');
+}
+
+function selectPreset(i,mode){
+  const p=PRESETS[i];
+  if(mode==='single'){
+    document.getElementById('power').value=p.watts;
+    document.querySelectorAll('#presetsGrid .preset').forEach((el,j)=>el.classList.toggle('active',j===i));
+    calcSingle();
+  }else{
+    document.getElementById('devName').value=p.name;
+    document.getElementById('devWatts').value=p.watts;
+    document.querySelectorAll('#presetsGridMulti .preset').forEach((el,j)=>el.classList.toggle('active',j===i));
+  }
+}
+
+/* Calculate single */
+function calcSingle(){
+  const W=parseNum(document.getElementById('power').value);
+  const V=parseNum(document.getElementById('voltage').value)||127;
+  const maxA=parseNum(document.getElementById('maxCurrent').value)||10;
+
+  if(!W||!V||!maxA){
+    document.getElementById('gaugeWrap').style.display='none';
+    document.getElementById('statusBadge').innerHTML='';
+    document.getElementById('resultGrid').style.display='none';
+    document.getElementById('wireRec').style.display='none';
+    document.getElementById('singleActions').style.display='none';
+    return;
+  }
+
+  const current=W/V;
+  const pct=Math.min(100,Math.max(0,(current/maxA)*100));
+  const margin=((maxA-current)/maxA)*100;
+  const maxPower=V*maxA;
+
+  // Gauge
+  document.getElementById('gaugeWrap').style.display='flex';
+  const arc=document.getElementById('gaugeArc');
+  const totalLen=251.2;
+  arc.style.transition='stroke-dasharray 0.6s ease';
+  arc.setAttribute('stroke-dasharray',`${(pct/100)*totalLen} ${totalLen}`);
+  document.getElementById('gaugeText').textContent=pct.toFixed(0)+'%';
+
+  // Status
+  let statusClass,statusText;
+  if(pct<=60){statusClass='safe';statusText='✅ Seguro — Aparelho dentro da capacidade';}
+  else if(pct<=85){statusClass='warn';statusText='⚠️ Atenção — Próximo do limite';}
+  else{statusClass='danger';statusText='🔴 PERIGO — Sobrecarga!';}
+  document.getElementById('statusBadge').innerHTML=`<div class="status-badge ${statusClass}">${statusText}</div>`;
+
+  // Results
+  document.getElementById('resultGrid').style.display='grid';
+  document.getElementById('singleActions').style.display='flex';
+  document.getElementById('currentNeeded').textContent=current.toFixed(2)+' A';
+  document.getElementById('currentNeeded').className='rc-value '+(pct>85?'red':pct>60?'yellow':'green');
+  document.getElementById('outletCapacity').textContent=maxA+' A';
+  document.getElementById('marginPct').textContent=margin.toFixed(1)+'%';
+  document.getElementById('marginPct').className='rc-value '+(margin<15?'red':margin<40?'yellow':'green');
+  document.getElementById('maxPower').textContent=maxPower+' W';
+
+  // Wire recommendation
+  document.getElementById('wireRec').style.display='block';
+  let wireSize,wireDesc;
+  if(maxA<=10){wireSize='1.5mm²';wireDesc='Até 10A — circuitos leves';}
+  else if(maxA<=20){wireSize='2.5mm²';wireDesc='Até 20A — uso geral';}
+  else if(maxA<=35){wireSize='4.0mm²';wireDesc='Até 35A — chuveiro/AC';}
+  else{wireSize='6.0mm²';wireDesc='Até 50A — usina';}
+  document.getElementById('wireRec').innerHTML=`
+    <div class="tip-card" style="margin-top:12px">
+      <div class="tip-title">🔌 Fio recomendado</div>
+      <div class="tip-text"><strong>${wireSize}</strong> — ${wireDesc}</div>
+    </div>`;
+}
+
+/* Multi device */
+function addDevice(){
+  const name=document.getElementById('devName').value.trim()||'Aparelho';
+  const watts=parseNum(document.getElementById('devWatts').value);
+  if(!watts){showToast('Informe a potência!');return;}
+  devices.push({name,watts});
+  localStorage.setItem('tomadaDevices',JSON.stringify(devices));
+  renderDevices();
+  document.getElementById('devName').value='';
+  document.getElementById('devWatts').value='';
+  document.querySelectorAll('#presetsGridMulti .preset').forEach(el=>el.classList.remove('active'));
+}
+
+function removeDevice(i){
+  devices.splice(i,1);
+  localStorage.setItem('tomadaDevices',JSON.stringify(devices));
+  renderDevices();
+}
+
+function renderDevices(){
+  const list=document.getElementById('deviceList');
+  if(devices.length===0){
+    list.innerHTML='<div style="text-align:center;padding:16px;font-size:0.8rem;color:var(--text-muted)">Nenhum aparelho adicionado</div>';
+    document.getElementById('multiStatus').innerHTML='';
+    document.getElementById('multiResult').innerHTML='';
+    document.getElementById('multiActions').style.display='none';
+    return;
+  }
+
+  list.innerHTML=devices.map((d,i)=>`
+    <div class="device-item">
+      <div class="device-info">
+        <div class="device-name">${d.name}</div>
+        <div class="device-watts">${d.watts}W</div>
+      </div>
+      <button class="device-remove" onclick="removeDevice(${i})">✕</button>
+    </div>`).join('');
+
+  // Calculate multi
+  const V=parseNum(document.getElementById('multiVoltage').value)||127;
+  const maxA=parseNum(document.getElementById('multiMaxCurrent').value)||10;
+  const totalW=devices.reduce((s,d)=>s+d.watts,0);
+  const totalCurrent=totalW/V;
+  const pct=Math.min(100,Math.max(0,(totalCurrent/maxA)*100));
+  const margin=((maxA-totalCurrent)/maxA)*100;
+
+  let statusClass,statusText;
+  if(pct<=60){statusClass='safe';statusText='✅ Seguro — Todos os aparelhos cabem na tomada';}
+  else if(pct<=85){statusClass='warn';statusText='⚠️ Atenção — Próximo do limite da tomada';}
+  else{statusClass='danger';statusText='🔴 PERIGO — Sobrecarga! Remova aparelhos';}
+  document.getElementById('multiStatus').innerHTML=`
+    <div class="status-badge ${statusClass}" style="margin:12px 0">${statusText}</div>`;
+
+  document.getElementById('multiResult').innerHTML=`
+    <div class="result-grid">
+      <div class="result-card">
+        <div class="rc-label">Total de aparelhos</div>
+        <div class="rc-value">${devices.length}</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-label">Potência total</div>
+        <div class="rc-value">${totalW} W</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-label">Corrente total</div>
+        <div class="rc-value ${pct>85?'red':pct>60?'yellow':'green'}">${totalCurrent.toFixed(2)} A</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-label">Capacidade tomada</div>
+        <div class="rc-value blue">${maxA} A</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-label">Uso</div>
+        <div class="rc-value ${pct>85?'red':pct>60?'yellow':'green'}">${pct.toFixed(1)}%</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-label">Margem</div>
+        <div class="rc-value ${margin<15?'red':margin<40?'yellow':'green'}">${margin.toFixed(1)}%</div>
+      </div>
+    </div>`;
+  document.getElementById('multiActions').style.display='flex';
+}
+
+/* Copy */
+function copySingle(){
+  const W=parseNum(document.getElementById('power').value);
+  const V=parseNum(document.getElementById('voltage').value)||127;
+  const maxA=parseNum(document.getElementById('maxCurrent').value)||10;
+  const current=W/V;
+  const pct=(current/maxA)*100;
+  const maxPower=V*maxA;
+
+  const txt=`⚡ Segurança Tomada - Resultado\n\n` +
+    `Potência: ${W}W | Tensão: ${V}V\n` +
+    `Corrente necessária: ${current.toFixed(2)}A\n` +
+    `Capacidade tomada: ${maxA}A (${maxPower}W)\n` +
+    `Uso: ${pct.toFixed(1)}%\n` +
+    `${pct>85?'🔴 PERIGO - Sobrecarga!':pct>60?'⚠️ ATENÇÃO - Próximo do limite':'✅ SEGURO'}\n\n` +
+    `Dev Aleksandro Alves`;
+  navigator.clipboard.writeText(txt).then(()=>showToast('Copiado!'));
+}
+
+function copyMulti(){
+  const V=parseNum(document.getElementById('multiVoltage').value)||127;
+  const maxA=parseNum(document.getElementById('multiMaxCurrent').value)||10;
+  const totalW=devices.reduce((s,d)=>s+d.watts,0);
+  const totalCurrent=totalW/V;
+  const pct=(totalCurrent/maxA)*100;
+
+  let txt=`⚡ Segurança Tomada - Múltiplos Aparelhos\n\n`;
+  devices.forEach(d=>txt+=`• ${d.name}: ${d.watts}W\n`);
+  txt+=`\nTotal: ${totalW}W | ${totalCurrent.toFixed(2)}A\n`;
+  txt+=`Tomada: ${maxA}A (${V*maxA}W)\n`;
+  txt+=`Uso: ${pct.toFixed(1)}%\n`;
+  txt+=`${pct>85?'🔴 PERIGO':pct>60?'⚠️ ATENÇÃO':'✅ SEGURO'}\n\n`;
+  txt+=`Dev Aleksandro Alves`;
+  navigator.clipboard.writeText(txt).then(()=>showToast('Copiado!'));
+}
+
+function clearMulti(){
+  devices=[];
+  localStorage.setItem('tomadaDevices',JSON.stringify(devices));
+  renderDevices();
+}
+
+/* Toast */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+/* Init */
+renderPresets();
+renderDevices();
+</script>
 </body>
 </html>
