@@ -1,340 +1,553 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Valor Total</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
-        :root {
-            --primary-color: #6C63FF;
-            --secondary-color: #4CAF50;
-            --background-color: #F0F2F5;
-            --text-color: #333333;
-            --input-bg: #FFFFFF;
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            --gradient: linear-gradient(135deg, #6C63FF, #4CAF50);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Juros - Parcelamento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--font:'Inter',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;--radius:20px;--transition:0.35s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{
+  --bg:#0a0a1a;--bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);--card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;--text-muted:#8b8ba0;
+  --primary:#e11d48;--primary-dim:rgba(225,29,72,0.12);--primary-glow:rgba(225,29,72,0.25);
+  --accent:#fb7185;--green:#10b981;--blue:#3b82f6;--yellow:#f59e0b;--orange:#f97316;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--tag-bg:rgba(255,255,255,0.05);
+  --success-bg:rgba(16,185,129,0.1);--danger-bg:rgba(225,29,72,0.1);--warn-bg:rgba(245,158,11,0.1);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);--card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;--text-muted:#6b7280;
+  --primary:#be123c;--primary-dim:rgba(190,18,60,0.08);--primary-glow:rgba(190,18,60,0.15);
+  --accent:#e11d48;--green:#059669;--blue:#2563eb;--yellow:#d97706;--orange:#ea580c;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);--tag-bg:rgba(0,0,0,0.04);
+  --success-bg:rgba(5,150,105,0.08);--danger-bg:rgba(190,18,60,0.08);--warn-bg:rgba(217,119,6,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-grad);color:var(--text);min-height:100vh;padding:20px;transition:background var(--transition),color var(--transition)}
+.app{max-width:560px;margin:0 auto;padding-bottom:40px}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:var(--primary-dim);border:1.5px solid var(--primary);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.header-title{font-size:1.1rem;font-weight:800}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.theme-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            line-height: 1.6;
-        }
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:16px}
 
-        .calculator {
-            background-color: var(--input-bg);
-            padding: 3rem;
-            border-radius: 30px;
-            box-shadow: var(--box-shadow);
-            width: 100%;
-            max-width: 550px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:14px;padding:4px}
+.tab{flex:1;padding:11px 6px;border-radius:11px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.active{background:var(--primary-dim);color:var(--primary);box-shadow:0 2px 8px var(--primary-glow)}
 
-        .calculator::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: var(--gradient);
-            transform: rotate(45deg);
-            opacity: 0.1;
-            z-index: 0;
-        }
+/* Input */
+.input-group{margin-bottom:14px}
+.input-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.input-label span{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.input-wrap{position:relative}
+.input-wrap input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--font);font-size:0.9rem;font-weight:500;outline:none;transition:all var(--transition)}
+.input-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+.input-wrap input::placeholder{color:var(--text-muted);font-weight:400}
+.input-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:0.85rem;color:var(--text-muted);pointer-events:none}
 
-        .calculator-content {
-            position: relative;
-            z-index: 1;
-        }
+/* Slider */
+.slider-group{margin-bottom:14px}
+.slider-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.slider-label{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.slider-value{font-family:var(--mono);font-size:0.85rem;font-weight:700;color:var(--primary)}
+input[type="range"]{width:100%;height:6px;border-radius:3px;background:var(--card-border);outline:none;-webkit-appearance:none;appearance:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--primary);cursor:pointer;box-shadow:0 2px 8px var(--primary-glow)}
 
-        h1 {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 2rem;
-            font-weight: 700;
-            font-size: 2.5rem;
-            position: relative;
-        }
+/* Comparison grid */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.compare-card{padding:16px;border-radius:14px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);text-align:center;transition:all var(--transition);cursor:pointer}
+.compare-card:hover{border-color:var(--primary);transform:translateY(-2px)}
+.compare-card.active{border-color:var(--primary);background:var(--primary-dim)}
+.compare-card .cc-label{font-size:0.7rem;font-weight:600;color:var(--text-muted);margin-bottom:4px}
+.compare-card .cc-value{font-family:var(--mono);font-size:1.1rem;font-weight:800;color:var(--text)}
+.compare-card.active .cc-value{color:var(--primary)}
+.compare-card .cc-sub{font-size:0.65rem;color:var(--text-muted);margin-top:2px}
 
-        h1::after {
-            content: '';
-            display: block;
-            width: 70px;
-            height: 4px;
-            background: var(--gradient);
-            margin: 15px auto 0;
-            border-radius: 2px;
-        }
+/* Result cards */
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.result-card{padding:14px;border-radius:14px;border:1px solid var(--card-border);background:rgba(255,255,255,0.03);transition:all var(--transition)}
+.result-card:hover{border-color:var(--primary)}
+.rc-label{font-size:0.65rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}
+.rc-value{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--text)}
+.rc-value.green{color:var(--green)}
+.rc-value.red{color:var(--primary)}
+.rc-value.blue{color:var(--blue)}
+.rc-value.yellow{color:var(--yellow)}
 
-        .input-grid {
-            display: grid;
-            gap: 2rem;
-        }
+/* Result full */
+.result-full{padding:16px;border-radius:14px;border:1px solid var(--card-border);background:rgba(255,255,255,0.03);margin-bottom:16px}
+.rf-label{font-size:0.7rem;font-weight:600;color:var(--text-muted);margin-bottom:8px}
+.rf-bar{height:8px;border-radius:4px;background:var(--card-border);overflow:hidden;margin-bottom:6px}
+.rf-fill{height:100%;border-radius:4px;transition:width 0.6s ease}
+.rf-legend{display:flex;justify-content:space-between;font-size:0.65rem;color:var(--text-muted)}
 
-        .input-group {
-            position: relative;
-        }
+/* Amortization table */
+.amort-header{font-size:0.75rem;font-weight:700;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.amort-table{width:100%;border-collapse:collapse;font-size:0.75rem}
+.amort-table th{padding:8px 6px;text-align:left;font-weight:700;color:var(--text-muted);border-bottom:1.5px solid var(--card-border);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em}
+.amort-table td{padding:8px 6px;border-bottom:1px solid var(--card-border);color:var(--text)}
+.amort-table tr:last-child td{border-bottom:none;font-weight:700;color:var(--primary)}
+.amort-table .num{font-family:var(--mono);text-align:right}
 
-        label {
-            display: block;
-            margin-bottom: 0.75rem;
-            color: var(--text-color);
-            font-weight: 600;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+/* Buttons */
+.action-row{display:flex;gap:8px;margin-bottom:16px}
+.btn{flex:1;padding:14px;border-radius:14px;border:none;font-family:var(--font);font-size:0.85rem;font-weight:700;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{background:var(--card);border:1.5px solid var(--card-border);color:var(--text)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn.copied{border-color:var(--green);color:var(--green);background:var(--success-bg)}
 
-        input {
-            width: 100%;
-            padding: 1.2rem 1rem 1.2rem 3.5rem;
-            font-size: 1.1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            background-color: #f8f9fa;
-        }
+/* Status badge */
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:0.7rem;font-weight:700;margin-bottom:12px}
+.status-badge.juros{background:var(--danger-bg);color:var(--primary)}
+.status-badge.sem-juros{background:var(--success-bg);color:var(--green)}
+.status-badge.desconto{background:var(--warn-bg);color:var(--yellow)}
 
-        input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 5px rgba(108, 99, 255, 0.1);
-            background-color: #ffffff;
-        }
+/* History */
+.history{margin-top:16px}
+.history-title{font-size:0.75rem;font-weight:700;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.history-clear{font-size:0.65rem;color:var(--primary);cursor:pointer;font-weight:600;background:var(--primary-dim);padding:4px 10px;border-radius:8px;border:none;font-family:var(--font)}
+.history-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid var(--card-border);margin-bottom:6px;cursor:pointer;transition:all var(--transition)}
+.history-item:hover{border-color:var(--primary);background:var(--primary-dim)}
+.history-text{font-size:0.75rem;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:8px}
+.history-text .mono{font-family:var(--mono);font-weight:600}
 
-        .input-icon {
-            position: absolute;
-            top: 3.1rem;
-            left: 1.2rem;
-            color: var(--primary-color);
-            font-size: 1.4rem;
-        }
+.footer{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid var(--card-border)}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 1.2rem;
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;border-radius:12px;background:var(--primary);color:#fff;font-family:var(--font);font-size:0.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: all 0.5s;
-        }
-
-        button:hover::before {
-            left: 100%;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 20px rgba(108, 99, 255, 0.3);
-        }
-
-        #resultado {
-            margin-top: 2.5rem;
-            padding: 2rem;
-            background-color: #f8f9fa;
-            border-radius: 15px;
-            font-weight: 400;
-            transition: all 0.3s ease;
-            border: 2px solid #e0e0e0;
-            position: relative;
-        }
-
-        #resultado::before {
-            content: 'Resultado';
-            position: absolute;
-            top: -10px;
-            left: 20px;
-            background-color: var(--input-bg);
-            padding: 0 10px;
-            font-size: 0.9rem;
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        .highlight {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        .copy-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 1rem;
-            padding: 0.8rem 1.5rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .copy-button:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .copy-button i {
-            margin-right: 0.5rem;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fadeIn {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @media (max-width: 600px) {
-            .calculator {
-                padding: 2rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            input, button {
-                font-size: 1rem;
-            }
-        }
-    </style>
+@media(max-width:500px){body{padding:12px}.card{padding:18px}.compare-grid,.result-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-    <div class="calculator">
-        <div class="calculator-content">
-            <h1>Calculadora de Valor Total</h1>
-            <div class="input-grid">
-                <div class="input-group">
-                    <label for="valorAvista">Valor à Vista</label>
-                    <input type="number" id="valorAvista" step="0.01" min="0" required placeholder="Digite o valor à vista">
-                    <i class="fas fa-dollar-sign input-icon"></i>
-                </div>
-                
-                <div class="input-group">
-                    <label for="parcelas">Número de Parcelas</label>
-                    <input type="number" id="parcelas" min="1" required placeholder="Digite o número de parcelas">
-                    <i class="fas fa-list-ol input-icon"></i>
-                </div>
-                
-                <div class="input-group">
-                    <label for="valorParcela">Valor da Parcela</label>
-                    <input type="number" id="valorParcela" step="0.01" min="0" required placeholder="Digite o valor da parcela">
-                    <i class="fas fa-money-bill-wave input-icon"></i>
-                </div>
-            </div>
-            
-            <button onclick="calcularEExibirResultado()">Calcular</button>
-            
-            <div id="resultado"></div>
-        </div>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">💰</div>
+      <div>
+        <div class="header-title">Juros Parcelamento</div>
+        <div class="header-sub">Calcule juros e compare preços</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="setTab('calc')" data-tab="calc">🧮 Calcular</button>
+      <button class="tab" onclick="setTab('compare')" data-tab="compare">⚖️ Comparar</button>
+      <button class="tab" onclick="setTab('history')" data-tab="history">🕐 Histórico</button>
     </div>
 
-    <script>
-        function calcularValorTotal(valorAvista, parcelas, valorParcela) {
-            const valorTotal = valorParcela * parcelas;
-            const diferencaJuros = valorTotal - valorAvista;
-            const porcentagemJuros = (diferencaJuros / valorAvista) * 100;
-            
-            return { valorTotal, diferencaJuros, porcentagemJuros };
-        }
+    <!-- Calcular Tab -->
+    <div id="tabCalc">
+      <div class="input-group">
+        <div class="input-label"><span>Valor à vista (R$)</span></div>
+        <div class="input-wrap">
+          <input type="text" id="valorAvista" placeholder="0,00" oninput="formatCurrency(this);calculate()">
+          <span class="input-icon">R$</span>
+        </div>
+      </div>
 
-        function formatarMoeda(valor) {
-            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
+      <div class="input-group">
+        <div class="input-label"><span>Valor da parcela (R$)</span></div>
+        <div class="input-wrap">
+          <input type="text" id="valorParcela" placeholder="0,00" oninput="formatCurrency(this);calculate()">
+          <span class="input-icon">R$</span>
+        </div>
+      </div>
 
-        function gerarResultadoHTML(resultado) {
-            let html = `<p><span class="highlight">Valor Total:</span> ${formatarMoeda(resultado.valorTotal)}</p>`;
-            
-            if (resultado.diferencaJuros > 0) {
-                html += `<p><span class="highlight">Há juros no parcelamento.</span></p>`;
-                html += `<p><span class="highlight">Valor dos Juros:</span> ${formatarMoeda(resultado.diferencaJuros)}</p>`;
-                html += `<p><span class="highlight">Porcentagem de Juros:</span> ${resultado.porcentagemJuros.toFixed(2)}%</p>`;
-            } else if (resultado.diferencaJuros < 0) {
-                html += `<p><span class="highlight">O valor parcelado é menor que o valor à vista.</span></p>`;
-                html += `<p><span class="highlight">Diferença:</span> ${formatarMoeda(-resultado.diferencaJuros)}</p>`;
-            } else {
-                html += `<p><span class="highlight">Não há juros no parcelamento.</span></p>`;
-            }
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-label">Número de parcelas</span>
+          <span class="slider-value" id="parcelasDisplay">12x</span>
+        </div>
+        <input type="range" id="parcelas" min="1" max="60" value="12" oninput="updateParcelas();calculate()">
+      </div>
 
-            html += `<button class="copy-button" onclick="copiarRelatorio()"><i class="fas fa-copy"></i> Copiar Relatório</button>`;
+      <div id="statusBadge"></div>
 
-            return html;
-        }
+      <div class="result-grid" id="resultGrid" style="display:none">
+        <div class="result-card">
+          <div class="rc-label">Valor Total</div>
+          <div class="rc-value" id="totalParcelado">R$ 0,00</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Juros (R$)</div>
+          <div class="rc-value red" id="jurosValor">R$ 0,00</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Juros (% ao mês)</div>
+          <div class="rc-value yellow" id="jurosMes">0,00%</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Juros (% total)</div>
+          <div class="rc-value red" id="jurosTotal">0,00%</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">CET (% a.a.)</div>
+          <div class="rc-value blue" id="cetAnual">0,00%</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Economia à vista</div>
+          <div class="rc-value green" id="economia">R$ 0,00</div>
+        </div>
+      </div>
 
-        function exibirResultado(resultadoHTML) {
-            const resultadoElement = document.getElementById('resultado');
-            resultadoElement.innerHTML = resultadoHTML;
-            resultadoElement.classList.remove('fadeIn');
-            void resultadoElement.offsetWidth; // Trigger reflow
-            resultadoElement.classList.add('fadeIn');
-        }
+      <!-- Visual bar -->
+      <div class="result-full" id="resultBar" style="display:none">
+        <div class="rf-label">Composição do valor total</div>
+        <div class="rf-bar"><div class="rf-fill" id="barAvista" style="width:50%;background:var(--green)"></div></div>
+        <div class="rf-legend">
+          <span>À vista: <strong id="legendAvista">50%</strong></span>
+          <span>Juros: <strong id="legendJuros">50%</strong></span>
+        </div>
+      </div>
 
-        function calcularEExibirResultado() {
-            const valorAvista = parseFloat(document.getElementById('valorAvista').value);
-            const parcelas = parseInt(document.getElementById('parcelas').value);
-            const valorParcela = parseFloat(document.getElementById('valorParcela').value);
-            
-            const resultado = calcularValorTotal(valorAvista, parcelas, valorParcela);
-            const resultadoHTML = gerarResultadoHTML(resultado);
-            exibirResultado(resultadoHTML);
-        }
+      <div class="action-row" id="actionBtns" style="display:none">
+        <button class="btn btn-primary" onclick="copyResult()">📋 Copiar resultado</button>
+        <button class="btn btn-secondary" onclick="clearCalc()">🗑️ Limpar</button>
+      </div>
+    </div>
 
-        function copiarRelatorio() {
-            const resultadoElement = document.getElementById('resultado');
-            const resultadoTexto = resultadoElement.innerText.replace('Copiar Relatório', '').trim();
-            
-            navigator.clipboard.writeText(resultadoTexto).then(() => {
-                alert('Relatório copiado para a área de transferência!');
-            }).catch(err => {
-                console.error('Erro ao copiar: ', err);
-                alert('Não foi possível copiar o relatório. Por favor, tente novamente.');
-            });
-        }
-    </script>
+    <!-- Comparar Tab -->
+    <div id="tabCompare" style="display:none">
+      <div class="compare-grid">
+        <div class="compare-card active" onclick="setOpA()">
+          <div class="cc-label">Opção A</div>
+          <div class="cc-value" id="opAval">—</div>
+          <div class="cc-sub" id="opAinfo">Preencha ao lado</div>
+        </div>
+        <div class="compare-card" onclick="setOpB()">
+          <div class="cc-label">Opção B</div>
+          <div class="cc-value" id="opBval">—</div>
+          <div class="cc-sub" id="opBinfo">Preencha ao lado</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Opção A — Parcelas</span></div>
+        <div class="input-wrap">
+          <input type="text" id="compAval" placeholder="Valor da parcela" oninput="formatCurrency(this);compare()">
+          <span class="input-icon">R$</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Opção A — Qtd parcelas</span></div>
+        <div class="input-wrap"><input type="number" id="compAqtd" min="1" max="60" placeholder="Ex: 12" oninput="compare()"></div>
+      </div>
+
+      <div style="height:1px;background:var(--card-border);margin:16px 0"></div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Opção B — Parcelas</span></div>
+        <div class="input-wrap">
+          <input type="text" id="compBval" placeholder="Valor da parcela" oninput="formatCurrency(this);compare()">
+          <span class="input-icon">R$</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Opção B — Qtd parcelas</span></div>
+        <div class="input-wrap"><input type="number" id="compBqtd" min="1" max="60" placeholder="Ex: 24" oninput="compare()"></div>
+      </div>
+
+      <div id="compareResult"></div>
+    </div>
+
+    <!-- History Tab -->
+    <div id="tabHistory" style="display:none">
+      <div id="historyEmpty" style="text-align:center;padding:24px;font-size:0.85rem;color:var(--text-muted)">Nenhum cálculo ainda</div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <div class="card" id="amortCard" style="display:none">
+    <div class="amort-header">
+      <span>📅 Tabela Price (Amortização)</span>
+      <button class="history-clear" onclick="copyAmort()">📋 Copiar</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="amort-table" id="amortTable">
+        <thead><tr><th>#</th><th>Parcela</th><th>Amort.</th><th>Juros</th><th>Saldo</th></tr></thead>
+        <tbody id="amortBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let history=JSON.parse(localStorage.getItem('jurosHistory')||'[]');
+let activeOp='A';
+
+/* Theme */
+function toggleTheme(){const h=document.documentElement,b=document.querySelector('.theme-btn');const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');b.textContent=d?'☀️':'🌙';localStorage.setItem('jurosTheme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('jurosTheme');if(s){document.documentElement.setAttribute('data-theme',s);document.querySelector('.theme-btn').textContent=s==='dark'?'🌙':'☀️';}})();
+
+/* Tabs */
+function setTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));
+  document.getElementById('tabCalc').style.display=t==='calc'?'block':'none';
+  document.getElementById('tabCompare').style.display=t==='compare'?'block':'none';
+  document.getElementById('tabHistory').style.display=t==='history'?'block':'none';
+  if(t==='history')renderHistory();
+}
+
+/* Format currency */
+function formatCurrency(input){
+  let v=input.value.replace(/\D/g,'');
+  if(!v){input.value='';return;}
+  v=(parseInt(v)/100).toFixed(2);
+  input.value=v.replace('.',',');
+}
+
+function parseCurrency(str){
+  if(!str)return 0;
+  return parseFloat(str.replace(/\./g,'').replace(',','.'))||0;
+}
+
+/* Parcelas slider */
+function updateParcelas(){
+  document.getElementById('parcelasDisplay').textContent=document.getElementById('parcelas').value+'x';
+}
+
+/* Calculate */
+function calculate(){
+  const avista=parseCurrency(document.getElementById('valorAvista').value);
+  const parcela=parseCurrency(document.getElementById('valorParcela').value);
+  const qtd=parseInt(document.getElementById('parcelas').value);
+
+  if(!avista||!parcela||qtd<1){
+    document.getElementById('resultGrid').style.display='none';
+    document.getElementById('resultBar').style.display='none';
+    document.getElementById('actionBtns').style.display='none';
+    document.getElementById('statusBadge').innerHTML='';
+    document.getElementById('amortCard').style.display='none';
+    return;
+  }
+
+  const total=parcela*qtd;
+  const juros=total-avista;
+  const jurosPct=(juros/avista)*100;
+
+  // Monthly rate (Newton's method)
+  let monthlyRate=0;
+  if(juros>0&&avista>0&&qtd>1){
+    let rate=0.01;
+    for(let i=0;i<100;i++){
+      const fv=avista;
+      const pv=parcela*Math.pow(1+rate,qtd)/(rate*Math.pow(1+rate,qtd));
+      const diff=pv-fv;
+      const drv=parcela*((qtd*Math.pow(1+rate,qtd-1)*(rate*Math.pow(1+rate,qtd))-Math.pow(1+rate,qtd)*(Math.pow(1+rate,qtd)+rate*qtd*Math.pow(1+rate,qtd-1)))/(rate*Math.pow(1+rate,qtd))**2);
+      if(Math.abs(drv)<1e-15)break;
+      rate-=diff/drv;
+      if(rate<0)rate=0.0001;
+      if(rate>5)rate=5;
+    }
+    monthlyRate=rate;
+  }
+
+  const cetAnual=(Math.pow(1+monthlyRate,12)-1)*100;
+  const economia=juros>0?juros:0;
+
+  // Status badge
+  let badge='';
+  if(juros>0.01)badge='<div class="status-badge juros">⚠️ Com juros</div>';
+  else if(juros<-0.01)badge='<div class="status-badge desconto">💰 Desconto à vista</div>';
+  else badge='<div class="status-badge sem-juros">✅ Sem juros</div>';
+  document.getElementById('statusBadge').innerHTML=badge;
+
+  // Results
+  document.getElementById('resultGrid').style.display='grid';
+  document.getElementById('resultBar').style.display='block';
+  document.getElementById('actionBtns').style.display='flex';
+
+  document.getElementById('totalParcelado').textContent=formatBRL(total);
+  document.getElementById('jurosValor').textContent=formatBRL(Math.abs(juros));
+  document.getElementById('jurosMes').textContent=monthlyRate>0?(monthlyRate*100).toFixed(2)+'%':'—';
+  document.getElementById('jurosTotal').textContent=jurosPct.toFixed(2)+'%';
+  document.getElementById('cetAnual').textContent=cetAnual.toFixed(2)+'%';
+  document.getElementById('economia').textContent=economia>0?formatBRL(economia):'R$ 0,00';
+
+  // Color coding
+  document.getElementById('jurosValor').className='rc-value '+(juros>0.01?'red':'green');
+  document.getElementById('jurosTotal').className='rc-value '+(juros>0.01?'red':'green');
+
+  // Bar
+  const avistaPct=Math.min(100,Math.max(0,(avista/total)*100));
+  const jurosPctBar=100-avistaPct;
+  document.getElementById('barAvista').style.width=avistaPct+'%';
+  document.getElementById('legendAvista').textContent=avistaPct.toFixed(1)+'%';
+  document.getElementById('legendJuros').textContent=jurosPctBar.toFixed(1)+'%';
+
+  // Amortization table
+  buildAmortTable(avista,monthlyRate,parcela,qtd);
+
+  // Add to history
+  addHistory({avista,parcela,qtd,total,juros,jurosPct:jurosPct.toFixed(2),date:new Date().toLocaleString('pt-BR')});
+}
+
+function buildAmortTable(P,rate,parcela,n){
+  const tbody=document.getElementById('amortBody');
+  tbody.innerHTML='';
+  let saldo=P;
+  let totalJuros=0;
+  let totalAmort=0;
+
+  for(let i=1;i<=n;i++){
+    const jurosParcela=saldo*rate;
+    const amort=parcela-jurosParcela;
+    saldo=Math.max(0,saldo-amort);
+    totalJuros+=jurosParcela;
+    totalAmort+=amort;
+
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i}</td><td class="num">${formatBRL(parcela)}</td><td class="num">${formatBRL(amort)}</td><td class="num">${formatBRL(jurosParcela)}</td><td class="num">${formatBRL(saldo)}</td>`;
+    tbody.appendChild(tr);
+  }
+
+  // Total row
+  const totalRow=document.createElement('tr');
+  totalRow.innerHTML=`<td>Total</td><td class="num">${formatBRL(parcela*n)}</td><td class="num">${formatBRL(totalAmort)}</td><td class="num">${formatBRL(totalJuros)}</td><td class="num">—</td>`;
+  tbody.appendChild(totalRow);
+
+  document.getElementById('amortCard').style.display='block';
+}
+
+function formatBRL(v){return 'R$ '+v.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+
+/* Compare */
+function setOpA(){activeOp='A';document.querySelectorAll('.compare-card')[0].classList.add('active');document.querySelectorAll('.compare-card')[1].classList.remove('active');}
+function setOpB(){activeOp='B';document.querySelectorAll('.compare-card')[1].classList.add('active');document.querySelectorAll('.compare-card')[0].classList.remove('active');}
+
+function compare(){
+  const aVal=parseCurrency(document.getElementById('compAval').value);
+  const aQtd=parseInt(document.getElementById('compAqtd').value)||0;
+  const bVal=parseCurrency(document.getElementById('compBval').value);
+  const bQtd=parseInt(document.getElementById('compBqtd').value)||0;
+
+  if(aVal&&aQtd){
+    const aTotal=aVal*aQtd;
+    document.getElementById('opAval').textContent=formatBRL(aTotal);
+    document.getElementById('opAinfo').textContent=aQtd+'x de '+formatBRL(aVal);
+  }
+  if(bVal&&bQtd){
+    const bTotal=bVal*bQtd;
+    document.getElementById('opBval').textContent=formatBRL(bTotal);
+    document.getElementById('opBinfo').textContent=bQtd+'x de '+formatBRL(bVal);
+  }
+
+  if(aVal&&aQtd&&bVal&&bQtd){
+    const aTotal=aVal*aQtd;
+    const bTotal=bVal*bQtd;
+    const diff=aTotal-bTotal;
+    const winner=diff>0?'B':'A';
+    const save=Math.abs(diff);
+    document.getElementById('compareResult').innerHTML=`
+      <div class="result-full" style="margin-top:12px">
+        <div class="rf-label">Resultado da comparação</div>
+        <div style="text-align:center;padding:8px 0">
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:4px">Opção ${winner} é mais barata</div>
+          <div style="font-family:var(--mono);font-size:1.3rem;font-weight:800;color:var(--green)">${formatBRL(save)}</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px">de economia (${((save/Math.max(aTotal,bTotal))*100).toFixed(1)}%)</div>
+        </div>
+      </div>`;
+  }
+}
+
+/* Copy */
+function copyResult(){
+  const avista=parseCurrency(document.getElementById('valorAvista').value);
+  const parcela=parseCurrency(document.getElementById('valorParcela').value);
+  const qtd=parseInt(document.getElementById('parcelas').value);
+  const total=parcela*qtd;
+  const juros=total-avista;
+
+  const txt=`💰 Cálculo de Juros - Parcelamento\n\n` +
+    `À vista: ${formatBRL(avista)}\n` +
+    `Parcelas: ${qtd}x de ${formatBRL(parcela)}\n` +
+    `Total: ${formatBRL(total)}\n` +
+    `Juros: ${formatBRL(Math.abs(juros))} (${((juros/avista)*100).toFixed(2)}%)\n\n` +
+    `Dev Aleksandro Alves`;
+
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=event.target;b.textContent='✅ Copiado!';b.classList.add('copied');
+    showToast('Resultado copiado!');setTimeout(()=>{b.textContent='📋 Copiar resultado';b.classList.remove('copied');},2000);
+  });
+}
+
+function copyAmort(){
+  const rows=document.querySelectorAll('#amortTable tr');
+  let txt='📅 Tabela Price - Amortização\n\n';
+  rows.forEach(r=>{
+    const cells=r.querySelectorAll('td');
+    if(cells.length>=5)txt+=`#${cells[0].textContent} | ${cells[1].textContent} | Amort: ${cells[2].textContent} | Juros: ${cells[3].textContent} | Saldo: ${cells[4].textContent}\n`;
+  });
+  txt+='\nDev Aleksandro Alves';
+  navigator.clipboard.writeText(txt).then(()=>showToast('Tabela copiada!'));
+}
+
+function clearCalc(){
+  document.getElementById('valorAvista').value='';
+  document.getElementById('valorParcela').value='';
+  document.getElementById('parcelas').value=12;
+  updateParcelas();
+  calculate();
+}
+
+/* History */
+function addHistory(item){
+  history=h=>[item,...h.filter(h=>!(h.avista===item.avista&&h.parcela===item.parcela&&h.qtd===item.qtd))].slice(0,20);
+  history=typeof history==='function'?history(history):history;
+  // Fix: actually run the function
+  history=([item,...history.filter(h=>!(h.avista===item.avista&&h.parcela===item.parcela&&h.qtd===item.qtd))]).slice(0,20);
+  localStorage.setItem('jurosHistory',JSON.stringify(history));
+}
+
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  const empty=document.getElementById('historyEmpty');
+  if(history.length===0){empty.style.display='block';list.innerHTML='';return;}
+  empty.style.display='none';
+  list.innerHTML=history.map(h=>`
+    <div class="history-item" onclick="loadHistory(${h.avista},${h.parcela},${h.qtd})">
+      <span class="history-text"><span class="mono">${h.qtd}x ${formatBRL(h.parcela)}</span> = ${formatBRL(h.total)} (${h.jurosPct}% juros)</span>
+    </div>
+  `).join('');
+}
+
+function loadHistory(avista,parcela,qtd){
+  document.getElementById('valorAvista').value=avista.toFixed(2).replace('.',',');
+  document.getElementById('valorParcela').value=parcela.toFixed(2).replace('.',',');
+  document.getElementById('parcelas').value=qtd;
+  updateParcelas();
+  setTab('calc');
+  calculate();
+}
+
+/* Toast */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+</script>
 </body>
 </html>

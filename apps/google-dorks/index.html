@@ -1,386 +1,392 @@
 <!DOCTYPE html>
-
-<html lang="pt-br">
-
+<html lang="pt-BR" data-theme="dark">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Dorks Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--font:'Inter',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;--radius:20px;--transition:0.35s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{
+  --bg:#0a0a1a;--bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);--card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;--text-muted:#8b8ba0;
+  --primary:#e11d48;--primary-dim:rgba(225,29,72,0.12);--primary-glow:rgba(225,29,72,0.25);
+  --accent:#fb7185;--green:#10b981;--blue:#3b82f6;--yellow:#f59e0b;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--tag-bg:rgba(255,255,255,0.05);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);--card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;--text-muted:#6b7280;
+  --primary:#be123c;--primary-dim:rgba(190,18,60,0.08);--primary-glow:rgba(190,18,60,0.15);
+  --accent:#e11d48;--green:#059669;--blue:#2563eb;--yellow:#d97706;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);--tag-bg:rgba(0,0,0,0.04);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-grad);color:var(--text);min-height:100vh;padding:20px;transition:background var(--transition),color var(--transition)}
+.app{max-width:560px;margin:0 auto;padding-bottom:40px}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:var(--primary-dim);border:1.5px solid var(--primary);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.header-title{font-size:1.1rem;font-weight:800}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.theme-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
+
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:16px}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:14px;padding:4px}
+.tab{flex:1;padding:11px 6px;border-radius:11px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.active{background:var(--primary-dim);color:var(--primary);box-shadow:0 2px 8px var(--primary-glow)}
+
+/* Input */
+.input-group{margin-bottom:14px}
+.input-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.input-label span{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.input-wrap{position:relative}
+.input-wrap input[type="text"],.input-wrap textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--font);font-size:0.9rem;font-weight:500;outline:none;transition:all var(--transition)}
+.input-wrap textarea{min-height:60px;resize:vertical;font-family:var(--mono);font-size:0.82rem;line-height:1.5}
+.input-wrap input:focus,.input-wrap textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+.input-wrap input::placeholder,.input-wrap textarea::placeholder{color:var(--text-muted);font-weight:400}
+
+/* Operator chips */
+.operators-label{font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.operators-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px}
+.op-chip{padding:10px;border-radius:10px;border:1.5px solid var(--card-border);background:var(--tag-bg);cursor:pointer;transition:all var(--transition);text-align:center}
+.op-chip:hover{border-color:var(--primary);transform:translateY(-1px)}
+.op-chip.active{border-color:var(--primary);background:var(--primary-dim)}
+.op-chip .op-name{font-size:0.78rem;font-weight:700;color:var(--text)}
+.op-chip.active .op-name{color:var(--primary)}
+.op-chip .op-desc{font-size:0.6rem;color:var(--text-muted);margin-top:2px}
+.op-chip.active .op-desc{color:var(--primary);opacity:0.7}
+
+/* Templates */
+.templates-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tpl-btn{padding:7px 14px;border-radius:20px;border:1.5px solid var(--card-border);background:var(--tag-bg);color:var(--text-muted);font-family:var(--font);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;gap:5px}
+.tpl-btn:hover{border-color:var(--primary);color:var(--text);transform:translateY(-1px)}
+
+/* Preview */
+.preview{padding:16px;border-radius:14px;background:rgba(255,255,255,0.03);border:1px solid var(--card-border);margin-bottom:16px;display:none}
+.preview.show{display:block}
+.preview-label{font-size:0.7rem;font-weight:600;color:var(--text-muted);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.preview-text{font-family:var(--mono);font-size:0.85rem;color:var(--primary);word-break:break-all;line-height:1.5;user-select:all}
+
+/* Actions */
+.action-row{display:flex;gap:8px;margin-bottom:16px}
+.btn{flex:1;padding:14px;border-radius:14px;border:none;font-family:var(--font);font-size:0.85rem;font-weight:700;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{background:var(--card);border:1.5px solid var(--card-border);color:var(--text)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-green{background:linear-gradient(135deg,var(--green),#059669);color:#fff}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,0.3)}
+.btn.copied{border-color:var(--green);color:var(--green);background:rgba(16,185,129,0.1)}
+
+/* History */
+.history{margin-top:16px}
+.history-title{font-size:0.75rem;font-weight:700;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.history-clear{font-size:0.65rem;color:var(--primary);cursor:pointer;font-weight:600;background:var(--primary-dim);padding:4px 10px;border-radius:8px;border:none;font-family:var(--font)}
+.history-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;border:1px solid var(--card-border);margin-bottom:6px;cursor:pointer;transition:all var(--transition)}
+.history-item:hover{border-color:var(--primary);background:var(--primary-dim)}
+.history-text{font-family:var(--mono);font-size:0.75rem;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:8px}
+.history-actions{display:flex;gap:4px;flex-shrink:0}
+.hist-btn{padding:4px 8px;border-radius:6px;border:none;font-size:0.6rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:all var(--transition)}
+.hist-btn.copy{background:var(--primary-dim);color:var(--primary)}
+.hist-btn.copy:hover{background:var(--primary);color:#fff}
+.hist-btn.search{background:rgba(16,185,129,0.1);color:var(--green)}
+.hist-btn.search:hover{background:var(--green);color:#fff}
+
+.footer{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid var(--card-border)}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
 
-    <meta charset="UTF-8">
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;border-radius:12px;background:var(--primary);color:#fff;font-family:var(--font);font-size:0.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Busca Avançada com Google Dorks</title>
-
-    <style>
-
-        :root {
-
-            --primary-color: #E50914;
-
-            --background-color: #141414;
-
-            --text-color: #ffffff;
-
-            --input-background: #333333;
-
-            --input-border: #444444;
-
-        }
-
-        body {
-
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-
-            margin: 0;
-
-            padding: 0;
-
-            background-color: var(--background-color);
-
-            color: var(--text-color);
-
-            line-height: 1.6;
-
-        }
-
-        .container {
-
-            max-width: 800px;
-
-            margin: 0 auto;
-
-            padding: 20px;
-
-        }
-
-        h1 {
-
-            text-align: center;
-
-            color: var(--primary-color);
-
-            font-size: 2.5em;
-
-            margin-bottom: 30px;
-
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-
-        }
-
-        .busca-container {
-
-            background-color: rgba(51, 51, 51, 0.8);
-
-            padding: 30px;
-
-            border-radius: 8px;
-
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-
-            margin-bottom: 30px;
-
-        }
-
-        .busca-row {
-
-            display: flex;
-
-            justify-content: center;
-
-            gap: 15px;
-
-            margin-bottom: 15px;
-
-        }
-
-        input[type="text"], select {
-
-            width: 100%;
-
-            padding: 12px;
-
-            font-size: 16px;
-
-            background-color: var(--input-background);
-
-            border: 1px solid var(--input-border);
-
-            color: var(--text-color);
-
-            border-radius: 4px;
-
-            transition: all 0.3s ease;
-
-        }
-
-        input[type="text"]:focus, select:focus {
-
-            outline: none;
-
-            border-color: var(--primary-color);
-
-            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
-
-        }
-
-        select {
-
-            appearance: none;
-
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-
-            background-repeat: no-repeat;
-
-            background-position: right 10px center;
-
-        }
-
-        button {
-
-            padding: 12px 24px;
-
-            font-size: 16px;
-
-            background-color: var(--primary-color);
-
-            color: var(--text-color);
-
-            border: none;
-
-            cursor: pointer;
-
-            border-radius: 4px;
-
-            transition: all 0.3s ease;
-
-        }
-
-        button:hover {
-
-            background-color: #F40612;
-
-            transform: translateY(-2px);
-
-        }
-
-        button:active {
-
-            transform: translateY(0);
-
-        }
-
-        #resultados {
-
-            background-color: rgba(51, 51, 51, 0.8);
-
-            padding: 20px;
-
-            border-radius: 8px;
-
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-
-        }
-
-        #resultados a {
-
-            color: var(--primary-color);
-
-            text-decoration: none;
-
-            transition: color 0.3s;
-
-        }
-
-        #resultados a:hover {
-
-            color: #F40612;
-
-            text-decoration: underline;
-
-        }
-
-        .footer {
-
-            text-align: center;
-
-            margin-top: 30px;
-
-            font-size: 14px;
-
-            color: #999;
-
-        }
-
-    </style>
-
+@media(max-width:500px){body{padding:12px}.card{padding:18px}.operators-grid{grid-template-columns:1fr 1fr}}
+</style>
 </head>
-
 <body>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">🔍</div>
+      <div>
+        <div class="header-title">Google Dorks</div>
+        <div class="header-sub">Busca avançada com operadores</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
 
-    <div class="container">
-
-        <h1>Busca Avançada com Google Dorks</h1>
-
-        <div class="busca-container">
-
-            <div class="busca-row">
-
-                <input type="text" id="buscaNormal" placeholder="Pesquisa normal">
-
-            </div>
-
-            <div class="busca-row">
-
-                <input type="text" id="buscaExata1" placeholder="Busca exata 1">
-
-                <input type="text" id="buscaExata2" placeholder="Busca exata 2">
-
-            </div>
-
-            <div class="busca-row">
-
-                <input type="text" id="campoDork" placeholder="Digite seu dork">
-
-                <select id="tipoDork">
-
-                    <option value="">Selecione um tipo de dork</option>
-
-                    <option value="inurl:">inurl:</option>
-
-                    <option value="intitle:">intitle:</option>
-
-                    <option value="filetype:">filetype:</option>
-
-                    <option value="site:">site:</option>
-
-                    <option value="whatsapp">Grupos WhatsApp</option>
-
-                    <option value="telegram">Grupos Telegram</option>
-
-                </select>
-
-            </div>
-
-            <div class="busca-row">
-
-                <button onclick="realizarBusca()">Buscar</button>
-
-            </div>
-
-        </div>
-
-        <div id="resultados"></div>
-
-        
-
-        <div class="footer">
-
-            Criado por Aleksandro Alves
-
-        </div>
-
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="setTab('build')" data-tab="build">🔨 Builder</button>
+      <button class="tab" onclick="setTab('manual')" data-tab="manual">⌨️ Manual</button>
+      <button class="tab" onclick="setTab('history')" data-tab="history">🕐 Histórico</button>
     </div>
 
+    <!-- Builder Tab -->
+    <div id="tabBuild">
+      <div class="input-group">
+        <div class="input-label"><span>Palavras-chave</span></div>
+        <div class="input-wrap"><input type="text" id="keywords" placeholder="Ex: senha admin filetype:pdf" oninput="buildDork()"></div>
+      </div>
 
+      <div class="input-group">
+        <div class="input-label"><span>Exato (aspas)</span></div>
+        <div class="input-wrap"><input type="text" id="exact" placeholder="Exato: texto entre aspas" oninput="buildDork()"></div>
+      </div>
 
-    <script>
+      <div class="input-group">
+        <div class="input-label"><span>Excluir (menos)</span></div>
+        <div class="input-wrap"><input type="text" id="exclude" placeholder="Excluir: termos indesejados" oninput="buildDork()"></div>
+      </div>
 
-        function realizarBusca() {
+      <div class="operators-label">Operadores</div>
+      <div class="operators-grid">
+        <div class="op-chip" onclick="addOperator('site:')" data-op="site:">
+          <div class="op-name">site:</div>
+          <div class="op-desc">Domínio específico</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('inurl:')" data-op="inurl:">
+          <div class="op-name">inurl:</div>
+          <div class="op-desc">Na URL</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('intitle:')" data-op="intitle:">
+          <div class="op-name">intitle:</div>
+          <div class="op-desc">No título</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('intext:')" data-op="intext:">
+          <div class="op-name">intext:</div>
+          <div class="op-desc">No texto</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('filetype:')" data-op="filetype:">
+          <div class="op-name">filetype:</div>
+          <div class="op-desc">Tipo de arquivo</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('ext:')" data-op="ext:">
+          <div class="op-name">ext:</div>
+          <div class="op-desc">Extensão</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('related:')" data-op="related:">
+          <div class="op-name">related:</div>
+          <div class="op-desc">Sites similares</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('cache:')" data-op="cache:">
+          <div class="op-name">cache:</div>
+          <div class="op-desc">Cache Google</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('before:')" data-op="before:">
+          <div class="op-name">before:</div>
+          <div class="op-desc">Antes da data</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('after:')" data-op="after:">
+          <div class="op-name">after:</div>
+          <div class="op-desc">Após a data</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('allintitle:')" data-op="allintitle:">
+          <div class="op-name">allintitle:</div>
+          <div class="op-desc">Tudo no título</div>
+        </div>
+        <div class="op-chip" onclick="addOperator('allinurl:')" data-op="allinurl:">
+          <div class="op-name">allinurl:</div>
+          <div class="op-desc">Tudo na URL</div>
+        </div>
+      </div>
 
-            const buscaNormal = document.getElementById('buscaNormal').value;
+      <div class="input-group">
+        <div class="input-label"><span>Valor do operador</span></div>
+        <div class="input-wrap"><input type="text" id="opValue" placeholder="Digite o valor após selecionar operador" oninput="buildDork()"></div>
+      </div>
 
-            const buscaExata1 = document.getElementById('buscaExata1').value;
+      <div class="operators-label">Templates rápidos</div>
+      <div class="templates-grid">
+        <button class="tpl-btn" onclick="useTemplate('files')">📄 Arquivos PDF</button>
+        <button class="tpl-btn" onclick="useTemplate('login')">🔐 Logins expostos</button>
+        <button class="tpl-btn" onclick="useTemplate('dirs')">📁 Diretórios abertos</button>
+        <button class="tpl-btn" onclick="useTemplate('sql')">💉 SQL dumps</button>
+        <button class="tpl-btn" onclick="useTemplate('wa')">💬 WhatsApp</button>
+        <button class="tpl-btn" onclick="useTemplate('tg')">✈️ Telegram</button>
+        <button class="tpl-btn" onclick="useTemplate('git')">🐙 GitHub</button>
+        <button class="tpl-btn" onclick="useTemplate('email')">📧 Emails</button>
+      </div>
+    </div>
 
-            const buscaExata2 = document.getElementById('buscaExata2').value;
+    <!-- Manual Tab -->
+    <div id="tabManual" style="display:none">
+      <div class="input-group">
+        <div class="input-label"><span>Digite sua dork diretamente</span></div>
+        <div class="input-wrap"><textarea id="manualDork" rows="4" placeholder="Ex: site:github.com intext:\"password\" filetype:env" oninput="updateManualPreview()"></textarea></div>
+      </div>
+    </div>
 
-            const campoDork = document.getElementById('campoDork').value;
+    <!-- History Tab -->
+    <div id="tabHistory" style="display:none">
+      <div id="historyEmpty" style="text-align:center;padding:24px;font-size:0.85rem;color:var(--text-muted)">Nenhuma busca ainda</div>
+      <div id="historyList"></div>
+    </div>
+  </div>
 
-            const tipoDork = document.getElementById('tipoDork').value;
+  <!-- Preview -->
+  <div class="card preview" id="previewCard">
+    <div class="preview-label">
+      <span>Consulta gerada</span>
+      <span style="font-size:0.65rem;color:var(--text-muted)" id="previewCount">0 caracteres</span>
+    </div>
+    <div class="preview-text" id="previewText">—</div>
+    <div class="action-row" style="margin-top:12px;margin-bottom:0">
+      <button class="btn btn-primary" onclick="searchGoogle()" id="btnSearch">🔍 Buscar no Google</button>
+      <button class="btn btn-secondary" onclick="copyDork()" id="btnCopy">📋 Copiar</button>
+    </div>
+  </div>
 
-            const divResultados = document.getElementById('resultados');
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
 
+<script>
+let selectedOp='';
+let history=JSON.parse(localStorage.getItem('dorksHistory')||'[]');
+let currentDork='';
 
+/* Theme */
+function toggleTheme(){const h=document.documentElement,b=document.querySelector('.theme-btn');const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');b.textContent=d?'☀️':'🌙';localStorage.setItem('dorksTheme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('dorksTheme');if(s){document.documentElement.setAttribute('data-theme',s);document.querySelector('.theme-btn').textContent=s==='dark'?'🌙':'☀️';}})();
 
-            if (!buscaNormal && !buscaExata1 && !buscaExata2 && !campoDork) {
+/* Tabs */
+function setTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));
+  document.getElementById('tabBuild').style.display=t==='build'?'block':'none';
+  document.getElementById('tabManual').style.display=t==='manual'?'block':'none';
+  document.getElementById('tabHistory').style.display=t==='history'?'block':'none';
+  if(t==='history')renderHistory();
+}
 
-                alert('Por favor, digite pelo menos um termo de busca');
+/* Operators */
+function addOperator(op){
+  selectedOp=op;
+  document.querySelectorAll('.op-chip').forEach(c=>c.classList.toggle('active',c.dataset.op===op));
+  document.getElementById('opValue').focus();
+  document.getElementById('opValue').placeholder=op+'valor...';
+}
 
-                return;
+/* Build dork */
+function buildDork(){
+  const kw=document.getElementById('keywords').value.trim();
+  const exact=document.getElementById('exact').value.trim();
+  const exclude=document.getElementById('exclude').value.trim();
+  const opVal=document.getElementById('opValue').value.trim();
 
-            }
+  let dork='';
+  if(kw)dork+=kw;
+  if(exact)dork+=' "'+exact+'"';
+  if(exclude)dork+=' -'+exclude;
+  if(selectedOp&&opVal)dork+=' '+selectedOp+opVal;
 
+  dork=dork.trim();
+  showPreview(dork);
+}
 
+/* Manual */
+function updateManualPreview(){
+  showPreview(document.getElementById('manualDork').value.trim());
+}
 
-            let consultaBusca = buscaNormal;
+/* Preview */
+function showPreview(dork){
+  currentDork=dork;
+  const card=document.getElementById('previewCard');
+  if(!dork){card.classList.remove('show');return;}
+  card.classList.add('show');
+  document.getElementById('previewText').textContent=dork;
+  document.getElementById('previewCount').textContent=dork.length+' caracteres';
+}
 
+/* Templates */
+function useTemplate(type){
+  const templates={
+    files:'filetype:pdf filetype:doc filetype:xls',
+    login:'intitle:"login" inurl:"admin"',
+    dirs:'intitle:"index of" inurl:"/"',
+    sql:'filetype:sql "password" "CREATE TABLE"',
+    wa:'inurl:"chat.whatsapp.com"',
+    tg:'inurl:"t.me/joinchat"',
+    git:'site:github.com intext:"password" OR intext:"secret"',
+    email:'intext:"@" filetype:csv OR filetype:xlsx'
+  };
+  document.getElementById('manualDork').value=templates[type]||'';
+  setTab('manual');
+  updateManualPreview();
+}
 
+/* Search */
+function searchGoogle(){
+  if(!currentDork){showToast('Gere uma dork primeiro!');return;}
+  window.open('https://www.google.com/search?q='+encodeURIComponent(currentDork),'_blank');
+  addHistory(currentDork);
+}
 
-            if (buscaExata1) {
+/* Copy */
+function copyDork(){
+  if(!currentDork){showToast('Nada para copiar!');return;}
+  navigator.clipboard.writeText(currentDork).then(()=>{
+    const b=document.getElementById('btnCopy');b.textContent='✅ Copiado!';b.classList.add('copied');
+    showToast('Dork copiada!');setTimeout(()=>{b.textContent='📋 Copiar';b.classList.remove('copied');},2000);
+    addHistory(currentDork);
+  });
+}
 
-                consultaBusca += ` "${buscaExata1}"`;
+/* History */
+function addHistory(dork){
+  if(!dork)return;
+  history=h.filter(h=>h!==dork);
+  history.unshift(dork);
+  if(history.length>20)history.pop();
+  localStorage.setItem('dorksHistory',JSON.stringify(history));
+}
 
-            }
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  const empty=document.getElementById('historyEmpty');
+  if(history.length===0){empty.style.display='block';list.innerHTML='';return;}
+  empty.style.display='none';
+  list.innerHTML=history.map(d=>`
+    <div class="history-item" onclick="useHistory('${d.replace(/'/g,"\\'")}')">
+      <span class="history-text">${d}</span>
+      <div class="history-actions">
+        <button class="hist-btn copy" onclick="event.stopPropagation();copyHist('${d.replace(/'/g,"\\'")}')">📋</button>
+        <button class="hist-btn search" onclick="event.stopPropagation();searchHist('${d.replace(/'/g,"\\'")}')">🔍</button>
+      </div>
+    </div>
+  `).join('');
+}
 
+function useHistory(d){
+  document.getElementById('manualDork').value=d;
+  setTab('manual');
+  updateManualPreview();
+}
 
+function copyHist(d){navigator.clipboard.writeText(d).then(()=>showToast('Copiado!'));}
+function searchHist(d){window.open('https://www.google.com/search?q='+encodeURIComponent(d),'_blank');addHistory(d);}
 
-            if (buscaExata2) {
+/* Toast */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
-                consultaBusca += ` "${buscaExata2}"`;
-
-            }
-
-
-
-            if (tipoDork === 'whatsapp') {
-
-                consultaBusca += ` inurl:"chat.whatsapp.com" "${campoDork || 'grupo'}"`;
-
-            } else if (tipoDork === 'telegram') {
-
-                consultaBusca += ` inurl:"t.me" "${campoDork || 'grupo'}"`;
-
-            } else if (campoDork) {
-
-                consultaBusca += ` ${tipoDork}${campoDork}`;
-
-            }
-
-
-
-            const urlBusca = `https://www.google.com/search?q=${encodeURIComponent(consultaBusca)}`;
-
-
-
-            divResultados.innerHTML = `
-
-                <p>Realizando busca para: ${consultaBusca}</p>
-
-                <p>Clique aqui para ver os resultados: <a href="${urlBusca}" target="_blank">Resultados da Busca Google</a></p>
-
-                <button onclick="copiarConsulta('${consultaBusca}')">Copiar Consulta</button>
-
-            `;
-
-        }
-
-
-
-        function copiarConsulta(consulta) {
-
-            navigator.clipboard.writeText(consulta).then(() => {
-
-                alert('Consulta copiada para a área de transferência!');
-
-            }, (err) => {
-
-                console.error('Erro ao copiar: ', err);
-
-            });
-
-        }
-
-    </script>
-
+/* Keyboard */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey&&e.target.tagName!=='TEXTAREA'){e.preventDefault();searchGoogle();}
+});
+</script>
 </body>
-
 </html>
-
