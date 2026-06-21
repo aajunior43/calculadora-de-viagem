@@ -1,112 +1,470 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="utf-8">
-    <title>🚰 Calculadora de Consumo de Água 🚰</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            font-family: 'Roboto Mono', monospace;
-            font-size: 16px;
-            color: #00adb5;
-            text-align: center;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        h1 {
-            font-size: 32px;
-            color: #fff;
-            margin: 20px 0;
-            text-shadow: 0 0 10px #00adb5;
-        }
-        form {
-            background-color: #222831;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px #00adb5;
-            width: 100%;
-            max-width: 400px;
-        }
-        label {
-            margin: 15px 0;
-            font-size: 18px;
-            color: #00adb5;
-            display: block;
-            text-align: left;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            background-color: #393e46;
-            border: 1px solid #00adb5;
-            border-radius: 5px;
-            color: #fff;
-            font-size: 18px;
-        }
-        input[type="number"]:focus {
-            outline: none;
-            box-shadow: 0 0 5px #00adb5;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #00adb5;
-            border: none;
-            border-radius: 5px;
-            color: #393e46;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        button:hover {
-            background-color: #05c3c9;
-        }
-        #resultado {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #393e46;
-            color: #00adb5;
-            border-radius: 5px;
-            box-shadow: 0 0 10px #00adb5;
-            font-size: 20px;
-            display: none;
-        }
-        .footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            font-size: 14px;
-            color: #00adb5;
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Consumo de Água</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--font:'Inter',system-ui,-apple-system,sans-serif;--radius:20px;--transition:0.35s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{
+  --bg:#0a0a1a;--bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);--card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;--text-muted:#8b8ba0;
+  --primary:#06b6d4;--primary-dim:rgba(6,182,212,0.12);--primary-glow:rgba(6,182,212,0.25);
+  --accent:#22d3ee;--blue:#3b82f6;--green:#10b981;--red:#ef4444;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--tag-bg:rgba(255,255,255,0.05);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);--card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;--text-muted:#6b7280;
+  --primary:#0891b2;--primary-dim:rgba(8,145,178,0.08);--primary-glow:rgba(8,145,178,0.15);
+  --accent:#06b6d4;--blue:#2563eb;--green:#059669;--red:#dc2626;
+  --shadow:0 8px 32px rgba(0,0,0,0.08);--tag-bg:rgba(0,0,0,0.04);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-grad);color:var(--text);min-height:100vh;padding:20px;transition:background var(--transition),color var(--transition)}
+.app{max-width:520px;margin:0 auto;padding-bottom:40px}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:var(--primary-dim);border:1.5px solid var(--primary);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.header-title{font-size:1.1rem;font-weight:800}
+.header-sub{font-size:0.7rem;color:var(--text-muted);font-weight:500;margin-top:1px}
+.theme-btn{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);font-size:1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
+
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:16px}
+
+/* Gauge */
+.gauge-wrap{display:flex;justify-content:center;margin-bottom:20px}
+.gauge{position:relative;width:180px;height:180px}
+.gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge-bg{fill:none;stroke:var(--card-border);stroke-width:10}
+.gauge-fill{fill:none;stroke:var(--primary);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1)}
+.gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.gauge-pct{font-size:2rem;font-weight:800;color:var(--primary);line-height:1}
+.gauge-label{font-size:0.7rem;color:var(--text-muted);font-weight:600;margin-top:4px}
+.gauge-ml{font-size:0.85rem;font-weight:700;color:var(--text);margin-top:2px}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,0.03);border-radius:14px;padding:4px}
+.tab{flex:1;padding:11px 6px;border-radius:11px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:0.75rem;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.active{background:var(--primary-dim);color:var(--primary);box-shadow:0 2px 8px var(--primary-glow)}
+.tab:hover:not(.active){color:var(--text)}
+
+.input-group{margin-bottom:14px}
+.input-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.input-label span{font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+.input-wrap{position:relative}
+.input-wrap input[type="number"],.input-wrap input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--card-border);background:rgba(255,255,255,0.03);color:var(--text);font-family:var(--font);font-size:1rem;font-weight:600;outline:none;transition:all var(--transition)}
+.input-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim)}
+.input-wrap input::placeholder{color:var(--text-muted);font-weight:400}
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none}
+.input-suffix{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:0.75rem;font-weight:600;color:var(--text-muted)}
+
+/* Activity level */
+.activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.activity-btn{padding:12px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--tag-bg);cursor:pointer;transition:all var(--transition);text-align:center}
+.activity-btn:hover{border-color:var(--primary)}
+.activity-btn.active{border-color:var(--primary);background:var(--primary-dim);box-shadow:0 0 12px var(--primary-glow)}
+.activity-icon{font-size:1.3rem;margin-bottom:4px}
+.activity-name{font-size:0.75rem;font-weight:700;color:var(--text)}
+.activity-mult{font-size:0.65rem;color:var(--text-muted);margin-top:2px}
+.activity-btn.active .activity-mult{color:var(--primary)}
+
+/* Climate */
+.climate-row{display:flex;gap:8px;margin-bottom:16px}
+.climate-btn{flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--card-border);background:var(--tag-bg);cursor:pointer;transition:all var(--transition);text-align:center;font-size:0.78rem;font-weight:600;color:var(--text-muted)}
+.climate-btn:hover{border-color:var(--primary);color:var(--text)}
+.climate-btn.active{border-color:var(--primary);background:var(--primary-dim);color:var(--primary)}
+
+/* Quick add */
+.quick-add{display:flex;gap:8px;margin-bottom:16px}
+.quick-btn{flex:1;padding:14px;border-radius:14px;border:1.5px solid var(--card-border);background:var(--card);cursor:pointer;transition:all var(--transition);text-align:center}
+.quick-btn:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px var(--primary-glow)}
+.quick-btn:active{transform:scale(0.95)}
+.quick-icon{font-size:1.5rem;margin-bottom:4px}
+.quick-ml{font-size:0.85rem;font-weight:700;color:var(--primary)}
+.quick-label{font-size:0.65rem;color:var(--text-muted);font-weight:500}
+
+/* Log */
+.log-list{max-height:200px;overflow-y:auto}
+.log-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;border:1px solid var(--card-border);margin-bottom:4px;font-size:0.8rem;animation:slideUp 0.2s ease}
+.log-item .log-time{color:var(--text-muted);font-weight:600;min-width:50px}
+.log-item .log-amount{color:var(--primary);font-weight:700}
+.log-item .log-del{padding:4px 8px;border-radius:6px;border:none;background:rgba(239,68,68,0.1);color:var(--red);font-size:0.65rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:all var(--transition)}
+.log-item .log-del:hover{background:var(--red);color:#fff}
+.log-empty{text-align:center;padding:16px;font-size:0.8rem;color:var(--text-muted)}
+
+/* Buttons */
+.btn{width:100%;padding:14px;border-radius:14px;border:none;font-family:var(--font);font-size:0.9rem;font-weight:700;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{background:var(--card);border:1.5px solid var(--card-border);color:var(--text);margin-top:8px}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-danger{background:rgba(239,68,68,0.1);border:1.5px solid rgba(239,68,68,0.2);color:var(--red);margin-top:8px}
+.btn-danger:hover{background:var(--red);color:#fff}
+
+/* History cards */
+.history-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.history-day{padding:12px;border-radius:12px;border:1px solid var(--card-border);text-align:center;cursor:pointer;transition:all var(--transition)}
+.history-day:hover{border-color:var(--primary)}
+.history-day.today{border-color:var(--primary);background:var(--primary-dim)}
+.history-date{font-size:0.65rem;color:var(--text-muted);font-weight:600}
+.history-val{font-size:1rem;font-weight:800;color:var(--text);margin-top:4px}
+.history-pct{font-size:0.65rem;font-weight:600;margin-top:2px}
+.history-pct.good{color:var(--green)}
+.history-pct.mid{color:var(--primary)}
+.history-pct.low{color:var(--red)}
+
+.footer{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid var(--card-border)}
+.footer-brand{font-size:0.7rem;font-weight:600;color:var(--text-muted);letter-spacing:0.03em}
+.footer-brand span{color:var(--primary);font-weight:700}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;border-radius:12px;background:var(--primary);color:#fff;font-family:var(--font);font-size:0.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:999;transition:transform 0.35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:500px){body{padding:12px}.card{padding:18px}.gauge{width:150px;height:150px}.activity-grid{grid-template-columns:1fr}.quick-add{flex-wrap:wrap}.quick-btn{min-width:calc(33% - 6px)}}
+</style>
 </head>
 <body>
-    <h1>Calculadora de Consumo de Água</h1>
-    <form id="waterCalcForm" onsubmit="calcular(); return false;">
-        <label for="peso">Peso (em kg):</label>
-        <input type="number" id="peso" name="peso" required placeholder="Digite seu peso em kg">
-        <button type="submit">Calcular</button>
-        <div id="resultado"></div>
-    </form>
-    <script>
-        function calcular() {
-            const peso = document.getElementById('peso').value;
-            const consumo = peso * 35; // Recomendação atualizada para 35ml por kg
-            const litros = (consumo / 1000).toFixed(2);
-            document.getElementById('resultado').innerHTML = `Com ${peso} kg, você deve beber aproximadamente ${litros} litros de água por dia.`;
-            document.getElementById('resultado').style.display = 'block';
-        }
-    </script>
-    <div class="footer">Criado por Aleksandro Alves Da Rocha Junior</div>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">💧</div>
+      <div>
+        <div class="header-title">Consumo de Água</div>
+        <div class="header-sub">Meta diária personalizada</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
+
+  <!-- Gauge -->
+  <div class="gauge-wrap">
+    <div class="gauge">
+      <svg viewBox="0 0 200 200">
+        <circle class="gauge-bg" cx="100" cy="100" r="85"></circle>
+        <circle class="gauge-fill" id="gaugeFill" cx="100" cy="100" r="85"
+          stroke-dasharray="534" stroke-dashoffset="534"></circle>
+      </svg>
+      <div class="gauge-center">
+        <div class="gauge-pct" id="gaugePct">0%</div>
+        <div class="gauge-label">da meta</div>
+        <div class="gauge-ml" id="gaugeMl">0 / 0 ml</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="setTab('calc')" data-tab="calc">🧮 Calcular</button>
+      <button class="tab" onclick="setTab('add')" data-tab="add">➕ Beber</button>
+      <button class="tab" onclick="setTab('log')" data-tab="log">📋 Histórico</button>
+    </div>
+
+    <!-- Calc Tab -->
+    <div id="tabCalc">
+      <div class="input-group">
+        <div class="input-label"><span>Peso</span></div>
+        <div class="input-wrap">
+          <input type="number" id="peso" placeholder="Ex: 70" min="1" max="300">
+          <span class="input-suffix">kg</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Idade</span></div>
+        <div class="input-wrap">
+          <input type="number" id="idade" placeholder="Ex: 30" min="1" max="120">
+          <span class="input-suffix">anos</span>
+        </div>
+      </div>
+
+      <div class="input-label" style="margin-bottom:8px"><span>Nível de atividade</span></div>
+      <div class="activity-grid">
+        <div class="activity-btn active" onclick="setActivity(this,1)" data-mult="1">
+          <div class="activity-icon">🪑</div>
+          <div class="activity-name">Sedentário</div>
+          <div class="activity-mult">×1.0</div>
+        </div>
+        <div class="activity-btn" onclick="setActivity(this,1.2)" data-mult="1.2">
+          <div class="activity-icon">🚶</div>
+          <div class="activity-name">Leve</div>
+          <div class="activity-mult">×1.2</div>
+        </div>
+        <div class="activity-btn" onclick="setActivity(this,1.5)" data-mult="1.5">
+          <div class="activity-icon">🏃</div>
+          <div class="activity-name">Moderado</div>
+          <div class="activity-mult">×1.5</div>
+        </div>
+        <div class="activity-btn" onclick="setActivity(this,1.8)" data-mult="1.8">
+          <div class="activity-icon">🏋️</div>
+          <div class="activity-name">Intenso</div>
+          <div class="activity-mult">×1.8</div>
+        </div>
+      </div>
+
+      <div class="input-label" style="margin-bottom:8px"><span>Clima</span></div>
+      <div class="climate-row">
+        <div class="climate-btn" onclick="setClimate(this,0.85)">❄️ Frio</div>
+        <div class="climate-btn active" onclick="setClimate(this,1)">🌤️ Normal</div>
+        <div class="climate-btn" onclick="setClimate(this,1.15)">☀️ Quente</div>
+        <div class="climate-btn" onclick="setClimate(this,1.3)">🔥 Escaldante</div>
+      </div>
+
+      <button class="btn btn-primary" onclick="calcularMeta()"><span>💧</span> Calcular Meta</button>
+    </div>
+
+    <!-- Add Tab -->
+    <div id="tabAdd" style="display:none">
+      <div class="input-label" style="margin-bottom:10px"><span>Adicionar água</span></div>
+      <div class="quick-add">
+        <div class="quick-btn" onclick="addWater(150)">
+          <div class="quick-icon">🥛</div>
+          <div class="quick-ml">150ml</div>
+          <div class="quick-label">Copo</div>
+        </div>
+        <div class="quick-btn" onclick="addWater(250)">
+          <div class="quick-icon">☕</div>
+          <div class="quick-ml">250ml</div>
+          <div class="quick-label">Xícara</div>
+        </div>
+        <div class="quick-btn" onclick="addWater(350)">
+          <div class="quick-icon">🥤</div>
+          <div class="quick-ml">350ml</div>
+          <div class="quick-label">Garrafa</div>
+        </div>
+        <div class="quick-btn" onclick="addWater(500)">
+          <div class="quick-icon">🍶</div>
+          <div class="quick-ml">500ml</div>
+          <div class="quick-label">Garrafão</div>
+        </div>
+        <div class="quick-btn" onclick="addWater(750)">
+          <div class="quick-icon">🫗</div>
+          <div class="quick-ml">750ml</div>
+          <div class="quick-label">Pool</div>
+        </div>
+        <div class="quick-btn" onclick="addWater(1000)">
+          <div class="quick-icon">🧴</div>
+          <div class="quick-ml">1L</div>
+          <div class="quick-label">Garrafão G</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Ou digite manualmente</span></div>
+        <div class="input-wrap">
+          <input type="number" id="customMl" placeholder="Quantidade em ml" min="1" max="5000">
+          <span class="input-suffix">ml</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="addCustom()"><span>➕</span> Adicionar</button>
+      <button class="btn btn-danger" onclick="resetDay()">🔄 Resetar dia</button>
+
+      <div style="margin-top:16px" id="todayLog">
+        <div class="input-label" style="margin-bottom:8px"><span>Consumo de hoje</span></div>
+        <div class="log-list" id="logList"></div>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div id="tabLog" style="display:none">
+      <div class="input-label" style="margin-bottom:10px"><span>Últimos 7 dias</span></div>
+      <div class="history-grid" id="historyGrid"></div>
+      <button class="btn btn-secondary" onclick="exportData()" style="margin-top:8px">💾 Exportar dados</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const CIRCUMFERENCE=2*Math.PI*85;
+let meta=2500;
+let activityMult=1;
+let climateMult=1;
+let todayLog=JSON.parse(localStorage.getItem('aguaLog_'+todayKey())||'[]');
+let allHistory=JSON.parse(localStorage.getItem('aguaHistory')||'{}');
+
+function todayKey(){return new Date().toISOString().slice(0,10);}
+
+/* Theme */
+function toggleTheme(){const h=document.documentElement,b=document.querySelector('.theme-btn');const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');b.textContent=d?'☀️':'🌙';localStorage.setItem('aguaTheme',d?'light':'dark');}
+(function(){const s=localStorage.getItem('aguaTheme');if(s){document.documentElement.setAttribute('data-theme',s);document.querySelector('.theme-btn').textContent=s==='dark'?'🌙':'☀️';}})();
+
+/* Tabs */
+function setTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));
+  document.getElementById('tabCalc').style.display=t==='calc'?'block':'none';
+  document.getElementById('tabAdd').style.display=t==='add'?'block':'none';
+  document.getElementById('tabLog').style.display=t==='log'?'block':'none';
+  if(t==='log')renderHistory();
+  if(t==='add')renderLog();
+}
+
+/* Activity */
+function setActivity(el,mult){
+  document.querySelectorAll('.activity-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  activityMult=mult;
+}
+
+/* Climate */
+function setClimate(el,mult){
+  document.querySelectorAll('.climate-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  climateMult=mult;
+}
+
+/* Calculate meta */
+function calcularMeta(){
+  const peso=parseFloat(document.getElementById('peso').value);
+  const idade=parseInt(document.getElementById('idade').value)||30;
+  if(!peso||peso<1){showToast('Digite seu peso!');return;}
+
+  let base=peso*35;
+  if(idade<15) base=peso*40;
+  else if(idade>65) base=peso*30;
+
+  meta=Math.round(base*activityMult*climateMult/50)*50;
+  localStorage.setItem('aguaMeta',meta);
+  updateGauge();
+  showToast(`Meta: ${meta}ml/dia`);
+  setTab('add');
+}
+
+/* Add water */
+function addWater(ml){
+  todayLog.push({ml,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),ts:Date.now()});
+  saveToday();
+  updateGauge();
+  renderLog();
+  const consumed=todayLog.reduce((s,l)=>s+l.ml,0);
+  if(consumed>=meta)showToast('🎉 Meta atingida!');
+  else showToast(`+${ml}ml — ${consumed}ml de ${meta}ml`);
+}
+
+function addCustom(){
+  const ml=parseInt(document.getElementById('customMl').value);
+  if(!ml||ml<1){showToast('Digite a quantidade!');return;}
+  addWater(ml);
+  document.getElementById('customMl').value='';
+}
+
+function removeLog(idx){
+  todayLog.splice(idx,1);
+  saveToday();
+  updateGauge();
+  renderLog();
+}
+
+function resetDay(){
+  if(!confirm('Resetar consumo de hoje?'))return;
+  todayLog=[];
+  saveToday();
+  updateGauge();
+  renderLog();
+  showToast('Dia resetado!');
+}
+
+function saveToday(){
+  localStorage.setItem('aguaLog_'+todayKey(),JSON.stringify(todayLog));
+  allHistory[todayKey()]={
+    log:todayLog,
+    total:todayLog.reduce((s,l)=>s+l.ml,0),
+    meta:meta
+  };
+  localStorage.setItem('aguaHistory',JSON.stringify(allHistory));
+}
+
+/* Gauge */
+function updateGauge(){
+  const consumed=todayLog.reduce((s,l)=>s+l.ml,0);
+  const pct=Math.min(100,Math.round((consumed/meta)*100));
+  const offset=CIRCUMFERENCE*(1-pct/100);
+
+  document.getElementById('gaugeFill').style.strokeDashoffset=offset;
+  document.getElementById('gaugePct').textContent=pct+'%';
+  document.getElementById('gaugeMl').textContent=consumed+' / '+meta+' ml';
+}
+
+/* Log */
+function renderLog(){
+  const list=document.getElementById('logList');
+  if(todayLog.length===0){
+    list.innerHTML='<div class="log-empty">Nenhum registro hoje</div>';
+    return;
+  }
+  list.innerHTML=todayLog.map((l,i)=>`
+    <div class="log-item">
+      <span class="log-time">${l.time}</span>
+      <span class="log-amount">+${l.ml}ml</span>
+      <button class="log-del" onclick="removeLog(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+/* History */
+function renderHistory(){
+  const grid=document.getElementById('historyGrid');
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const key=d.toISOString().slice(0,10);
+    const dayData=allHistory[key]||{total:0,meta:meta};
+    const pct=dayData.meta?Math.min(100,Math.round((dayData.total/dayData.meta)*100)):0;
+    const isToday=key===todayKey();
+    days.push(`
+      <div class="history-day${isToday?' today':''}">
+        <div class="history-date">${d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit'})}</div>
+        <div class="history-val">${dayData.total}ml</div>
+        <div class="history-pct ${pct>=100?'good':pct>=60?'mid':'low'}">${pct}%</div>
+      </div>
+    `);
+  }
+  grid.innerHTML=days.join('');
+}
+
+/* Export */
+function exportData(){
+  const lines=['Data,Total (ml),Meta (ml),Porcentagem'];
+  Object.keys(allHistory).sort().forEach(d=>{
+    const h=allHistory[d];
+    const pct=h.meta?Math.round((h.total/h.meta)*100):0;
+    lines.push(`${d},${h.total},${h.meta},${pct}%`);
+  });
+  const blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;
+  a.download='consumo-agua-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
+  showToast('Dados exportados!');
+}
+
+/* Toast */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+/* Keyboard */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey&&e.target.tagName!=='TEXTAREA'){e.preventDefault();
+    if(document.getElementById('tabCalc').style.display!=='none')calcularMeta();
+    else if(document.getElementById('tabAdd').style.display!=='none')addCustom();
+  }
+});
+
+/* Init */
+meta=parseInt(localStorage.getItem('aguaMeta'))||2500;
+updateGauge();
+renderLog();
+</script>
 </body>
 </html>
