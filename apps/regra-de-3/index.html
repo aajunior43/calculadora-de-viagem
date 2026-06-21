@@ -1,78 +1,867 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <title>Calculadora de Regra de Três - Aleksandro Alves Da Rocha Junior</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f0f0f0;
-        }
-        .calculator {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-            margin: auto;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-        }
-        .calculator input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        .calculator button {
-            padding: 10px;
-            width: 100%;
-            border-radius: 5px;
-            border: none;
-            background-color: #007BFF;
-            color: #fff;
-            font-weight: bold;
-        }
-        .calculator button:hover {
-            background-color: #0056b3;
-        }
-        .result {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 12px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Regra de Três</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --radius:20px;
+  --transition:0.35s cubic-bezier(.4,0,.2,1);
+}
+
+[data-theme="dark"]{
+  --bg:#0a0a1a;
+  --bg-grad:linear-gradient(135deg,#0a0a1a 0%,#0d1117 50%,#0a0a1a 100%);
+  --card:rgba(18,18,40,0.85);
+  --card-border:rgba(255,255,255,0.06);
+  --text:#e8e8f0;
+  --text-muted:#8b8ba0;
+  --primary:#10b981;
+  --primary-dim:rgba(16,185,129,0.12);
+  --primary-glow:rgba(16,185,129,0.25);
+  --accent:#06d6a0;
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,0.12);
+  --yellow:#f59e0b;
+  --yellow-dim:rgba(245,158,11,0.12);
+  --shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+
+[data-theme="light"]{
+  --bg:#f0f2f5;
+  --bg-grad:linear-gradient(135deg,#f0f2f5 0%,#e8ecf0 50%,#f0f2f5 100%);
+  --card:rgba(255,255,255,0.92);
+  --card-border:rgba(0,0,0,0.06);
+  --text:#1a1a2e;
+  --text-muted:#6b7280;
+  --primary:#059669;
+  --primary-dim:rgba(5,150,105,0.08);
+  --primary-glow:rgba(5,150,105,0.15);
+  --accent:#10b981;
+  --red:#dc2626;
+  --red-dim:rgba(220,38,38,0.08);
+  --yellow:#d97706;
+  --yellow-dim:rgba(217,119,6,0.08);
+  --shadow:0 8px 32px rgba(0,0,0,0.08);
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg-grad);
+  color:var(--text);
+  min-height:100vh;
+  padding:20px;
+  transition:background var(--transition),color var(--transition);
+  overflow-x:hidden;
+}
+
+.app{
+  max-width:480px;
+  margin:0 auto;
+  padding-bottom:40px;
+}
+
+/* ── Header ── */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:24px;
+}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{
+  width:44px;height:44px;
+  background:var(--primary-dim);
+  border:1.5px solid var(--primary);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+}
+.header-title{
+  font-size:1.1rem;
+  font-weight:800;
+  letter-spacing:-0.01em;
+}
+.header-sub{
+  font-size:0.7rem;
+  color:var(--text-muted);
+  font-weight:500;
+  margin-top:1px;
+}
+.theme-btn{
+  width:40px;height:40px;
+  border-radius:12px;
+  border:1.5px solid var(--card-border);
+  background:var(--card);
+  color:var(--text);
+  font-size:1.1rem;
+  cursor:pointer;
+  transition:all var(--transition);
+  display:flex;align-items:center;justify-content:center;
+}
+.theme-btn:hover{border-color:var(--primary);transform:scale(1.05)}
+
+/* ── Card ── */
+.card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius);
+  padding:24px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  margin-bottom:16px;
+}
+
+/* ── Mode Tabs ── */
+.tabs{
+  display:flex;
+  gap:6px;
+  margin-bottom:20px;
+  background:rgba(255,255,255,0.03);
+  border-radius:14px;
+  padding:4px;
+}
+.tab{
+  flex:1;
+  padding:10px 8px;
+  border-radius:11px;
+  border:none;
+  background:transparent;
+  color:var(--text-muted);
+  font-family:var(--font);
+  font-size:0.78rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:all var(--transition);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.tab.active{
+  background:var(--primary-dim);
+  color:var(--primary);
+  box-shadow:0 2px 8px var(--primary-glow);
+}
+.tab:hover:not(.active){color:var(--text)}
+.tab-icon{font-size:1rem}
+
+/* ── Formula Visual ── */
+.formula-visual{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:16px;
+  margin-bottom:20px;
+  border-radius:14px;
+  background:var(--primary-dim);
+  border:1px solid rgba(16,185,129,0.15);
+}
+.formula-item{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.formula-val{
+  width:60px;height:48px;
+  border-radius:10px;
+  border:1.5px solid var(--card-border);
+  background:var(--card);
+  color:var(--primary);
+  font-family:var(--font);
+  font-size:1.1rem;
+  font-weight:700;
+  text-align:center;
+  display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);
+}
+.formula-val.empty{color:var(--text-muted);font-size:0.8rem}
+.formula-val.filled{border-color:var(--primary);box-shadow:0 0 8px var(--primary-glow)}
+.formula-label{
+  font-size:0.65rem;
+  color:var(--text-muted);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+}
+.formula-op{
+  font-size:1.2rem;
+  font-weight:700;
+  color:var(--text-muted);
+  margin-top:-16px;
+}
+.formula-x{
+  font-size:1.4rem;
+  font-weight:800;
+  color:var(--red);
+  margin-top:-16px;
+}
+
+/* ── Inputs ── */
+.input-group{
+  margin-bottom:14px;
+}
+.input-label{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:6px;
+}
+.input-label span{
+  font-size:0.75rem;
+  font-weight:600;
+  color:var(--text-muted);
+}
+.input-label .val-display{
+  font-size:0.85rem;
+  font-weight:700;
+  color:var(--text);
+}
+.input-wrap{
+  position:relative;
+}
+.input-wrap input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:12px;
+  border:1.5px solid var(--card-border);
+  background:rgba(255,255,255,0.03);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:1.1rem;
+  font-weight:600;
+  outline:none;
+  transition:all var(--transition);
+}
+.input-wrap input::placeholder{color:var(--text-muted);font-weight:400}
+.input-wrap input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px var(--primary-dim);
+  background:rgba(16,185,129,0.03);
+}
+.input-wrap .unit{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  font-size:0.75rem;font-weight:600;color:var(--text-muted);
+  pointer-events:none;
+}
+
+/* ── Button ── */
+.calc-btn{
+  width:100%;
+  padding:16px;
+  border-radius:14px;
+  border:none;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;
+  font-family:var(--font);
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:all var(--transition);
+  margin-top:6px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--primary-glow)}
+.calc-btn:active{transform:scale(0.97)}
+
+.calc-btn.secondary{
+  background:var(--card);
+  border:1.5px solid var(--card-border);
+  color:var(--text);
+  margin-top:8px;
+}
+.calc-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+
+/* ── Result ── */
+.result-card{
+  display:none;
+  margin-top:16px;
+  padding:20px;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--primary-dim),rgba(6,214,160,0.06));
+  border:1.5px solid rgba(16,185,129,0.2);
+  text-align:center;
+  animation:slideUp 0.3s ease;
+}
+.result-card.show{display:block}
+.result-label{
+  font-size:0.7rem;
+  font-weight:600;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  margin-bottom:6px;
+}
+.result-value{
+  font-size:2rem;
+  font-weight:800;
+  color:var(--primary);
+  letter-spacing:-0.02em;
+  line-height:1.2;
+}
+.result-formula{
+  margin-top:10px;
+  font-size:0.8rem;
+  color:var(--text-muted);
+  font-weight:500;
+}
+.result-actions{
+  display:flex;gap:8px;margin-top:12px;
+}
+.result-actions button{
+  flex:1;
+  padding:10px;
+  border-radius:10px;
+  border:1.5px solid var(--card-border);
+  background:var(--card);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:0.78rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:all var(--transition);
+}
+.result-actions button:hover{border-color:var(--primary);color:var(--primary)}
+.result-actions button.copied{border-color:var(--primary);color:var(--primary);background:var(--primary-dim)}
+
+/* ── Steps ── */
+.steps{
+  margin-top:16px;
+  display:none;
+}
+.steps.show{display:block}
+.steps-title{
+  font-size:0.75rem;
+  font-weight:700;
+  color:var(--text-muted);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.step{
+  display:flex;gap:10px;
+  margin-bottom:10px;
+  padding:12px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--card-border);
+  animation:slideUp 0.3s ease;
+}
+.step-num{
+  width:26px;height:26px;
+  border-radius:8px;
+  background:var(--primary-dim);
+  color:var(--primary);
+  font-size:0.75rem;
+  font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.step-text{
+  font-size:0.8rem;
+  color:var(--text);
+  font-weight:500;
+  line-height:1.5;
+}
+.step-text strong{color:var(--primary);font-weight:700}
+
+/* ── History ── */
+.history{
+  margin-top:16px;
+}
+.history-title{
+  font-size:0.75rem;
+  font-weight:700;
+  color:var(--text-muted);
+  margin-bottom:10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.history-clear{
+  font-size:0.65rem;
+  color:var(--red);
+  cursor:pointer;
+  font-weight:600;
+  background:var(--red-dim);
+  padding:4px 10px;
+  border-radius:8px;
+  border:none;
+  font-family:var(--font);
+}
+.history-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid var(--card-border);
+  margin-bottom:6px;
+  cursor:pointer;
+  transition:all var(--transition);
+}
+.history-item:hover{border-color:var(--primary);background:var(--primary-dim)}
+.history-calc{font-size:0.8rem;font-weight:600;color:var(--text)}
+.history-result{font-size:0.85rem;font-weight:700;color:var(--primary)}
+.history-empty{
+  text-align:center;
+  padding:16px;
+  font-size:0.8rem;
+  color:var(--text-muted);
+}
+
+/* ── Footer ── */
+.footer{
+  text-align:center;
+  margin-top:32px;
+  padding-top:16px;
+  border-top:1px solid var(--card-border);
+}
+.footer-brand{
+  font-size:0.7rem;
+  font-weight:600;
+  color:var(--text-muted);
+  letter-spacing:0.03em;
+}
+.footer-brand span{color:var(--primary);font-weight:700}
+
+/* ── Animations ── */
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+  padding:12px 24px;border-radius:12px;
+  background:var(--primary);color:#fff;
+  font-family:var(--font);font-size:0.85rem;font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,0.3);
+  z-index:999;
+  transition:transform 0.35s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── Responsive ── */
+@media(max-width:500px){
+  body{padding:12px}
+  .card{padding:18px}
+  .formula-visual{gap:8px;padding:12px}
+  .formula-val{width:52px;height:42px;font-size:1rem}
+}
+</style>
 </head>
 <body>
-    <h1>Calculadora de Regra de Três</h1>
-    <p>Para usar esta calculadora, preencha os três primeiros campos com os valores conhecidos da sua proporção. Por exemplo, se você sabe que 2 está para 4, assim como 3 está para X, você preencheria os campos com 2, 4 e 3. Depois, pressione 'Calcular' para obter o resultado.</p>
-    <div class="calculator">
-        <input id="input1" type="number" placeholder="Valor 1">
-        <input id="input2" type="number" placeholder="Valor 2">
-        <input id="input3" type="number" placeholder="Valor 3">
-        <button onclick="calculate()">Calcular</button>
-        <div class="result" id="result"></div>
-    </div>
-    <div class="footer">
-        Criado por Aleksandro Alves Da Rocha Junior
-    </div>
-    <script>
-        function calculate() {
-            var input1 = document.getElementById('input1').value;
-            var input2 = document.getElementById('input2').value;
-            var input3 = document.getElementById('input3').value;
 
-            if(input1 && input2 && input3) {
-                var result = (input2 * input3) / input1;
-                document.getElementById('result').innerText = "Resultado: " + result;
-            } else {
-                document.getElementById('result').innerText = "Por favor, preencha todos os campos.";
-            }
-        }
-    </script>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">📐</div>
+      <div>
+        <div class="header-title">Regra de Três</div>
+        <div class="header-sub">Proporção simples e composta</div>
+      </div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+  </div>
+
+  <!-- Mode Tabs -->
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="setMode('simple')" data-mode="simple">
+        <span class="tab-icon">📐</span> Simples
+      </button>
+      <button class="tab" onclick="setMode('inverse')" data-mode="inverse">
+        <span class="tab-icon">🔄</span> Inversa
+      </button>
+      <button class="tab" onclick="setMode('composed')" data-mode="composed">
+        <span class="tab-icon">📊</span> Composta
+      </button>
+    </div>
+
+    <!-- Simple / Inverse -->
+    <div id="simpleForm">
+      <div class="formula-visual" id="formulaVisual">
+        <div class="formula-item">
+          <div class="formula-val" id="fv1">—</div>
+          <div class="formula-label">A</div>
+        </div>
+        <div class="formula-op">:</div>
+        <div class="formula-item">
+          <div class="formula-val" id="fv2">—</div>
+          <div class="formula-label">B</div>
+        </div>
+        <div class="formula-op">=</div>
+        <div class="formula-item">
+          <div class="formula-val" id="fv3">—</div>
+          <div class="formula-label">C</div>
+        </div>
+        <div class="formula-op">:</div>
+        <div class="formula-item">
+          <div class="formula-val" id="fvX" style="border-color:var(--red);color:var(--red)">?</div>
+          <div class="formula-label">X</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>A (valor 1)</span><span class="val-display" id="dispA"></span></div>
+        <div class="input-wrap"><input id="valA" type="number" placeholder="Ex: 2" step="any" oninput="updateFormula()"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>B (valor 2)</span><span class="val-display" id="dispB"></span></div>
+        <div class="input-wrap"><input id="valB" type="number" placeholder="Ex: 10" step="any" oninput="updateFormula()"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>C (valor 3)</span><span class="val-display" id="dispC"></span></div>
+        <div class="input-wrap"><input id="valC" type="number" placeholder="Ex: 5" step="any" oninput="updateFormula()"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Unidade de X</span></div>
+        <div class="input-wrap"><input id="unitX" type="text" placeholder="Ex: kg, litros, R$..." maxlength="20"></div>
+      </div>
+
+      <button class="calc-btn" onclick="calculate()">
+        <span>⚡</span> Calcular X
+      </button>
+      <button class="calc-btn secondary" onclick="clearAll()">
+        <span>🗑️</span> Limpar
+      </button>
+    </div>
+
+    <!-- Composed -->
+    <div id="composedForm" style="display:none">
+      <div class="formula-visual">
+        <div class="formula-item">
+          <div class="formula-val" style="width:auto;padding:0 10px;font-size:0.85rem" id="fvA1">—</div>
+          <div class="formula-label" id="lblA1">A₁</div>
+        </div>
+        <div class="formula-op">×</div>
+        <div class="formula-item">
+          <div class="formula-val" style="width:auto;padding:0 10px;font-size:0.85rem" id="fvB1">—</div>
+          <div class="formula-label" id="lblB1">B₁</div>
+        </div>
+        <div class="formula-op">=</div>
+        <div class="formula-item">
+          <div class="formula-val" style="width:auto;padding:0 10px;font-size:0.85rem" id="fvC1">—</div>
+          <div class="formula-label" id="lblC1">C₁</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>A₁ (valor conhecido 1)</span></div>
+        <div class="input-wrap"><input id="cA1" type="number" placeholder="Ex: 2" step="any"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>B₁ (valor conhecido 2)</span></div>
+        <div class="input-wrap"><input id="cB1" type="number" placeholder="Ex: 3" step="any"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>C₁ (resultado conhecido)</span></div>
+        <div class="input-wrap"><input id="cC1" type="number" placeholder="Ex: 12" step="any"></div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--card-border);margin:14px 0">
+      <div class="input-group">
+        <div class="input-label"><span>A₂ (valor 2º caso)</span></div>
+        <div class="input-wrap"><input id="cA2" type="number" placeholder="Ex: 5" step="any"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>B₂ (valor 2º caso)</span></div>
+        <div class="input-wrap"><input id="cB2" type="number" placeholder="Ex: 7" step="any"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>C₂ = ?</span></div>
+        <div class="input-wrap"><input id="cC2" type="number" placeholder="Resultado" step="any" readonly style="opacity:0.6"></div>
+      </div>
+      <div class="input-group">
+        <div class="input-label"><span>Unidade</span></div>
+        <div class="input-wrap"><input id="unitComp" type="text" placeholder="Ex: kg, litros, R$..." maxlength="20"></div>
+      </div>
+
+      <button class="calc-btn" onclick="calculateComposed()">
+        <span>⚡</span> Calcular
+      </button>
+      <button class="calc-btn secondary" onclick="clearComposed()">
+        <span>🗑️</span> Limpar
+      </button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-card" id="resultCard">
+    <div class="result-label">Resultado</div>
+    <div class="result-value" id="resultValue">—</div>
+    <div class="result-formula" id="resultFormula"></div>
+    <div class="result-actions">
+      <button onclick="copyResult()" id="copyBtn">📋 Copiar</button>
+      <button onclick="shareResult()">📤 Compartilhar</button>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps" id="stepsCard">
+    <div class="steps-title">📝 Passo a passo</div>
+    <div id="stepsList"></div>
+  </div>
+
+  <!-- History -->
+  <div class="card history" id="historyCard" style="display:none">
+    <div class="history-title">
+      <span>🕐 Histórico</span>
+      <button class="history-clear" onclick="clearHistory()">Limpar</button>
+    </div>
+    <div id="historyList"></div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">Dev <span>Aleksandro Alves</span></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let mode = 'simple';
+let history = JSON.parse(localStorage.getItem('regra3History') || '[]');
+
+/* ── Theme ── */
+function toggleTheme(){
+  const html = document.documentElement;
+  const btn = document.querySelector('.theme-btn');
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  btn.textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('regra3Theme', isDark ? 'light' : 'dark');
+}
+(function(){
+  const saved = localStorage.getItem('regra3Theme');
+  if(saved){
+    document.documentElement.setAttribute('data-theme', saved);
+    document.querySelector('.theme-btn').textContent = saved === 'dark' ? '🌙' : '☀️';
+  }
+})();
+
+/* ── Mode ── */
+function setMode(m){
+  mode = m;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.mode === m));
+  document.getElementById('simpleForm').style.display = m === 'composed' ? 'none' : 'block';
+  document.getElementById('composedForm').style.display = m === 'composed' ? 'block' : 'none';
+  hideResult();
+}
+
+/* ── Formula Visual ── */
+function updateFormula(){
+  const a = document.getElementById('valA').value;
+  const b = document.getElementById('valB').value;
+  const c = document.getElementById('valC').value;
+  const fv1 = document.getElementById('fv1');
+  const fv2 = document.getElementById('fv2');
+  const fv3 = document.getElementById('fv3');
+  const fvX = document.getElementById('fvX');
+
+  fv1.textContent = a || '—';
+  fv2.textContent = b || '—';
+  fv3.textContent = c || '—';
+  fvX.textContent = (a && b && c) ? '?' : '?';
+
+  fv1.className = 'formula-val' + (a ? ' filled' : ' empty');
+  fv2.className = 'formula-val' + (b ? ' filled' : ' empty');
+  fv3.className = 'formula-val' + (c ? ' filled' : ' empty');
+
+  document.getElementById('dispA').textContent = a ? '= ' + a : '';
+  document.getElementById('dispB').textContent = b ? '= ' + b : '';
+  document.getElementById('dispC').textContent = c ? '= ' + c : '';
+}
+
+/* ── Calculate Simple ── */
+function calculate(){
+  const a = parseFloat(document.getElementById('valA').value);
+  const b = parseFloat(document.getElementById('valB').value);
+  const c = parseFloat(document.getElementById('valC').value);
+  const unit = document.getElementById('unitX').value.trim();
+
+  if(isNaN(a) || isNaN(b) || isNaN(c)){
+    showToast('Preencha todos os valores!');
+    return;
+  }
+  if(a === 0){ showToast('Valor A não pode ser zero!'); return; }
+
+  let result, formulaText, steps;
+
+  if(mode === 'simple'){
+    result = (b * c) / a;
+    formulaText = `X = (${b} × ${c}) / ${a}`;
+    steps = [
+      { text: `Temos a proporção: <strong>${a}</strong> está para <strong>${b}</strong>` },
+      { text: `Queremos descobrir o que corresponde a <strong>${c}</strong>` },
+      { text: `Fórmula: X = (B × C) / A` },
+      { text: `X = (${b} × ${c}) / ${a}` },
+      { text: `X = ${(b*c)} / ${a}` },
+      { text: `<strong>X = ${formatNum(result)}${unit ? ' ' + unit : ''}</strong>` }
+    ];
+  } else {
+    result = (a * b) / c;
+    formulaText = `X = (${a} × ${b}) / ${c}`;
+    steps = [
+      { text: `Na regra de três <strong>inversa</strong>, os valores são inversamente proporcionais` },
+      { text: `Temos: <strong>${a}</strong> ↔ <strong>${b}</strong> ↔ <strong>${c}</strong>` },
+      { text: `Fórmula: X = (A × B) / C` },
+      { text: `X = (${a} × ${b}) / ${c}` },
+      { text: `X = ${(a*b)} / ${c}` },
+      { text: `<strong>X = ${formatNum(result)}${unit ? ' ' + unit : ''}</strong>` }
+    ];
+  }
+
+  showResult(result, formulaText, unit, steps);
+  addHistory(`${a} : ${b} = ${c} : X`, result, unit);
+}
+
+/* ── Calculate Composed ── */
+function calculateComposed(){
+  const a1 = parseFloat(document.getElementById('cA1').value);
+  const b1 = parseFloat(document.getElementById('cB1').value);
+  const c1 = parseFloat(document.getElementById('cC1').value);
+  const a2 = parseFloat(document.getElementById('cA2').value);
+  const b2 = parseFloat(document.getElementById('cB2').value);
+  const unit = document.getElementById('unitComp').value.trim();
+
+  if([a1,b1,c1,a2,b2].some(isNaN)){
+    showToast('Preencha todos os valores!');
+    return;
+  }
+  if(a1 === 0 || b1 === 0){
+    showToast('A₁ e B₁ não podem ser zero!');
+    return;
+  }
+
+  const result = (c1 * a2 * b2) / (a1 * b1);
+  document.getElementById('cC2').value = formatNum(result);
+
+  const formulaText = `X = (${c1} × ${a2} × ${b2}) / (${a1} × ${b1})`;
+  const steps = [
+    { text: `Regra de três <strong>composta</strong> — múltiplas grandezas` },
+    { text: `Caso 1: <strong>${a1}</strong> × <strong>${b1}</strong> = <strong>${c1}</strong>` },
+    { text: `Caso 2: <strong>${a2}</strong> × <strong>${b2}</strong> = X` },
+    { text: `X = (${c1} × ${a2} × ${b2}) / (${a1} × ${b1})` },
+    { text: `X = ${(c1*a2*b2)} / ${(a1*b1)}` },
+    { text: `<strong>X = ${formatNum(result)}${unit ? ' ' + unit : ''}</strong>` }
+  ];
+
+  showResult(result, formulaText, unit, steps);
+  addHistory(`Composta: (${a1}×${b1}=${c1}) → (${a2}×${b2}=?)`, result, unit);
+}
+
+/* ── Result Display ── */
+function showResult(value, formula, unit, steps){
+  document.getElementById('resultValue').textContent = formatNum(value) + (unit ? ' ' + unit : '');
+  document.getElementById('resultFormula').textContent = formula;
+  document.getElementById('resultCard').classList.add('show');
+  document.getElementById('resultCard').style.animation = 'none';
+  requestAnimationFrame(()=>{ document.getElementById('resultCard').style.animation = 'slideUp 0.3s ease'; });
+
+  const stepsList = document.getElementById('stepsList');
+  stepsList.innerHTML = steps.map((s,i) => `
+    <div class="step" style="animation-delay:${i*0.06}s">
+      <div class="step-num">${i+1}</div>
+      <div class="step-text">${s.text}</div>
+    </div>
+  `).join('');
+  document.getElementById('stepsCard').classList.add('show');
+}
+
+function hideResult(){
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('stepsCard').classList.remove('show');
+}
+
+function formatNum(n){
+  if(Number.isInteger(n)) return n.toLocaleString('pt-BR');
+  const r = parseFloat(n.toFixed(6));
+  return r.toLocaleString('pt-BR');
+}
+
+/* ── Clear ── */
+function clearAll(){
+  ['valA','valB','valC','unitX'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('dispA').textContent = '';
+  document.getElementById('dispB').textContent = '';
+  document.getElementById('dispC').textContent = '';
+  updateFormula();
+  hideResult();
+}
+
+function clearComposed(){
+  ['cA1','cB1','cC1','cA2','cB2','cC2','unitComp'].forEach(id => document.getElementById(id).value = '');
+  hideResult();
+}
+
+/* ── Copy / Share ── */
+function copyResult(){
+  const val = document.getElementById('resultValue').textContent;
+  navigator.clipboard.writeText(val).then(()=>{
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✅ Copiado!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = '📋 Copiar'; btn.classList.remove('copied'); }, 2000);
+    showToast('Resultado copiado!');
+  });
+}
+
+function shareResult(){
+  const val = document.getElementById('resultValue').textContent;
+  const formula = document.getElementById('resultFormula').textContent;
+  const text = `📐 Regra de Três\n${formula}\n✅ Resultado: ${val}\n\nDev Aleksandro Alves`;
+  if(navigator.share){
+    navigator.share({ text }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(()=> showToast('Texto copiado para compartilhar!'));
+  }
+}
+
+/* ── History ── */
+function addHistory(calc, result, unit){
+  history.unshift({ calc, result: formatNum(result), unit: unit||'', time: Date.now() });
+  if(history.length > 20) history.pop();
+  localStorage.setItem('regra3History', JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory(){
+  const card = document.getElementById('historyCard');
+  const list = document.getElementById('historyList');
+  if(history.length === 0){ card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = history.slice(0,10).map(h => `
+    <div class="history-item">
+      <span class="history-calc">${h.calc}</span>
+      <span class="history-result">= ${h.result}${h.unit ? ' '+h.unit : ''}</span>
+    </div>
+  `).join('');
+}
+
+function clearHistory(){
+  history = [];
+  localStorage.removeItem('regra3History');
+  renderHistory();
+}
+
+/* ── Toast ── */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+/* ── Keyboard Shortcuts ── */
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault();
+    if(mode === 'composed') calculateComposed(); else calculate();
+  }
+  if(e.key === 'Escape') clearAll();
+});
+
+/* ── Init ── */
+updateFormula();
+renderHistory();
+</script>
 </body>
 </html>
