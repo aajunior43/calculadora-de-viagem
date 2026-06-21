@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hub central de aplicações.">
+  <title>Hub Master</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #f8fafc;
+      background: #060b14;
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: clamp(32px, 7vw, 88px) 22px;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(14, 165, 233, .16), transparent 32rem),
+        #060b14;
+    }
+    main { width: min(1080px, 100%); margin: 0 auto; }
+    .label { margin: 0 0 12px; color: #38bdf8; font-size: .76rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(2.6rem, 7vw, 5.3rem); line-height: .95; letter-spacing: -.06em; }
+    .intro { max-width: 560px; margin: 22px 0 48px; color: #94a3b8; font-size: 1.05rem; line-height: 1.7; }
+    .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 18px; }
+    .app {
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      padding: 26px;
+      border: 1px solid #1e293b;
+      border-radius: 22px;
+      color: inherit;
+      text-decoration: none;
+      background: rgba(15, 23, 42, .78);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .app:hover { transform: translateY(-4px); border-color: #38bdf8; background: #111d31; }
+    .icon { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 15px; background: linear-gradient(135deg, #0ea5e9, #2563eb); font-size: 1.35rem; }
+    h2 { margin: 30px 0 9px; font-size: 1.35rem; }
+    .app p { margin: 0; color: #94a3b8; line-height: 1.55; }
+    .open { margin-top: auto; padding-top: 26px; color: #38bdf8; font-size: .88rem; font-weight: 800; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="label">Central de aplicações</p>
+    <h1>HUB-MASTER</h1>
+    <p class="intro">Todos os projetos reunidos em um só lugar. Selecione uma aplicação para abrir.</p>
+    <section class="apps" aria-label="Aplicações disponíveis">
+      <a class="app" href="/calculadora-de-tempestade/">
+        <span class="icon" aria-hidden="true">&#9889;</span>
+        <h2>Calculadora de Tempestade</h2>
+        <p>Calcule a distância aproximada de uma tempestade pelo intervalo entre o relâmpago e o trovão.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/contador-de-caracteres/">
+        <span class="icon" aria-hidden="true">Aa</span>
+        <h2>Contador de Caracteres</h2>
+        <p>Conte instantaneamente a quantidade de caracteres em qualquer texto digitado.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/regra-de-3/">
+        <span class="icon" aria-hidden="true">3x</span>
+        <h2>Regra de Três</h2>
+        <p>Resolva proporções de forma rápida informando os três valores conhecidos.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/gerador-de-variacoes/">
+        <span class="icon" aria-hidden="true">V+</span>
+        <h2>Gerador de Variações</h2>
+        <p>Combine palavras e variáveis para gerar rapidamente múltiplas versões de uma frase.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/extrair-links-de-grupos/">
+        <span class="icon" aria-hidden="true">#</span>
+        <h2>Extrator de Links de Grupos</h2>
+        <p>Localize e organize links de grupos do WhatsApp e Telegram a partir de textos.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/gerador-de-numeros-aleatorios/">
+        <span class="icon" aria-hidden="true">#?</span>
+        <h2>Gerador de Números Aleatórios</h2>
+        <p>Gere sequências personalizadas com números, letras e caracteres especiais.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/calculadora-consumo-ideal-agua/">
+        <span class="icon" aria-hidden="true">H2O</span>
+        <h2>Consumo Ideal de Água</h2>
+        <p>Estime a quantidade diária de água recomendada a partir do peso corporal.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/pdf-extrator/">
+        <span class="icon" aria-hidden="true">PDF</span>
+        <h2>Extrator de Texto PDF</h2>
+        <p>Carregue documentos PDF e extraia o texto de páginas específicas ou do arquivo completo.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/relogio/">
+        <span class="icon" aria-hidden="true">12:00</span>
+        <h2>Relógio Digital</h2>
+        <p>Acompanhe a hora e a data atuais em uma interface digital de estilo retrô.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/google-dorks/">
+        <span class="icon" aria-hidden="true">G?</span>
+        <h2>Google Dorks</h2>
+        <p>Monte pesquisas avançadas combinando termos, correspondências exatas e operadores do Google.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/calculadora-juros-parcelamento/">
+        <span class="icon" aria-hidden="true">R$</span>
+        <h2>Juros de Parcelamento</h2>
+        <p>Compare valores à vista e parcelados para calcular o custo total e os juros cobrados.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/contagem-regressiva-datas/">
+        <span class="icon" aria-hidden="true">D-</span>
+        <h2>Contagem Regressiva</h2>
+        <p>Crie e acompanhe contagens regressivas para datas e eventos importantes.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/calculadora-seguranca-tomada/">
+        <span class="icon" aria-hidden="true">W/A</span>
+        <h2>Segurança da Tomada</h2>
+        <p>Verifique se a potência de um aparelho é compatível com a tensão e corrente da tomada.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/salvar-prompt/">
+        <span class="icon" aria-hidden="true">P+</span>
+        <h2>Salvar Prompt</h2>
+        <p>Organize um prompt com nome personalizado e salve seu conteúdo em um arquivo de texto.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/calculadora-conciliacao/">
+        <span class="icon" aria-hidden="true">+/-</span>
+        <h2>Calculadora de Conciliação</h2>
+        <p>Compare o saldo bancário com o saldo contábil e identifique o ajuste necessário.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/calculadora-regra-de-3/">
+        <span class="icon" aria-hidden="true">3x+</span>
+        <h2>TriCalc Pro</h2>
+        <p>Resolva regras de três simples e inversas com uma calculadora dedicada.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/formatador-mensagem-whatsapp/">
+        <span class="icon" aria-hidden="true">WA</span>
+        <h2>Formatador para WhatsApp</h2>
+        <p>Formate mensagens, visualize o resultado e organize parágrafos antes de copiar.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/marca-dagua/">
+        <span class="icon" aria-hidden="true">WM</span>
+        <h2>Marca d'Água</h2>
+        <p>Adicione marcas d'água personalizadas às imagens e baixe o resultado em PNG.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/buscador-grupos-whatsapp-telegram/">
+        <span class="icon" aria-hidden="true">W/T</span>
+        <h2>Buscador de Grupos</h2>
+        <p>Pesquise, extraia e organize links de grupos do WhatsApp e Telegram.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/mermaid-fluxograma/">
+        <span class="icon" aria-hidden="true">MMD</span>
+        <h2>Mermaid Diagram Studio</h2>
+        <p>Crie fluxogramas e outros diagramas Mermaid, visualize e exporte em PNG ou PDF.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/favoritos/">
+        <span class="icon" aria-hidden="true">Fav</span>
+        <h2>Gerenciador de Favoritos</h2>
+        <p>Organize, pesquise, edite e exporte uma coleção persistente de links favoritos.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/markify-creator/">
+        <span class="icon" aria-hidden="true">MK</span>
+        <h2>Markify Creator</h2>
+        <p>Crie marcas d'água visuais sobre imagens e exporte o resultado diretamente no navegador.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/prompt-palace-ai-hub/">
+        <span class="icon" aria-hidden="true">PP</span>
+        <h2>Prompt Palace</h2>
+        <p>Organize prompts, modelos e ferramentas de inteligência artificial em um painel pessoal.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/tidy-tasks-bloom/">
+        <span class="icon" aria-hidden="true">TB</span>
+        <h2>Tidy Tasks</h2>
+        <p>Gerencie suas tarefas com elegância e produtividade.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/inaja-fornecimento-digital/">
+        <span class="icon" aria-hidden="true">IF</span>
+        <h2>Inajá Fornecimento Digital</h2>
+        <p>Sistema de fornecimento digital para gestão de documentos.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/calculadoradediferenca/">
+        <span class="icon" aria-hidden="true">CD</span>
+        <h2>Calculadora de Diferença</h2>
+        <p>Calcule diferenças entre valores de forma rápida e precisa.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/matrix/">
+        <span class="icon" aria-hidden="true">MX</span>
+        <h2>Matrix</h2>
+        <p>Efeito visual matrix no navegador.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/organizador/">
+        <span class="icon" aria-hidden="true">🗂️</span>
+        <h2>Organizador de Arquivos</h2>
+        <p>Organize seus arquivos remotamente. Conecte o agente no seu PC e controle pelo site.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/youtube-transcriber/">
+        <span class="icon" aria-hidden="true">🎬</span>
+        <h2>YouTube Transcriber</h2>
+        <p>Extraia a transcrição de qualquer vídeo do YouTube com legendas disponíveis.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/color-gemini-canvas/">
+        <span class="icon" aria-hidden="true">🎨</span>
+        <h2>Color Gemini Canvas</h2>
+        <p>Canvas de cores inspirado no Gemini para criar e explorar paletas.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/bloco-de-notas-markdown/">
+        <span class="icon" aria-hidden="true">📝</span>
+        <h2>Bloco de Notas Markdown</h2>
+        <p>Escreva e visualize suas notas em tempo real com suporte a Markdown.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/meus-repositorios-github/">
+        <span class="icon" aria-hidden="true">📂</span>
+        <h2>Meus Repositórios GitHub</h2>
+        <p>Visualize e gerencie seus repositórios do GitHub em um painel organizado.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/calculadora-percent/">
+        <span class="icon" aria-hidden="true">%</span>
+        <h2>Calculadora de Porcentagem</h2>
+        <p>Calcule porcentagens, descontos, juros e variações de forma completa.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/reinado/">
+        <span class="icon" aria-hidden="true">👑</span>
+        <h2>Reinado</h2>
+        <p>Governe seu reino medieval com decisões estratégicas e IA generativa.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/countdown-sub-sync/">
+        <span class="icon" aria-hidden="true">🔔</span>
+        <h2>Contagem de Assinaturas</h2>
+        <p>Gerencie e acompanhe suas assinaturas com contagem regressiva até a renovação.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/baixar-videos/">
+        <span class="icon" aria-hidden="true">🎬</span>
+        <h2>Baixar Vídeos</h2>
+        <p>Baixe vídeos de YouTube, TikTok, Twitter e mais em MP4.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/extrator-designer/">
+        <span class="icon" aria-hidden="true">🎨</span>
+        <h2>Extrator de Estilo</h2>
+        <p>Analise o estilo visual de qualquer site e gere um prompt detalhado com IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/calculadora-de-viagem/">
+        <span class="icon" aria-hidden="true">✈️</span>
+        <h2>Calculadora de Viagem</h2>
+        <p>Calcule custos de viagem com alimentação, hospedagem e transporte.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/area-de-trabalho/">
+        <span class="icon" aria-hidden="true">💻</span>
+        <h2>Área de Trabalho</h2>
+        <p>Organize seus links e atalhos da área de trabalho em um painel.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/gerador-de-status/">
+        <span class="icon" aria-hidden="true">📱</span>
+        <h2>Gerador de Status</h2>
+        <p>Crie status personalizados para WhatsApp e redes sociais.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/friendly-lobster-run/">
+        <span class="icon" aria-hidden="true">🦞</span>
+        <h2>Friendly Lobster Run</h2>
+        <p>Jogo divertido de correr com lagostas amigáveis.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/cyberclock-background/">
+        <span class="icon" aria-hidden="true">🕐</span>
+        <h2>Cyber Clock Background</h2>
+        <p>Relógio cyberpunk animado para fundo de tela.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/art-narrator/">
+        <span class="icon" aria-hidden="true">🖼️</span>
+        <h2>Art Narrator</h2>
+        <p>Gere narrações e descrições detalhadas para suas obras de arte com IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/afazeres/">
+        <span class="icon" aria-hidden="true">✅</span>
+        <h2>Afazeres</h2>
+        <p>Organize suas tarefas diárias com facilidade.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/dorks/">
+        <span class="icon" aria-hidden="true">🔍</span>
+        <h2>Google Dorks</h2>
+        <p>Gere dorks avançadas do Google para buscas especializadas.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/pdfmaster-pro/">
+        <span class="icon" aria-hidden="true">📄</span>
+        <h2>PDFMaster Pro</h2>
+        <p>Edite, anote e gerencie seus documentos PDF com ferramentas profissionais.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/meu-site/">
+        <span class="icon" aria-hidden="true">🌐</span>
+        <h2>Meu Site</h2>
+        <p>Portfólio pessoal com projetos, certificados e informações de contato.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/quick-notes-ai/">
+        <span class="icon" aria-hidden="true">📝</span>
+        <h2>Quick Notes AI</h2>
+        <p>Bloco de notas com nomes inteligentes gerados por IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/gemini-pdf-rename-magic/">
+        <span class="icon" aria-hidden="true">✨</span>
+        <h2>Gemini PDF Rename</h2>
+        <p>Renomeie seus PDFs automaticamente com IA Gemini.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/organizador-extratos/">
+        <span class="icon" aria-hidden="true">🏦</span>
+        <h2>Organizador de Extratos</h2>
+        <p>Organize seus extratos bancários com nomes inteligentes.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/hub-design-studio/">
+        <span class="icon" aria-hidden="true">🎨</span>
+        <h2>Hub Design Studio</h2>
+        <p>Estúdio de design para personalizar temas e interfaces.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/analisador-nota-fiscal/">
+        <span class="icon" aria-hidden="true">🧾</span>
+        <h2>Analisador de Nota Fiscal</h2>
+        <p>Analise notas fiscais automaticamente com IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/ai-image-prompt/">
+        <span class="icon" aria-hidden="true">🖼️</span>
+        <h2>AI Image Prompt Generator</h2>
+        <p>Gere prompts detalhados para imagens com IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/gerador-memes/">
+        <span class="icon" aria-hidden="true">😂</span>
+        <h2>Gerador de Memes IA</h2>
+        <p>Crie memes automaticamente com inteligência artificial.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/corretor-ortografico/">
+        <span class="icon" aria-hidden="true">✍️</span>
+        <h2>Corretor Ortográfico IA</h2>
+        <p>Corrija textos automaticamente com IA avançada.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/social-media-design/">
+        <span class="icon" aria-hidden="true">📱</span>
+        <h2>Social Media Design</h2>
+        <p>Crie designs profissionais para redes sociais.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/gerador-dorks-ia/">
+        <span class="icon" aria-hidden="true">🔎</span>
+        <h2>Gerador de Dorks IA</h2>
+        <p>Gere Google Dorks avançadas com inteligência artificial.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/plano-estudo/">
+        <span class="icon" aria-hidden="true">📚</span>
+        <h2>Plano de Estudo IA</h2>
+        <p>Crie planos de estudo personalizados com IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/sherlock/">
+        <span class="icon" aria-hidden="true">🔍</span>
+        <h2>Sherlock</h2>
+        <p>Ferramenta de investigação e busca avançada.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/melhorador-prompt/">
+        <span class="icon" aria-hidden="true">⚡</span>
+        <h2>Melhorador de Prompt</h2>
+        <p>Aperfeiçoe seus prompts para IA com sugestões inteligentes.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/dicionario-ia/">
+        <span class="icon" aria-hidden="true">📖</span>
+        <h2>Dicionário IA</h2>
+        <p>Definições inteligentes geradas por inteligência artificial.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/fluxograma-ia/">
+        <span class="icon" aria-hidden="true">📊</span>
+        <h2>Fluxograma com IA</h2>
+        <p>Crie fluxogramas automaticamente com IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/agenda-ia/">
+        <span class="icon" aria-hidden="true">📅</span>
+        <h2>Agenda IA</h2>
+        <p>Organize sua agenda com assistente inteligente.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/prompt-spark/">
+        <span class="icon" aria-hidden="true">💡</span>
+        <h2>Prompt Spark</h2>
+        <p>Gerador e otimizador de prompts para IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/diaria-clock/">
+        <span class="icon" aria-hidden="true">⏰</span>
+        <h2>Diária Clock</h2>
+        <p>Gerencie seu tempo e productividade diária.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/html-visualizer/">
+        <span class="icon" aria-hidden="true">🌐</span>
+        <h2>HTML Visualizer</h2>
+        <p>Visualize e teste código HTML em tempo real.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/gerador-status-novo/">
+        <span class="icon" aria-hidden="true">💬</span>
+        <h2>Gerador de Status</h2>
+        <p>Crie status personalizados para redes sociais.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/promptfoto/">
+        <span class="icon" aria-hidden="true">📸</span>
+        <h2>Prompt Foto</h2>
+        <p>Gere prompts fotográficos detalhados com IA.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/link-stash/">
+        <span class="icon" aria-hidden="true">🔗</span>
+        <h2>Link Stash</h2>
+        <p>Salve e organize seus links importantes.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/buscador-grupos/">
+        <span class="icon" aria-hidden="true">📱</span>
+        <h2>Buscador de Grupos</h2>
+        <p>Encontre links de grupos no WhatsApp, Telegram, Discord e mais.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+      <a class="app" href="/buscador-processos/">
+        <span class="icon" aria-hidden="true">⚖️</span>
+        <h2>Buscador de Processos</h2>
+        <p>Consulte processos judiciais por CPF ou CNPJ.</p>
+        <span class="open">Abrir aplicação &rarr;</span>
+      </a>
+    </section>
+  </main>
+</body>
+</html>

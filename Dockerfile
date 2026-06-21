@@ -1,0 +1,79 @@
+FROM nginx:1.28-alpine
+
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY public/ /usr/share/nginx/html/
+COPY apps/calculadora-de-tempestade/index.html /usr/share/nginx/html/calculadora-de-tempestade/index.html
+COPY apps/contador-de-caracteres/index.html /usr/share/nginx/html/contador-de-caracteres/index.html
+COPY apps/regra-de-3/index.html /usr/share/nginx/html/regra-de-3/index.html
+COPY apps/gerador-de-variacoes/index.html /usr/share/nginx/html/gerador-de-variacoes/index.html
+COPY apps/extrair-links-de-grupos/index.html /usr/share/nginx/html/extrair-links-de-grupos/index.html
+COPY apps/gerador-de-numeros-aleatorios/index.html /usr/share/nginx/html/gerador-de-numeros-aleatorios/index.html
+COPY apps/calculadora-consumo-ideal-agua/index.html /usr/share/nginx/html/calculadora-consumo-ideal-agua/index.html
+COPY apps/pdf-extrator/index.html /usr/share/nginx/html/pdf-extrator/index.html
+COPY apps/relogio/index.html /usr/share/nginx/html/relogio/index.html
+COPY apps/google-dorks/index.html /usr/share/nginx/html/google-dorks/index.html
+COPY apps/calculadora-juros-parcelamento/index.html /usr/share/nginx/html/calculadora-juros-parcelamento/index.html
+COPY apps/contagem-regressiva-datas/index.html /usr/share/nginx/html/contagem-regressiva-datas/index.html
+COPY apps/calculadora-seguranca-tomada/index.html /usr/share/nginx/html/calculadora-seguranca-tomada/index.html
+COPY apps/salvar-prompt/index.html /usr/share/nginx/html/salvar-prompt/index.html
+COPY apps/calculadora-conciliacao/index.html /usr/share/nginx/html/calculadora-conciliacao/index.html
+COPY apps/calculadora-regra-de-3/index.html /usr/share/nginx/html/calculadora-regra-de-3/index.html
+COPY apps/formatador-mensagem-whatsapp/index.html /usr/share/nginx/html/formatador-mensagem-whatsapp/index.html
+COPY apps/marca-dagua/index.html /usr/share/nginx/html/marca-dagua/index.html
+COPY apps/buscador-grupos-whatsapp-telegram/index.html /usr/share/nginx/html/buscador-grupos-whatsapp-telegram/index.html
+COPY apps/mermaid-fluxograma/index.html /usr/share/nginx/html/mermaid-fluxograma/index.html
+COPY apps/markify-creator/dist/ /usr/share/nginx/html/markify-creator/
+COPY apps/prompt-palace-ai-hub/dist/ /usr/share/nginx/html/prompt-palace-ai-hub/
+COPY apps/tidy-tasks-bloom-dist/ /usr/share/nginx/html/tidy-tasks-bloom/
+COPY apps/matrix/index.html /usr/share/nginx/html/matrix/index.html
+COPY apps/inaja-fornecimento-digital-dist/ /usr/share/nginx/html/inaja-fornecimento-digital/
+COPY apps/calculadoradediferenca-dist/ /usr/share/nginx/html/calculadoradediferenca/
+COPY apps/organizador-web/ /usr/share/nginx/html/organizador/
+COPY apps/youtube-transcriber/index.html /usr/share/nginx/html/youtube-transcriber/index.html
+COPY apps/color-gemini-canvas-dist/ /usr/share/nginx/html/color-gemini-canvas/
+COPY apps/bloco-de-notas-markdown/index.html /usr/share/nginx/html/bloco-de-notas-markdown/index.html
+COPY apps/meus-repositorios-github/ /usr/share/nginx/html/meus-repositorios-github/
+COPY apps/calculadora-percent-dist/ /usr/share/nginx/html/calculadora-percent/
+COPY apps/reinado/ /usr/share/nginx/html/reinado/
+COPY apps/countdown-sub-sync-dist/ /usr/share/nginx/html/countdown-sub-sync/
+COPY apps/bottelegramvideo-web/ /usr/share/nginx/html/baixar-videos/
+COPY apps/extrator-designer-web/ /usr/share/nginx/html/extrator-designer/
+COPY apps/calculadora-de-viagem/index.html /usr/share/nginx/html/calculadora-de-viagem/index.html
+COPY apps/area-de-trabalho/index.html /usr/share/nginx/html/area-de-trabalho/index.html
+COPY apps/gerador-de-status-dist/ /usr/share/nginx/html/gerador-de-status/
+COPY apps/friendly-lobster-run-dist/ /usr/share/nginx/html/friendly-lobster-run/
+COPY apps/cyberclock-background-dist/ /usr/share/nginx/html/cyberclock-background/
+COPY apps/art-narrator-dist/ /usr/share/nginx/html/art-narrator/
+COPY apps/afazeres-dist/ /usr/share/nginx/html/afazeres/
+COPY apps/dorks-dist/ /usr/share/nginx/html/dorks/
+COPY apps/pdfmaster-pro-dist/ /usr/share/nginx/html/pdfmaster-pro/
+COPY apps/meu-site-dist/ /usr/share/nginx/html/meu-site/
+COPY apps/quick-notes-ai/index.html /usr/share/nginx/html/quick-notes-ai/index.html
+COPY apps/gemini-pdf-rename-magic-dist/ /usr/share/nginx/html/gemini-pdf-rename-magic/
+COPY apps/organizador-web/ /usr/share/nginx/html/organizador-extratos/
+COPY apps/hub-design-studio-dist/ /usr/share/nginx/html/hub-design-studio/
+COPY apps/Analisador-de-Nota-Fiscal-com-IA-dist/ /usr/share/nginx/html/analisador-nota-fiscal/
+COPY apps/AI-Image-Prompt-Generator-dist/ /usr/share/nginx/html/ai-image-prompt/
+COPY apps/Gerador-de-Memes-IA-dist/ /usr/share/nginx/html/gerador-memes/
+COPY apps/Corretor-Ortogr-fico-com-IA-dist/ /usr/share/nginx/html/corretor-ortografico/
+COPY apps/Social-Media-Design-Assistant-dist/ /usr/share/nginx/html/social-media-design/
+COPY apps/Gerador-de-Google-Dorks-com-IA-dist/ /usr/share/nginx/html/gerador-dorks-ia/
+COPY apps/Expert-Study-Plan-Generator-dist/ /usr/share/nginx/html/plano-estudo/
+COPY apps/Sherlock-/dist/ /usr/share/nginx/html/sherlock/
+COPY apps/MELHORADOR-DE-PROMPT-dist/ /usr/share/nginx/html/melhorador-prompt/
+COPY apps/dicionario-ia-dist/ /usr/share/nginx/html/dicionario-ia/
+COPY apps/fluxograma-com-ia-dist/ /usr/share/nginx/html/fluxograma-ia/
+COPY apps/AGENDAIA-dist/ /usr/share/nginx/html/agenda-ia/
+COPY apps/prompt-spark-keeper-dist/ /usr/share/nginx/html/prompt-spark/
+COPY apps/diaria-clock-cruncher-dist/ /usr/share/nginx/html/diaria-clock/
+COPY apps/html-visualizer-dist/ /usr/share/nginx/html/html-visualizer/
+COPY apps/gerador-status-dist/ /usr/share/nginx/html/gerador-status-novo/
+COPY apps/promptfoto-dist/ /usr/share/nginx/html/promptfoto/
+COPY apps/link-stash-dist/ /usr/share/nginx/html/link-stash/
+COPY apps/buscador-grupos-web/index.html /usr/share/nginx/html/buscador-grupos/index.html
+COPY apps/buscador-processos-web/index.html /usr/share/nginx/html/buscador-processos/index.html
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:8080/health >/dev/null || exit 1

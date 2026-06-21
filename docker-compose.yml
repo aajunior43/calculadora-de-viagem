@@ -1,0 +1,104 @@
+services:
+  hub-master:
+    build: .
+    container_name: hub-master
+    restart: unless-stopped
+    expose:
+      - "8080"
+    networks:
+      - traefik-public
+    depends_on:
+      - favoritos
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hub-master.rule=Host(`hub.srv1767486.hstgr.cloud`)"
+      - "traefik.http.routers.hub-master.entrypoints=websecure"
+      - "traefik.http.routers.hub-master.tls=true"
+      - "traefik.http.routers.hub-master.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hub-master.loadbalancer.server.port=8080"
+      - "traefik.docker.network=traefik-public"
+
+  favoritos:
+    build:
+      context: .
+      dockerfile: services/favoritos/Dockerfile
+    restart: unless-stopped
+    environment:
+      FAVORITES_PASSWORD: ${FAVORITES_PASSWORD:?Defina FAVORITES_PASSWORD no arquivo .env}
+    volumes:
+      - favoritos-data:/var/www/html/data
+    networks:
+      - traefik-public
+
+  organizador-relay:
+    build:
+      context: .
+      dockerfile: services/organizador/Dockerfile
+    container_name: organizador-relay
+    restart: unless-stopped
+    expose:
+      - "8765"
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.organizador-relay.rule=Host(`hub.srv1767486.hstgr.cloud`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.organizador-relay.entrypoints=websecure"
+      - "traefik.http.routers.organizador-relay.tls=true"
+      - "traefik.http.routers.organizador-relay.tls.certresolver=letsencrypt"
+      - "traefik.http.services.organizador-relay.loadbalancer.server.port=8765"
+      - "traefik.docker.network=traefik-public"
+
+  subscription-api:
+    build:
+      context: .
+      dockerfile: services/subscription-api/Dockerfile
+    container_name: subscription-api
+    restart: unless-stopped
+    expose:
+      - "8766"
+    volumes:
+      - subscription-data:/data
+    networks:
+      - traefik-public
+
+  video-download-api:
+    build:
+      context: .
+      dockerfile: services/video-download-api/Dockerfile
+    container_name: video-download-api
+    restart: unless-stopped
+    expose:
+      - "8767"
+    networks:
+      - traefik-public
+
+  style-extractor-api:
+    build:
+      context: .
+      dockerfile: services/style-extractor-api/Dockerfile
+    container_name: style-extractor-api
+    restart: unless-stopped
+    expose:
+      - "8768"
+    networks:
+      - traefik-public
+
+  organizador-api:
+    build:
+      context: .
+      dockerfile: services/organizador-api/Dockerfile
+    container_name: organizador-api
+    restart: unless-stopped
+    expose:
+      - "8769"
+    networks:
+      - traefik-public
+
+volumes:
+  favoritos-data:
+  subscription-data:
+
+networks:
+  traefik-public:
+    external: true
